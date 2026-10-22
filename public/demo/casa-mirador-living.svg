@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Casa Mirador — warm living room concept</title>
+  <desc id="desc">Fictional architectural illustration of a sunlit living room with a linen sofa, oak furniture, a terracotta chair and a garden beyond full-height windows. Demo concept, not a photograph of a real project.</desc>
+  <defs>
+    <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#e9e2d6"/><stop offset="1" stop-color="#d6ccbc"/></linearGradient>
+    <linearGradient id="floor" x2=".8" y2="1"><stop stop-color="#b79a7a"/><stop offset="1" stop-color="#e2c8a7"/></linearGradient>
+    <linearGradient id="glass" x2="0" y2="1"><stop stop-color="#bacfc9"/><stop offset=".6" stop-color="#dde4cb"/><stop offset="1" stop-color="#829772"/></linearGradient>
+    <linearGradient id="linen" x2=".3" y2="1"><stop stop-color="#f3eadc"/><stop offset="1" stop-color="#c5b9a4"/></linearGradient>
+    <linearGradient id="oak" x2="1" y2=".3"><stop stop-color="#b88b5d"/><stop offset=".5" stop-color="#dfb98a"/><stop offset="1" stop-color="#a5774c"/></linearGradient>
+    <radialGradient id="sun"><stop stop-color="#fff9df" stop-opacity=".7"/><stop offset="1" stop-color="#fff9df" stop-opacity="0"/></radialGradient>
+    <pattern id="slats" width="19" height="800" patternUnits="userSpaceOnUse"><rect width="14" height="800" fill="#a07955"/><path d="M2 0v800M8 0v800" stroke="#c19a6f" stroke-opacity=".42"/></pattern>
+    <pattern id="weave" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 1h8M1 0v8" stroke="#7e6b51" stroke-width=".5" opacity=".16"/></pattern>
+    <filter id="shadow" x="-30%" y="-50%" width="160%" height="200%"><feGaussianBlur stdDeviation="13"/></filter>
+    <filter id="soft"><feGaussianBlur stdDeviation="3"/></filter>
+    <clipPath id="window"><rect x="632" y="100" width="486" height="403"/></clipPath>
+  </defs>
+  <rect width="1200" height="800" fill="url(#wall)"/>
+  <path d="M0 0h224v490L0 644Z" fill="url(#slats)"/>
+  <path d="M224 0h976v38H224Z" fill="#efe9df"/>
+  <path d="M0 644 224 489h976v311H0Z" fill="url(#floor)"/>
+  <g stroke="#8d7259" stroke-opacity=".18"><path d="m224 489-80 311m215-311-5 311m138-311 69 311m65-311 149 311m-15-311 230 311M0 715h1200M86 585h1114"/></g>
+  <rect x="618" y="85" width="515" height="432" fill="#6b6658"/>
+  <rect x="632" y="100" width="486" height="403" fill="url(#glass)"/>
+  <g clip-path="url(#window)">
+    <ellipse cx="1024" cy="179" rx="163" ry="167" fill="url(#sun)"/>
+    <path d="M618 407q94-108 206-15t303-43v171H618Z" fill="#839474"/>
+    <path d="M632 460q130-98 265-29t236-6v115H632Z" fill="#b2bb8b"/>
+    <path d="m1053 102-46 401m7-234-70-65m78 28 64-89m-73 234-95-76" fill="none" stroke="#7d8466" stroke-width="9"/>
+    <g fill="#728a6d" opacity=".85"><ellipse cx="970" cy="180" rx="92" ry="51"/><ellipse cx="1073" cy="141" rx="107" ry="68"/><ellipse cx="1097" cy="267" rx="100" ry="52"/><ellipse cx="941" cy="282" rx="65" ry="41"/></g>
+    <g fill="#d8d9b8"><ellipse cx="740" cy="457" rx="94" ry="38"/><ellipse cx="873" cy="464" rx="76" ry="31"/></g>
+  </g>
+  <path d="M796 92v415m162-415v415" stroke="#575e52" stroke-width="10"/>
+  <path d="M639 108v387m166-387v387m161-387v387" stroke="#faf7e8" stroke-opacity=".28" stroke-width="3"/>
+  <path d="m958 503 242 100v129L797 503Z" fill="#fff7d6" opacity=".25"/>
+  <path d="M621 81h-37v452h43M1136 81h38v452h-43" fill="#e9e2d5"/>
+  <g stroke="#c3b8a7" stroke-width="3" opacity=".5"><path d="M594 88v431m11-431v431m540-431v431m12-431v431"/></g>
+  <rect x="282" y="135" width="206" height="218" fill="#b1a38e"/>
+  <rect x="291" y="144" width="188" height="200" fill="#f1e8d8"/>
+  <path d="M321 311V192q34-52 65 0v119Z" fill="#bc7956"/>
+  <path d="M369 315V237q47-69 80 0v78Z" fill="#c4be9c"/>
+  <circle cx="430" cy="182" r="19" fill="#d7af6b"/>
+  <ellipse cx="538" cy="663" rx="359" ry="48" fill="#5a4a35" opacity=".15" filter="url(#shadow)"/>
+  <path d="m210 593 549-50 320 190-677 67L97 704Z" fill="#e0d5bd"/>
+  <path d="m210 593 549-50 320 190-677 67L97 704Z" fill="url(#weave)"/>
+  <path d="m234 612 511-45 282 159-619 59-265-87Z" fill="none" stroke="#bdb29b" stroke-width="2"/>
+  <path d="M207 459q0-38 36-42h377q36 0 38 39l3 123H203Z" fill="#b4a48b"/>
+  <rect x="225" y="426" width="198" height="135" rx="22" fill="url(#linen)"/>
+  <rect x="427" y="426" width="208" height="135" rx="22" fill="url(#linen)"/>
+  <path d="M206 536h449v74q-211 35-449-2Z" fill="#c2b49b"/>
+  <path d="M214 535h209v54H214Zm213 0h213v54H427Z" fill="#ece2d1"/>
+  <rect x="179" y="491" width="61" height="120" rx="19" fill="url(#linen)"/>
+  <rect x="625" y="489" width="61" height="118" rx="19" fill="url(#linen)"/>
+  <path d="M216 611v28m424-30v27" stroke="#725d43" stroke-width="13"/>
+  <path d="m254 460 67-13 16 81-76 9Z" fill="#b77752"/>
+  <path d="m352 461 49 9-9 63-53-3Z" fill="#e0d7bf"/>
+  <path d="m555 456 59 10-10 65-64-12Z" fill="#8c967c"/>
+  <path d="m553 456 8 61m8-58 8 60m8-57 8 59" stroke="#b0b69b" stroke-width="2"/>
+  <path d="M804 494q10-47 48-40l90 30q21 9 18 39l-29 95-141-28Z" fill="#a65f43"/>
+  <path d="M804 515q70-2 139 28l-21 58q-83 0-128-30Z" fill="#c7805b"/>
+  <path d="m811 590-16 65m116-44 23 55" stroke="#664c34" stroke-width="13"/>
+  <ellipse cx="653" cy="653" rx="149" ry="49" fill="#66533e" opacity=".14" filter="url(#soft)"/>
+  <path d="m547 631 11 66m176-69-15 70" stroke="#856344" stroke-width="16"/>
+  <ellipse cx="641" cy="614" rx="137" ry="46" fill="#966d45"/>
+  <ellipse cx="641" cy="607" rx="137" ry="45" fill="url(#oak)"/>
+  <ellipse cx="641" cy="606" rx="118" ry="35" fill="none" stroke="#a87c50" stroke-opacity=".35"/>
+  <path d="m585 585 82-9 41 22-83 10Z" fill="#f1e7d4"/>
+  <path d="m585 585 40 17 83-4v7l-83 10-40-21Z" fill="#c9b997"/>
+  <ellipse cx="669" cy="577" rx="21" ry="8" fill="#7e573e"/>
+  <path d="M648 574q-8-31 1-51h36q12 30 5 51-18 17-42 0" fill="#b48c65"/>
+  <path d="m669 525-9-47m9 34 19-25m-22 8-19-12" fill="none" stroke="#71785b" stroke-width="3"/>
+  <g fill="#879371"><ellipse cx="656" cy="478" rx="15" ry="6" transform="rotate(27 656 478)"/><ellipse cx="682" cy="485" rx="15" ry="6" transform="rotate(-31 682 485)"/><ellipse cx="645" cy="485" rx="13" ry="6" transform="rotate(30 645 485)"/></g>
+  <path d="M1076 526h77l-12 82h-51Z" fill="#b28b68"/>
+  <path d="M1117 536V338m-1 119-35-68m36 28 41-57" fill="none" stroke="#5d7352" stroke-width="6"/>
+  <g fill="#6b835c"><ellipse cx="1080" cy="383" rx="18" ry="47" transform="rotate(-34 1080 383)"/><ellipse cx="1139" cy="354" rx="19" ry="58" transform="rotate(31 1139 354)"/><ellipse cx="1116" cy="328" rx="20" ry="57"/><ellipse cx="1159" cy="434" rx="20" ry="48" transform="rotate(42 1159 434)"/><ellipse cx="1085" cy="466" rx="18" ry="44" transform="rotate(-42 1085 466)"/></g>
+  <path d="M54 800v-92m0 38-39-46m39 22 53-52" stroke="#536b50" stroke-width="7"/>
+  <g fill="#4f694e"><ellipse cx="21" cy="693" rx="21" ry="57" transform="rotate(-44 21 693)"/><ellipse cx="96" cy="670" rx="23" ry="63" transform="rotate(43 96 670)"/><ellipse cx="54" cy="671" rx="23" ry="59"/></g>
+  <g fill="#564d40" font-family="Arial, sans-serif"><text x="270" y="75" font-size="12" letter-spacing="3">CASA MIRADOR · INTERIOR STUDY</text><text x="1140" y="764" font-size="10" text-anchor="end" letter-spacing="2">FICTIONAL DEMO · CONCEPT ILLUSTRATION</text></g>
+</svg>

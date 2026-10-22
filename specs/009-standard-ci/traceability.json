@@ -1,0 +1,97 @@
+[
+  {
+    "requirement": "FR-001",
+    "decision": "specs/009-standard-ci/plan.md",
+    "tasks": [
+      "T001"
+    ],
+    "commits": [
+      "b8c06f95b344f60cfbb4ae66cbf22e41190136cf"
+    ],
+    "evidence": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/full-regression.yml",
+      "scripts/ci-browser-scope.mjs",
+      "tests/ci-browser-scope.test.ts",
+      "tests/release-ci.test.ts",
+      "specs/009-standard-ci/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-002",
+    "decision": "specs/009-standard-ci/plan.md",
+    "tasks": [
+      "T001"
+    ],
+    "commits": [
+      "b8c06f95b344f60cfbb4ae66cbf22e41190136cf"
+    ],
+    "evidence": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/full-regression.yml",
+      "scripts/ci-browser-scope.mjs",
+      "tests/ci-browser-scope.test.ts",
+      "tests/release-ci.test.ts",
+      "specs/009-standard-ci/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-003",
+    "decision": "specs/009-standard-ci/plan.md",
+    "tasks": [
+      "T001"
+    ],
+    "commits": [
+      "b8c06f95b344f60cfbb4ae66cbf22e41190136cf"
+    ],
+    "evidence": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/full-regression.yml",
+      "scripts/ci-browser-scope.mjs",
+      "tests/ci-browser-scope.test.ts",
+      "tests/release-ci.test.ts",
+      "specs/009-standard-ci/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-004",
+    "decision": "specs/009-standard-ci/plan.md",
+    "tasks": [
+      "T002"
+    ],
+    "commits": [
+      "b8c06f95b344f60cfbb4ae66cbf22e41190136cf"
+    ],
+    "evidence": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/full-regression.yml",
+      "scripts/ci-browser-scope.mjs",
+      "tests/ci-browser-scope.test.ts",
+      "tests/release-ci.test.ts",
+      "specs/009-standard-ci/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-005",
+    "decision": "specs/009-standard-ci/plan.md",
+    "tasks": [
+      "T003"
+    ],
+    "commits": [
+      "b8c06f95b344f60cfbb4ae66cbf22e41190136cf"
+    ],
+    "evidence": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/full-regression.yml",
+      "scripts/ci-browser-scope.mjs",
+      "tests/ci-browser-scope.test.ts",
+      "tests/release-ci.test.ts",
+      "specs/009-standard-ci/validation.md"
+    ],
+    "provenance": "private-history"
+  }
+]

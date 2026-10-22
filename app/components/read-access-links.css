@@ -1,0 +1,38 @@
+.read-access-links.read-link-manager { margin: 0; padding: 0; border: 0; }
+.read-link-manager .section-head { flex-wrap: wrap; gap: 12px; }
+.read-link-manager .invite-help { max-width: 680px; font-size: 12px; line-height: 1.65; }
+.read-link-composer { margin: 20px 0; padding: 20px; background: #f8f8fb; border: 1px solid #e2e3ed; border-radius: 12px; }
+.read-link-composer h4,.read-link-directory h4 { margin: 0 0 16px; font-size: 14px; font-weight: 700; }
+.read-link-composer .invite-form { grid-template-columns: 1fr 1fr; align-items: start; }
+.read-link-composer .invite-form label>span { font-size: 11px; }
+.read-link-composer .invite-form input,.read-link-composer .invite-form select { font-size: 12px; }
+.read-link-customize,.read-link-composer .read-link-actions { grid-column: 1/-1; }
+.read-link-customize summary,.read-link-history summary { cursor: pointer; font-size: 12px; font-weight: 650; padding: 12px 0; }
+.read-link-customize .permission-picker { margin: 12px 0; }
+.read-link-customize .invite-folder-access { margin-top: 12px; }
+.read-link-directory { margin-top: 24px; }
+.read-link-directory h4 span { color: #686a7c; margin-left: 5px; font-weight: 500; }
+.read-link-manager .read-link-record { padding: 16px 0; }
+.read-link-identity { overflow-wrap: anywhere; }
+.read-link-identity b { font-size: 13px; }
+.read-link-identity small { font-size: 11px; }
+.read-link-empty { color: #686a7c; font-size: 12px; padding: 20px 0; }
+.read-link-history { margin-top: 20px; border-top: 1px solid #e5e7eb; }
+.read-link-manager .invite-link { margin: 20px 0; }
+@media (max-width: 600px) {
+  .read-link-composer { padding: 14px; }
+  .read-link-composer .invite-form { grid-template-columns: minmax(0,1fr); }
+  .read-link-manager .read-link-record { gap: 10px; }
+  .read-link-record .read-link-actions { flex-basis: 100%; }
+  .read-link-manager .section-head>.primary-button { width: 100%; }
+}
+
+.read-link-composer, .read-link-composer .invite-form, .read-link-composer .invite-form label, .read-link-manager .invite-link > label { min-width: 0; }
+.read-link-manager .invite-link input { min-width: 0; }
+@media (max-width: 680px), (max-width: 900px) and (max-height: 500px) and (pointer: coarse) {
+  .read-link-manager button, .read-link-manager summary, .read-link-manager .permission-picker label { min-height: 44px; }
+  .read-link-composer .invite-form input:not([type=checkbox]), .read-link-composer .invite-form select, .read-link-manager .invite-link input { min-height: 44px; font-size: 16px; }
+  .read-link-actions > button { flex: 1 1 130px; }
+}
+
+@media (max-width: 680px), (max-width: 900px) and (max-height: 500px) and (pointer: coarse) { .read-link-manager .folder-access-picker { min-width: 0; } .read-link-manager .folder-scope-toggle, .read-link-manager .folder-choice-grid label { min-height: 44px; font-size: 11px; } .read-link-manager .folder-access-picker label > span { min-width: 0; overflow-wrap: anywhere; } .read-link-manager .folder-access-picker input, .read-link-manager .permission-picker input { flex: 0 0 18px; width: 18px; height: 18px; } }

@@ -1,0 +1,20 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -f
+      - scripts/Dockerfile.qa
+      - --build-arg=QA_PROJECT=house-planner-qa-example
+      - --build-arg=QA_BUCKET=house-planner-qa-example-files
+      - --build-arg=QA_API_KEY=${_QA_API_KEY}
+      - --build-arg=QA_APP_ID=${_QA_APP_ID}
+      - --build-arg=QA_SENDER_ID=000000000000
+      - -t
+      - us-central1-docker.pkg.dev/house-planner-qa-example/house-planner-qa/app:${_SOURCE_COMMIT}
+      - .
+images:
+  - us-central1-docker.pkg.dev/house-planner-qa-example/house-planner-qa/app:${_SOURCE_COMMIT}
+timeout: 1200s
+options:
+  logging: CLOUD_LOGGING_ONLY
+# Omit machineType to use Cloud Build's default low-cost worker.

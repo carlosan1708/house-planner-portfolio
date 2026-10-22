@@ -1,0 +1,44 @@
+import { expect, test } from "@playwright/test";
+test("shows the small outside-objective summary and explicit purchase option on desktop and mobile", async ({ page }) => {
+  await page.goto("/?mode=demo");
+  await page.getByRole("button", { name: /Budget|Presupuesto/, exact: true }).click();
+  const summary = page.locator(".budget-outside-objective");
+  await expect(summary).toContainText("Outside objective");
+  await expect(summary).toContainText("0");
+  await expect(summary).toHaveCSS("font-size", "12px");
+  await page.screenshot({ path: "test-results/budget-outside-desktop.png", fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(summary).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: "test-results/budget-outside-mobile.png", fullPage: true });
+  await page.locator(".mobile-workspace-nav").getByRole("button", { name: /Sections|Secciones/, exact: true }).click();
+  await page.getByRole("dialog", { name: /Sections|Secciones/, exact: true }).getByRole("button", { name: /Purchases\/Expenses|Compras\/Gastos/ }).click();
+  await page.getByRole("button", { name: /New purchase|Nueva compra/ }).click();
+  const picker = page.locator(".expense-form").getByLabel(/Budget line \(optional\)|Partida \(opcional\)/);
+  await expect(picker).toHaveValue("");
+  await picker.selectOption("outside-objective");
+  await expect(picker).toHaveValue("outside-objective");
+});
+
+test("marks a budget item visibly and moves paid amounts out of the main metrics without losing objective amounts", async ({ page }) => {
+  await page.goto("/?mode=demo");
+  await page.getByRole("button", { name: /Budget|Presupuesto/, exact: true }).click();
+  await page.locator(".budget-line-list button").filter({ hasText: "Concrete and reinforcement" }).click();
+  const toggle = page.getByRole("checkbox", { name: "Concrete and reinforcement Outside objective", exact: true });
+  await expect(toggle).toBeVisible();
+  await page.screenshot({ path: "test-results/budget-line-outside-editor.png", fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(toggle).toBeVisible();
+  await page.screenshot({ path: "test-results/budget-line-outside-editor-mobile.png", fullPage: true });
+  await toggle.check();
+  await page.getByRole("button", { name: /Dashboard|Panel/ }).click();
+  await expect(page.locator(".budget-outside-objective")).toContainText("$6,200");
+  await expect(page.locator(".budget-metrics")).toContainText("$25,000");
+  await page.locator(".budget-line-list button").filter({ hasText: "Concrete and reinforcement" }).click();
+  await expect(toggle).toBeChecked();
+  await expect(page.getByLabel("Concrete and reinforcement Objective", { exact: true })).toHaveValue("30000");
+  await toggle.uncheck();
+  await page.getByRole("button", { name: /Dashboard|Panel/ }).click();
+  await expect(page.locator(".budget-metrics")).toContainText("$55,000");
+  await expect(page.locator(".budget-outside-objective")).not.toContainText("$6,200");
+});

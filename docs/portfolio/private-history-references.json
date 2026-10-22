@@ -1,0 +1,73 @@
+{
+  "scope": "private-development-history",
+  "notice": "Identifiers are historical metadata, not locally available commit objects or public release evidence.",
+  "features": {
+    "001-portfolio": [
+      "05262308b7ea9d38ef6f17987c0b23a4fb6ca00f",
+      "1d5ef16b4216ed2b158260cdd92c4d11360cf89b",
+      "5327bc597b9e0b57edb2431411493d6d7839846c",
+      "7bed084c680d4a52eb3f83bc95e4420378e69065",
+      "7ce9f74b0987c4a6dec0714b2460e69d2e79210b",
+      "a3b32ddd84c9d7d17a44a568c9f9466839761143",
+      "a7df08765f000d347159bb1c6b09a78e1c487dcc",
+      "cc66d98e6c9c75b37e91f1ba23fb8d4045a9915e"
+    ],
+    "002-portfolio-release": [
+      "8f44940e03c925407344aa83a21ec2d15318f995",
+      "9e8fadfc53688eb452b81567f4c91a947a9aa488",
+      "b7cc98b13eaafb0a84fda76f99acc5f35f997b16",
+      "c1ff481d3fef34b054e6218bfef99af6746df3a2",
+      "fad26f171558072b9c85b12b3429a01eb4207a36"
+    ],
+    "003-demo-localization": [
+      "05ccc80f9e9480682d20fd94935b9bba66879a48",
+      "2eaf380fb328e6e819a3844dee78282e9ff6c3d1",
+      "4454838878b3835eae5e3e74a8f123d587767614",
+      "52898092364f9117a242d7d335c0f34345a67f0a",
+      "722cfd7f5e483583ade49493e79965495f81e517",
+      "80552e947241941824b41b44921132f6356ea37d",
+      "a88c04d1e00a19e23e6a71bf506d402a5d077fbb",
+      "f05081a9bcb825bdac276bd10e704f28e437538b",
+      "faf68f9a1578a3ab06492b71df181eb97f13366b"
+    ],
+    "004-featured-documents": [
+      "073575857cba2cf8aa612e7faff8213a8efdd16b",
+      "101a199d1c0de682555757c7607c8d6688976171",
+      "14df06a8b09b44c4bf7e318c48cdeb477951159d",
+      "19afb20ea081d28b1ed1e157467fe967aac2b028",
+      "34088995f1a151622212be0a0a7047c10bc1a797",
+      "347a970f756429f5dcae80dc2791243007afe6af",
+      "7d6a5034765ce1761e85b7f6acc17a00500c91fa",
+      "941acb1f23db3a9534b5e385dcbe2dc379716e47",
+      "97a135da5e19769238b216189ad580d1571277e1",
+      "9da82560f157880dcb4cee70bd772d2be1d33941",
+      "d127ca94991d88ee89e2894a882774ecf4290e37",
+      "f92e71af2fd58f1fe3f2a9ba92df35c08c78fdd0"
+    ],
+    "005-optional-cloud-qa": [
+      "0cae5fb9fd650e6febb7e8fb4b4ac656e50885a0",
+      "1dd153735ac7370c462884e2829e2f2c3e560682",
+      "38f16eba5779fb79183b7b9702fca2878f32112e",
+      "42a000ad41b7e5f961935a0092de5297eec66454",
+      "468a5df855db2fc64ce9532471130d5a8af6edc5",
+      "935fb26b8a3dffcf4e5ca4f26a9f7b174f181620",
+      "96619122fdacea5d42d9aa7519412025c4eda468",
+      "a5b4724cb42799707ede23a9b758696ad3e2e3dc",
+      "aef824d1e4e153c2679af4abc64dc067ce0ff8db",
+      "c4f1be49d8a1b80d003d76f808c513f7a37d5a7c",
+      "cd5a4fe98f31686b1eca0e3ee8b0165db6bb61b1"
+    ],
+    "006-budget-purchase-links": [
+      "370a2d8c8126dd87d1d8b647984f95a852dfc285"
+    ],
+    "007-countdown-completion": [
+      "dc5cd47dba81677c6e83b23797da673a67d4362a"
+    ],
+    "008-project-skills": [
+      "b2bf58f3f0a3dfc6af08e2a4893644b4f781b89c"
+    ],
+    "009-standard-ci": [
+      "b8c06f95b344f60cfbb4ae66cbf22e41190136cf"
+    ]
+  }
+}

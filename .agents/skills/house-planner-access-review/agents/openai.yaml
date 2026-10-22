@@ -1,0 +1,4 @@
+interface:
+  display_name: "House Planner access review"
+  short_description: "Review project, role, folder and vault boundaries"
+  default_prompt: "Use $house-planner-access-review for the requested House Planner work, respecting AGENTS.md and the approved scope."

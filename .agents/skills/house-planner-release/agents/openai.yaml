@@ -1,0 +1,4 @@
+interface:
+  display_name: "House Planner release"
+  short_description: "Publish the exact validated House Planner revision"
+  default_prompt: "Use $house-planner-release for the requested House Planner work, respecting AGENTS.md and the approved scope."

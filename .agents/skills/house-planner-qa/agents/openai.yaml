@@ -1,0 +1,4 @@
+interface:
+  display_name: "House Planner scoped QA"
+  short_description: "Choose isolated checks and respect regression approvals"
+  default_prompt: "Use $house-planner-qa for the requested House Planner work, respecting AGENTS.md and the approved scope."

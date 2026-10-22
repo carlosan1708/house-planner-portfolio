@@ -1,0 +1,82 @@
+[
+  {
+    "requirement": "FR-001",
+    "decision": "specs/006-budget-purchase-links/plan.md",
+    "tasks": [
+      "T002",
+      "T005"
+    ],
+    "commits": [
+      "370a2d8c8126dd87d1d8b647984f95a852dfc285"
+    ],
+    "evidence": [
+      "e2e/budget-purchase-links.spec.ts",
+      "specs/006-budget-purchase-links/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-002",
+    "decision": "specs/006-budget-purchase-links/plan.md",
+    "tasks": [
+      "T003",
+      "T005"
+    ],
+    "commits": [
+      "370a2d8c8126dd87d1d8b647984f95a852dfc285"
+    ],
+    "evidence": [
+      "e2e/budget-purchase-links.spec.ts",
+      "specs/006-budget-purchase-links/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-003",
+    "decision": "specs/006-budget-purchase-links/plan.md",
+    "tasks": [
+      "T001",
+      "T003",
+      "T005"
+    ],
+    "commits": [
+      "370a2d8c8126dd87d1d8b647984f95a852dfc285"
+    ],
+    "evidence": [
+      "e2e/budget-purchase-links.spec.ts",
+      "specs/006-budget-purchase-links/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-004",
+    "decision": "specs/006-budget-purchase-links/plan.md",
+    "tasks": [
+      "T004",
+      "T005"
+    ],
+    "commits": [
+      "370a2d8c8126dd87d1d8b647984f95a852dfc285"
+    ],
+    "evidence": [
+      "e2e/budget-purchase-links.spec.ts",
+      "specs/006-budget-purchase-links/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-005",
+    "decision": "specs/006-budget-purchase-links/plan.md",
+    "tasks": [
+      "T005"
+    ],
+    "commits": [
+      "370a2d8c8126dd87d1d8b647984f95a852dfc285"
+    ],
+    "evidence": [
+      "e2e/budget-purchase-links.spec.ts",
+      "specs/006-budget-purchase-links/validation.md"
+    ],
+    "provenance": "private-history"
+  }
+]

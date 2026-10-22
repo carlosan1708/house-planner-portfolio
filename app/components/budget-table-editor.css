@@ -1,0 +1,49 @@
+.budget-table-editor tbody > tr > :is(th, td) {
+  vertical-align: top;
+}
+
+.budget-table-editor tbody > tr > th > b {
+  display: block;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.budget-table-editor .budget-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  margin-top: 8px;
+}
+
+.budget-table-editor .budget-item-actions .budget-outside-toggle {
+  margin: 0;
+}
+
+.budget-table-editor .budget-item-actions .budget-remove-row {
+  padding: 8px 0;
+}
+
+.budget-table-editor .budget-paid-cell {
+  min-width: 140px;
+}
+
+.budget-table-editor tbody > tr > td:nth-child(5) {
+  min-width: 158px;
+}
+
+@media (max-width: 720px), (max-width: 960px) and (pointer: coarse) {
+  .budget-table-editor .budget-paid-cell,
+  .budget-table-editor tbody > tr > td:nth-child(5) {
+    min-width: 0;
+  }
+
+  .budget-table-editor .budget-item-actions {
+    justify-content: space-between;
+    gap: 4px 12px;
+  }
+
+  .budget-table-editor .budget-item-actions :is(.budget-outside-toggle, .budget-remove-row) {
+    min-height: 44px;
+  }
+}

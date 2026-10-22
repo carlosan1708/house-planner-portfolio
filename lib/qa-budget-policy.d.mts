@@ -1,0 +1,14 @@
+export const QA_BILLING_PROJECT: string;
+export const QA_BILLING_ACCOUNT: string;
+export const QA_TOTAL_BUDGET_NAME: string;
+export const QA_MONTHLY_TARGET_USD: 6;
+export const QA_EARLY_CUTOFF_USD: 5.75;
+export const QA_RESERVATION_POLICY: Readonly<{ schemaVersion: 1; baseAllowanceUsd: 0.5; cutoffUsd: 5.75; build: { amountUsd: 0.35; maxCount: 11 }; regression: { amountUsd: 0.15; maxCount: 10 } }>;
+export type QaBudgetReservation = { kind: "build" | "regression"; amountUsd: number; createdAt: string };
+export type QaBudgetLedger = { schemaVersion: number; period: string; reservations: Record<string, QaBudgetReservation>; baseAllowanceUsd: number };
+export type QaBudgetStatus = { period: string; reservedEstimateUsd: number; builds: number; regressions: number; cutoffUsd: number; monthlyTargetUsd: number; estimateOnly: boolean };
+export function parseQaBudgetMessage(body: unknown, now?: Date): { period: string; costAmount: number; cutoff: boolean } | null;
+export function assertQaBillingTarget(env: Record<string, string | undefined>): { email: string; audience: string; projectId: string };
+export function prepareQaBudgetLedger(existing?: unknown, now?: Date): QaBudgetLedger;
+export function qaBudgetStatus(existing?: unknown, now?: Date): QaBudgetStatus;
+export function reserveQaBudget(existing: unknown, operation: { kind: string; id: string }, now?: Date): { state: QaBudgetLedger; changed: boolean; status: QaBudgetStatus };

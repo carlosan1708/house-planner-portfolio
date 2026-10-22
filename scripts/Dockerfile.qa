@@ -1,0 +1,36 @@
+FROM node:22-slim AS dependencies
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+
+FROM node:22-slim AS builder
+WORKDIR /app
+ENV NEXT_TELEMETRY_DISABLED=1
+ARG QA_PROJECT
+ARG QA_BUCKET
+ARG QA_API_KEY
+ARG QA_APP_ID
+ARG QA_SENDER_ID
+ENV HOUSE_PLANNER_ENVIRONMENT=qa
+ENV GOOGLE_CLOUD_PROJECT=$QA_PROJECT
+ENV HOUSE_PLANNER_BUCKET=$QA_BUCKET
+ENV NEXT_PUBLIC_HOUSE_PLANNER_ENVIRONMENT=qa
+ENV NEXT_PUBLIC_FIREBASE_PROJECT_ID=$QA_PROJECT
+ENV NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=$QA_BUCKET
+ENV NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=$QA_PROJECT.firebaseapp.com
+ENV NEXT_PUBLIC_FIREBASE_API_KEY=$QA_API_KEY
+ENV NEXT_PUBLIC_FIREBASE_APP_ID=$QA_APP_ID
+ENV NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=$QA_SENDER_ID
+COPY --from=dependencies /app/node_modules ./node_modules
+COPY . .
+RUN npm run build -- --webpack
+
+FROM node:22-slim AS runner
+WORKDIR /app
+ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=8080 HOSTNAME=0.0.0.0
+COPY --from=builder --chown=node:node /app/public ./public
+COPY --from=builder --chown=node:node /app/.next/standalone ./
+COPY --from=builder --chown=node:node /app/.next/static ./.next/static
+USER node
+EXPOSE 8080
+CMD ["node", "server.js"]

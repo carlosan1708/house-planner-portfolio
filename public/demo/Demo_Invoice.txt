@@ -1,0 +1,9 @@
+HOUSE PLANNER — FICTIONAL DEMONSTRATION DOCUMENT
+
+Invoice: FAC-DEMO-001
+Supplier: North Studio
+Scope: Architectural design deposit
+Amount: USD 840
+Status: Paid
+
+This file contains only fictional data and does not represent a real transaction.

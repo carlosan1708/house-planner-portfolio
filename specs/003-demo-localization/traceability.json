@@ -1,0 +1,117 @@
+[
+  {
+    "requirement": "FR-001",
+    "decision": "specs/003-demo-localization/plan.md#decisions",
+    "tasks": [
+      "T003",
+      "T004",
+      "T005"
+    ],
+    "commits": [
+      "80552e947241941824b41b44921132f6356ea37d",
+      "05ccc80f9e9480682d20fd94935b9bba66879a48",
+      "a88c04d1e00a19e23e6a71bf506d402a5d077fbb",
+      "4454838878b3835eae5e3e74a8f123d587767614",
+      "52898092364f9117a242d7d335c0f34345a67f0a"
+    ],
+    "evidence": [
+      "tests/main-demo-localization.test.ts",
+      "tests/demo-budget-localization.test.tsx",
+      "tests/demo-expenses-aesthetics-localization.test.tsx"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-002",
+    "decision": "specs/003-demo-localization/plan.md#decisions",
+    "tasks": [
+      "T003",
+      "T004",
+      "T005",
+      "T006"
+    ],
+    "commits": [
+      "80552e947241941824b41b44921132f6356ea37d",
+      "05ccc80f9e9480682d20fd94935b9bba66879a48",
+      "a88c04d1e00a19e23e6a71bf506d402a5d077fbb",
+      "4454838878b3835eae5e3e74a8f123d587767614",
+      "52898092364f9117a242d7d335c0f34345a67f0a"
+    ],
+    "evidence": [
+      "tests/main-demo-localization.test.ts",
+      "tests/demo-budget-localization.test.tsx",
+      "tests/demo-expenses-aesthetics-localization.test.tsx"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-003",
+    "decision": "specs/003-demo-localization/plan.md#decisions",
+    "tasks": [
+      "T003",
+      "T004",
+      "T005",
+      "T006"
+    ],
+    "commits": [
+      "80552e947241941824b41b44921132f6356ea37d",
+      "05ccc80f9e9480682d20fd94935b9bba66879a48",
+      "a88c04d1e00a19e23e6a71bf506d402a5d077fbb",
+      "4454838878b3835eae5e3e74a8f123d587767614",
+      "52898092364f9117a242d7d335c0f34345a67f0a"
+    ],
+    "evidence": [
+      "tests/main-demo-localization.test.ts",
+      "tests/demo-workbooks.test.ts"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-004",
+    "decision": "specs/003-demo-localization/plan.md#decisions",
+    "tasks": [
+      "T006",
+      "T007",
+      "T010"
+    ],
+    "commits": [
+      "80552e947241941824b41b44921132f6356ea37d",
+      "05ccc80f9e9480682d20fd94935b9bba66879a48",
+      "a88c04d1e00a19e23e6a71bf506d402a5d077fbb",
+      "4454838878b3835eae5e3e74a8f123d587767614",
+      "52898092364f9117a242d7d335c0f34345a67f0a"
+    ],
+    "evidence": [
+      "specs/003-demo-localization/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-005",
+    "decision": "specs/003-demo-localization/plan.md#decisions",
+    "tasks": [
+      "T008",
+      "T009",
+      "T010"
+    ],
+    "commits": [
+      "80552e947241941824b41b44921132f6356ea37d",
+      "05ccc80f9e9480682d20fd94935b9bba66879a48",
+      "a88c04d1e00a19e23e6a71bf506d402a5d077fbb",
+      "4454838878b3835eae5e3e74a8f123d587767614",
+      "52898092364f9117a242d7d335c0f34345a67f0a",
+      "722cfd7f5e483583ade49493e79965495f81e517",
+      "2eaf380fb328e6e819a3844dee78282e9ff6c3d1",
+      "faf68f9a1578a3ab06492b71df181eb97f13366b",
+      "f05081a9bcb825bdac276bd10e704f28e437538b"
+    ],
+    "evidence": [
+      "specs/003-demo-localization/validation.md",
+      "scripts/deploy-gcp.ps1",
+      "lib/qa-budget-policy.mjs",
+      "scripts/release-ci.mjs",
+      "tests/release-ci.test.ts"
+    ],
+    "provenance": "private-history"
+  }
+]

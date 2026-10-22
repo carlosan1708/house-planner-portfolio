@@ -1,0 +1,78 @@
+[
+  {
+    "requirement": "FR-001",
+    "decision": "specs/007-countdown-completion/plan.md",
+    "tasks": [
+      "T002",
+      "T003"
+    ],
+    "commits": [
+      "dc5cd47dba81677c6e83b23797da673a67d4362a"
+    ],
+    "evidence": [
+      "tests/countdown-completion.test.ts",
+      "tests/countdown-dispatch.test.ts",
+      "tests/countdowns.test.ts",
+      "e2e/countdown-completion.spec.ts",
+      "specs/007-countdown-completion/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-002",
+    "decision": "specs/007-countdown-completion/plan.md",
+    "tasks": [
+      "T002",
+      "T003"
+    ],
+    "commits": [
+      "dc5cd47dba81677c6e83b23797da673a67d4362a"
+    ],
+    "evidence": [
+      "tests/countdown-completion.test.ts",
+      "tests/countdown-dispatch.test.ts",
+      "tests/countdowns.test.ts",
+      "e2e/countdown-completion.spec.ts",
+      "specs/007-countdown-completion/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-003",
+    "decision": "specs/007-countdown-completion/plan.md",
+    "tasks": [
+      "T001",
+      "T003"
+    ],
+    "commits": [
+      "dc5cd47dba81677c6e83b23797da673a67d4362a"
+    ],
+    "evidence": [
+      "tests/countdown-completion.test.ts",
+      "tests/countdown-dispatch.test.ts",
+      "tests/countdowns.test.ts",
+      "e2e/countdown-completion.spec.ts",
+      "specs/007-countdown-completion/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-004",
+    "decision": "specs/007-countdown-completion/plan.md",
+    "tasks": [
+      "T001",
+      "T003"
+    ],
+    "commits": [
+      "dc5cd47dba81677c6e83b23797da673a67d4362a"
+    ],
+    "evidence": [
+      "tests/countdown-completion.test.ts",
+      "tests/countdown-dispatch.test.ts",
+      "tests/countdowns.test.ts",
+      "e2e/countdown-completion.spec.ts",
+      "specs/007-countdown-completion/validation.md"
+    ],
+    "provenance": "private-history"
+  }
+]

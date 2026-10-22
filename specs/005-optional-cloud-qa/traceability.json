@@ -1,0 +1,216 @@
+[
+  {
+    "requirement": "FR-001",
+    "decision": "specs/005-optional-cloud-qa/plan.md",
+    "tasks": [
+      "T003",
+      "T006",
+      "T008"
+    ],
+    "commits": [
+      "a5b4724cb42799707ede23a9b758696ad3e2e3dc",
+      "cd5a4fe98f31686b1eca0e3ee8b0165db6bb61b1",
+      "96619122fdacea5d42d9aa7519412025c4eda468",
+      "0cae5fb9fd650e6febb7e8fb4b4ac656e50885a0",
+      "1dd153735ac7370c462884e2829e2f2c3e560682"
+    ],
+    "evidence": [
+      "specs/005-optional-cloud-qa/analysis.md",
+      "specs/005-optional-cloud-qa/validation.md",
+      "tests/release-ci.test.ts"
+    ],
+    "status": "Implementation/local acceptance complete; final integrated CI and release external receipt pending",
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-002",
+    "decision": "specs/005-optional-cloud-qa/plan.md",
+    "tasks": [
+      "T003",
+      "T008",
+      "T009",
+      "T010",
+      "T011",
+      "T012"
+    ],
+    "commits": [
+      "a5b4724cb42799707ede23a9b758696ad3e2e3dc",
+      "cd5a4fe98f31686b1eca0e3ee8b0165db6bb61b1",
+      "96619122fdacea5d42d9aa7519412025c4eda468",
+      "0cae5fb9fd650e6febb7e8fb4b4ac656e50885a0",
+      "1dd153735ac7370c462884e2829e2f2c3e560682",
+      "c4f1be49d8a1b80d003d76f808c513f7a37d5a7c",
+      "935fb26b8a3dffcf4e5ca4f26a9f7b174f181620",
+      "38f16eba5779fb79183b7b9702fca2878f32112e",
+      "aef824d1e4e153c2679af4abc64dc067ce0ff8db",
+      "42a000ad41b7e5f961935a0092de5297eec66454",
+      "468a5df855db2fc64ce9532471130d5a8af6edc5"
+    ],
+    "evidence": [
+      "specs/005-optional-cloud-qa/analysis.md",
+      "specs/005-optional-cloud-qa/validation.md",
+      "tests/release-ci.test.ts",
+      "e2e/mobile-experience.spec.ts",
+      "e2e/qa-permissions.spec.ts",
+      "specs/005-optional-cloud-qa/validation.md#integrated-local-acceptance-before-final-freeze"
+    ],
+    "status": "Implementation/local acceptance complete; final integrated CI and release external receipt pending",
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-003",
+    "decision": "specs/005-optional-cloud-qa/plan.md",
+    "tasks": [
+      "T003",
+      "T008"
+    ],
+    "commits": [
+      "a5b4724cb42799707ede23a9b758696ad3e2e3dc",
+      "cd5a4fe98f31686b1eca0e3ee8b0165db6bb61b1",
+      "96619122fdacea5d42d9aa7519412025c4eda468",
+      "0cae5fb9fd650e6febb7e8fb4b4ac656e50885a0",
+      "1dd153735ac7370c462884e2829e2f2c3e560682"
+    ],
+    "evidence": [
+      "specs/005-optional-cloud-qa/analysis.md",
+      "specs/005-optional-cloud-qa/validation.md",
+      "tests/release-ci.test.ts"
+    ],
+    "status": "Implementation/local acceptance complete; final integrated CI and release external receipt pending",
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-004",
+    "decision": "specs/005-optional-cloud-qa/plan.md",
+    "tasks": [
+      "T004",
+      "T006",
+      "T009"
+    ],
+    "commits": [
+      "a5b4724cb42799707ede23a9b758696ad3e2e3dc",
+      "cd5a4fe98f31686b1eca0e3ee8b0165db6bb61b1",
+      "96619122fdacea5d42d9aa7519412025c4eda468",
+      "0cae5fb9fd650e6febb7e8fb4b4ac656e50885a0",
+      "1dd153735ac7370c462884e2829e2f2c3e560682"
+    ],
+    "evidence": [
+      "specs/005-optional-cloud-qa/analysis.md",
+      "specs/005-optional-cloud-qa/validation.md",
+      "tests/release-ci.test.ts"
+    ],
+    "status": "Implementation/local acceptance complete; final integrated CI and release external receipt pending",
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-005",
+    "decision": "specs/005-optional-cloud-qa/plan.md",
+    "tasks": [
+      "T001",
+      "T005",
+      "T008",
+      "T010"
+    ],
+    "commits": [
+      "a5b4724cb42799707ede23a9b758696ad3e2e3dc",
+      "cd5a4fe98f31686b1eca0e3ee8b0165db6bb61b1",
+      "96619122fdacea5d42d9aa7519412025c4eda468",
+      "0cae5fb9fd650e6febb7e8fb4b4ac656e50885a0",
+      "1dd153735ac7370c462884e2829e2f2c3e560682",
+      "c4f1be49d8a1b80d003d76f808c513f7a37d5a7c"
+    ],
+    "evidence": [
+      "specs/005-optional-cloud-qa/analysis.md",
+      "specs/005-optional-cloud-qa/validation.md",
+      "tests/release-ci.test.ts"
+    ],
+    "status": "Implementation/local acceptance complete; final integrated CI and release external receipt pending",
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-006",
+    "decision": "specs/005-optional-cloud-qa/plan.md",
+    "tasks": [
+      "T001",
+      "T005",
+      "T008"
+    ],
+    "commits": [
+      "a5b4724cb42799707ede23a9b758696ad3e2e3dc",
+      "cd5a4fe98f31686b1eca0e3ee8b0165db6bb61b1",
+      "96619122fdacea5d42d9aa7519412025c4eda468",
+      "0cae5fb9fd650e6febb7e8fb4b4ac656e50885a0",
+      "1dd153735ac7370c462884e2829e2f2c3e560682"
+    ],
+    "evidence": [
+      "specs/005-optional-cloud-qa/analysis.md",
+      "specs/005-optional-cloud-qa/validation.md",
+      "tests/release-ci.test.ts"
+    ],
+    "status": "Implementation/local acceptance complete; final integrated CI and release external receipt pending",
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-007",
+    "decision": "specs/005-optional-cloud-qa/plan.md",
+    "tasks": [
+      "T002",
+      "T004",
+      "T005",
+      "T006",
+      "T008",
+      "T009",
+      "T010",
+      "T011",
+      "T012"
+    ],
+    "commits": [
+      "a5b4724cb42799707ede23a9b758696ad3e2e3dc",
+      "cd5a4fe98f31686b1eca0e3ee8b0165db6bb61b1",
+      "96619122fdacea5d42d9aa7519412025c4eda468",
+      "0cae5fb9fd650e6febb7e8fb4b4ac656e50885a0",
+      "1dd153735ac7370c462884e2829e2f2c3e560682",
+      "c4f1be49d8a1b80d003d76f808c513f7a37d5a7c",
+      "935fb26b8a3dffcf4e5ca4f26a9f7b174f181620",
+      "38f16eba5779fb79183b7b9702fca2878f32112e",
+      "aef824d1e4e153c2679af4abc64dc067ce0ff8db",
+      "42a000ad41b7e5f961935a0092de5297eec66454",
+      "468a5df855db2fc64ce9532471130d5a8af6edc5"
+    ],
+    "evidence": [
+      "specs/005-optional-cloud-qa/analysis.md",
+      "specs/005-optional-cloud-qa/validation.md",
+      "tests/release-ci.test.ts",
+      "e2e/mobile-experience.spec.ts",
+      "e2e/qa-permissions.spec.ts",
+      "specs/005-optional-cloud-qa/validation.md#integrated-local-acceptance-before-final-freeze"
+    ],
+    "status": "Implementation/local acceptance complete; final integrated CI and release external receipt pending",
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-008",
+    "decision": "specs/005-optional-cloud-qa/plan.md",
+    "tasks": [
+      "T001",
+      "T007",
+      "T008"
+    ],
+    "commits": [
+      "a5b4724cb42799707ede23a9b758696ad3e2e3dc",
+      "cd5a4fe98f31686b1eca0e3ee8b0165db6bb61b1",
+      "96619122fdacea5d42d9aa7519412025c4eda468",
+      "0cae5fb9fd650e6febb7e8fb4b4ac656e50885a0",
+      "1dd153735ac7370c462884e2829e2f2c3e560682",
+      "935fb26b8a3dffcf4e5ca4f26a9f7b174f181620",
+      "aef824d1e4e153c2679af4abc64dc067ce0ff8db"
+    ],
+    "evidence": [
+      "specs/005-optional-cloud-qa/analysis.md",
+      "specs/005-optional-cloud-qa/validation.md",
+      "tests/release-ci.test.ts"
+    ],
+    "status": "Implementation/local acceptance complete; final integrated CI and release external receipt pending",
+    "provenance": "private-history"
+  }
+]

@@ -1,0 +1,108 @@
+[
+  {
+    "requirement": "FR-001",
+    "decision": "specs/002-portfolio-release/plan.md#decisions",
+    "tasks": [
+      "T001",
+      "T002",
+      "T003"
+    ],
+    "commits": [
+      "fad26f171558072b9c85b12b3429a01eb4207a36",
+      "c1ff481d3fef34b054e6218bfef99af6746df3a2",
+      "8f44940e03c925407344aa83a21ec2d15318f995"
+    ],
+    "evidence": [
+      "specs/002-portfolio-release/validation.md",
+      "specs/002-portfolio-release/traceability.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-002",
+    "decision": "specs/002-portfolio-release/plan.md#decisions",
+    "tasks": [
+      "T004",
+      "T010"
+    ],
+    "commits": [
+      "fad26f171558072b9c85b12b3429a01eb4207a36",
+      "c1ff481d3fef34b054e6218bfef99af6746df3a2",
+      "8f44940e03c925407344aa83a21ec2d15318f995"
+    ],
+    "evidence": [
+      "specs/002-portfolio-release/validation.md",
+      "specs/002-portfolio-release/traceability.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-003",
+    "decision": "specs/002-portfolio-release/plan.md#decisions",
+    "tasks": [
+      "T005",
+      "T010"
+    ],
+    "commits": [
+      "fad26f171558072b9c85b12b3429a01eb4207a36",
+      "c1ff481d3fef34b054e6218bfef99af6746df3a2",
+      "8f44940e03c925407344aa83a21ec2d15318f995",
+      "b7cc98b13eaafb0a84fda76f99acc5f35f997b16"
+    ],
+    "evidence": [
+      "specs/002-portfolio-release/validation.md",
+      "specs/002-portfolio-release/traceability.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-004",
+    "decision": "specs/002-portfolio-release/plan.md#decisions",
+    "tasks": [
+      "T007",
+      "T008",
+      "T010"
+    ],
+    "commits": [
+      "fad26f171558072b9c85b12b3429a01eb4207a36"
+    ],
+    "evidence": [
+      "specs/002-portfolio-release/validation.md",
+      "specs/002-portfolio-release/traceability.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-005",
+    "decision": "specs/002-portfolio-release/plan.md#decisions",
+    "tasks": [
+      "T009",
+      "T010"
+    ],
+    "commits": [
+      "fad26f171558072b9c85b12b3429a01eb4207a36"
+    ],
+    "evidence": [
+      "specs/002-portfolio-release/validation.md",
+      "specs/002-portfolio-release/traceability.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-006",
+    "decision": "specs/002-portfolio-release/plan.md#decisions",
+    "tasks": [
+      "T006",
+      "T010"
+    ],
+    "commits": [
+      "fad26f171558072b9c85b12b3429a01eb4207a36",
+      "9e8fadfc53688eb452b81567f4c91a947a9aa488"
+    ],
+    "evidence": [
+      "specs/002-portfolio-release/validation.md",
+      "specs/002-portfolio-release/traceability.md"
+    ],
+    "provenance": "private-history"
+  }
+]

@@ -1,0 +1,112 @@
+.access-management { min-width: 0; padding: 24px; }
+.access-management .access-view-nav { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 0 18px; border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+.access-view-nav button { display: inline-flex; align-items: center; gap: 9px; border: 0; border-radius: 9px; padding: 11px 14px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 700; cursor: pointer; }
+.access-view-nav button[aria-pressed="true"] { background: #eeefff; color: #4d5ad0; }
+.access-view-nav button span, .access-filters button span, .access-count { display: inline-flex; align-items: center; justify-content: center; min-width: 21px; padding: 2px 6px; border-radius: 6px; background: #e8e9ed; color: #5d6170; font-size: 10px; font-weight: 700; }
+.access-view-nav button[aria-pressed="true"] span { background: #dfe2ff; color: #4d5ad0; }
+.access-directory-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
+.access-directory-head h3, .access-invitations h3 { margin: 0; font-size: 17px; color: #242834; }
+.access-directory-head p, .access-invitations .section-head p { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.access-directory-head > button { flex: 0 0 auto; }
+.access-search { display: block; max-width: 440px; }
+.access-search > span { display: block; margin-bottom: 7px; color: #565d70; font-size: 11px; font-weight: 700; }
+.access-search input { width: 100%; min-height: 42px; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; background: #fff; color: #242834; font: inherit; font-size: 12px; }
+.access-search input:focus { outline: 2px solid #c9ceff; outline-offset: 1px; border-color: #8c95ec; }
+.access-filters { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 15px; }
+.access-filters button { display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px; border: 1px solid var(--line); background: #fff; color: #626779; border-radius: 8px; font-size: 11px; font-weight: 650; cursor: pointer; }
+.access-filters button[aria-pressed="true"] { background: #f0f1ff; border-color: #a5adf7; color: #4c5bcc; }
+.access-management .access-users { margin-top: 20px; border: 0; padding: 0; }
+.access-management .access-user-row { display: block; padding: 0; margin: 0; border-top: 1px solid #e9ebf2; }
+.access-management .access-user-row:last-child { border-bottom: 1px solid #e9ebf2; }
+.access-user-summary { display: grid; grid-template-columns: minmax(200px, 1.2fr) minmax(150px, auto) minmax(150px, 1fr) auto; align-items: center; gap: 15px; padding: 18px 0; }
+.access-management .member-identity { gap: 10px; }
+.access-management .member-identity b { font-size: 13px; line-height: 1.4; }
+.access-management .member-identity small { font-size: 11px; line-height: 1.4; }
+.access-management .avatar { width: 36px; height: 36px; flex: 0 0 36px; font-size: 11px; }
+.access-user-badges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.access-user-badges .type-chip, .access-user-badges .status-chip { white-space: nowrap; }
+.access-source-chip { color: #7d8495; font-size: 10px; line-height: 1.4; }
+.access-row-summary { margin: 0; color: #72788b; font-size: 11px; line-height: 1.5; }
+.access-manage-button { display: inline-flex; align-items: center; justify-content: center; gap: 12px; white-space: nowrap; padding: 8px 10px; font-size: 11px; }
+.access-user-row.is-expanded { background: #fcfcff; }
+.access-management .member-access-settings { display: flex; align-items: stretch; gap: 18px; padding: 8px 16px 22px; border-top: 1px dashed #dfe3ee; }
+.access-role-field { display: flex; align-items: center; gap: 12px; padding-top: 12px; }
+.access-role-field > span { color: #5a6174; font-size: 11px; font-weight: 700; }
+.access-management .member-role-select { padding: 9px 11px; font-size: 11px; max-width: 100%; }
+.access-state-note { margin: -7px 0 0; color: #737b8f; font-size: 11px; line-height: 1.6; }
+.access-management .member-permissions { max-width: 740px; }
+.access-management .member-folder-access { width: 100%; max-width: 740px; }
+.access-member-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-top: 15px; border-top: 1px solid #e8ebf3; }
+.access-member-actions .delete-member { margin-left: auto; color: #b05455; border-color: #efd8d8; font-size: 11px; }
+.access-management .invite-people { margin-top: 0; padding: 20px; background: #fafbff; border: 1px solid #e6e8f2; }
+.access-management .access-invitations .invite-form { grid-template-columns: minmax(200px, 1.25fr) minmax(210px, 1fr) auto; gap: 14px; align-items: end; }
+.access-management .access-invitations .invite-form label > span { font-size: 11px; }
+.access-management .access-invitations .invite-form input:not([type="checkbox"]), .access-management .access-invitations .invite-form select { min-height: 42px; font-size: 12px; }
+.access-management .access-invitations .invite-form > .primary-button { grid-column: 3; grid-row: 1; min-height: 42px; }
+.access-invite-permissions { grid-column: 1 / -1; border-top: 1px solid #e6e8f2; padding-top: 12px; margin-top: 4px; }
+.access-invite-permissions summary, .access-invitation-history > summary, .access-advanced > summary { color: #566179; font-size: 12px; font-weight: 700; cursor: pointer; padding: 4px 0; }
+.access-invite-permissions summary > span, .access-invitation-history summary > span { margin-left: 10px; color: #8891a3; font-size: 10px; font-weight: 500; }
+.access-invite-permissions[open] > summary { margin-bottom: 18px; }
+.access-invite-permissions .invite-folder-access { margin-top: 14px; }
+.access-invitation-list { margin-top: 28px; }
+.access-invitation-list h3 { display: flex; align-items: center; gap: 9px; margin-bottom: 12px; }
+.access-management .access-invitation-row { display: grid; grid-template-columns: minmax(180px, 1fr) auto; gap: 18px; padding: 15px 0; border-top: 1px solid #e9ebf2; }
+.access-invitation-row b { font-size: 12px; overflow-wrap: anywhere; }
+.access-invitation-row .access-row-summary { margin-top: 8px; }
+.access-invitation-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+.access-invitation-actions button { padding: 8px 10px; font-size: 10px; }
+.access-invitation-note { color: #687487; font-size: 11px; line-height: 1.6; margin: 8px 0 0; }
+.access-invitation-history { margin-top: 20px; padding-top: 14px; border-top: 1px solid #e9ebf2; }
+.access-invitation-history[open] > summary { margin-bottom: 14px; }
+.access-empty-note { padding: 15px 0; color: #7a8192; font-size: 12px; }
+.access-advanced { margin-top: 20px; }
+.access-management [hidden] { display: none !important; }
+@media (max-width: 1100px) {
+  .access-user-summary { grid-template-columns: minmax(200px, 1fr) auto; gap: 10px 16px; }
+  .access-user-badges { grid-column: 1; grid-row: 2; padding-left: 46px; }
+  .access-user-summary > .access-row-summary { grid-column: 1; grid-row: 3; padding-left: 46px; }
+  .access-manage-button { grid-column: 2; grid-row: 1 / 4; }
+  .access-management .access-invitations .invite-form { grid-template-columns: 1fr 1fr; }
+  .access-management .access-invitations .invite-form > .primary-button { grid-column: 1 / -1; grid-row: auto; justify-self: start; }
+}
+@media (max-width: 600px) {
+  .access-management { padding: 18px 14px; }
+  .access-management .access-view-nav { gap: 3px; padding-bottom: 14px; margin-bottom: 20px; }
+  .access-view-nav button { padding: 9px 7px; gap: 5px; font-size: 10px; }
+  .access-directory-head { align-items: center; gap: 10px; margin-bottom: 18px; }
+  .access-directory-head h3 { font-size: 14px; }
+  .access-directory-head p { display: none; }
+  .access-directory-head > button { padding: 9px 10px; font-size: 10px; }
+  .access-search { max-width: none; }
+  .access-filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+  .access-filters button { min-height: 34px; justify-content: center; padding: 7px 5px; gap: 3px; font-size: 9px; white-space: nowrap; }
+  .access-filters button span { min-width: 16px; padding: 2px 4px; font-size: 9px; }
+  .access-user-summary { grid-template-columns: minmax(0, 1fr); padding: 16px 0; gap: 9px; }
+  .access-user-badges, .access-user-summary > .access-row-summary { grid-column: 1; grid-row: auto; padding-left: 46px; }
+  .access-manage-button { grid-column: 1; grid-row: auto; justify-self: start; margin-left: 46px; }
+  .access-management .member-access-settings { padding: 0 8px 20px; gap: 16px; }
+  .access-role-field { align-items: flex-start; flex-direction: column; gap: 7px; }
+  .access-member-actions .delete-member { margin-left: 0; }
+  .access-management .invite-people { padding: 16px 12px; }
+  .access-management .access-invitations .invite-form { grid-template-columns: minmax(0, 1fr); }
+  .access-management .access-invitations .invite-form > .primary-button { grid-column: 1; justify-self: stretch; }
+  .access-management .access-invitation-row { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .access-invitation-actions { justify-content: flex-start; }
+}
+
+.access-management .member-identity, .access-management .member-identity > span, .access-management .member-access-settings, .access-role-field, .access-search, .access-management .invite-form label { min-width: 0; }
+.access-management .member-identity b, .access-management .member-identity small { overflow-wrap: anywhere; }
+.access-management .permission-picker legend { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+.access-management button:focus-visible, .access-management input:focus-visible, .access-management select:focus-visible, .access-management summary:focus-visible { outline: 3px solid #6677f5; outline-offset: 3px; }
+@media (max-width: 680px), (max-width: 900px) and (max-height: 500px) and (pointer: coarse) {
+  .access-management button, .access-management summary, .access-management .permission-picker label { min-height: 44px; }
+  .access-search input, .access-management .member-role-select, .access-management .access-invitations .invite-form input:not([type=checkbox]), .access-management .access-invitations .invite-form select { min-height: 44px; font-size: 16px; }
+  .access-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .access-filters button { white-space: normal; font-size: 11px; }
+  .access-view-nav button { font-size: 12px; }
+  .access-management .member-identity b, .access-management .member-identity small { white-space: normal; }
+}
+
+@media (max-width: 680px) { .access-directory-head { flex-wrap: wrap; align-items: flex-start; } .access-directory-head > button { max-width: 100%; } }
+
+@media (max-width: 680px), (max-width: 900px) and (max-height: 500px) and (pointer: coarse) { .access-management .folder-access-picker { min-width: 0; } .access-management .folder-scope-toggle, .access-management .folder-choice-grid label { min-height: 44px; font-size: 11px; } .access-management .folder-access-picker label > span { min-width: 0; overflow-wrap: anywhere; } .access-management .folder-access-picker input, .access-management .permission-picker input { flex: 0 0 18px; width: 18px; height: 18px; } }

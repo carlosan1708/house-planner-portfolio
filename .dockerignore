@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+npm-debug.log
+.env*
+README.md
+.qa-tools
+qa-cloud-config.json
+gha-creds-*.json
+*.pem
+test-results
+playwright-report
+coverage
+*-debug.log

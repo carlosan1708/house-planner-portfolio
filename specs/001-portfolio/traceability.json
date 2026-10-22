@@ -1,0 +1,231 @@
+[
+  {
+    "requirement": "FR-001",
+    "decision": "specs/001-portfolio/plan.md#implementation-decisions",
+    "tasks": [
+      "T006",
+      "T008",
+      "T009"
+    ],
+    "commits": [
+      "1d5ef16b4216ed2b158260cdd92c4d11360cf89b",
+      "5327bc597b9e0b57edb2431411493d6d7839846c"
+    ],
+    "evidence": [
+      "README.md",
+      "docs/README.md",
+      "specs/001-portfolio/validation.md#local-checks"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-002",
+    "decision": "specs/001-portfolio/plan.md#implementation-decisions",
+    "tasks": [
+      "T006",
+      "T007"
+    ],
+    "commits": [
+      "1d5ef16b4216ed2b158260cdd92c4d11360cf89b",
+      "7ce9f74b0987c4a6dec0714b2460e69d2e79210b"
+    ],
+    "evidence": [
+      "docs/architecture/assistant.md",
+      "docs/architecture/workbooks.md",
+      "specs/001-portfolio/validation.md#local-checks"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-003",
+    "decision": "specs/001-portfolio/plan.md#implementation-decisions",
+    "tasks": [
+      "T002",
+      "T010"
+    ],
+    "commits": [
+      "a7df08765f000d347159bb1c6b09a78e1c487dcc",
+      "1d5ef16b4216ed2b158260cdd92c4d11360cf89b"
+    ],
+    "evidence": [
+      ".specify/integration.json",
+      ".specify/memory/constitution.md",
+      "docs/development/sdd.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-004",
+    "decision": "specs/001-portfolio/plan.md#implementation-decisions",
+    "tasks": [
+      "T003",
+      "T004",
+      "T005",
+      "T010",
+      "T020",
+      "T021"
+    ],
+    "commits": [
+      "7bed084c680d4a52eb3f83bc95e4420378e69065",
+      "cc66d98e6c9c75b37e91f1ba23fb8d4045a9915e",
+      "05262308b7ea9d38ef6f17987c0b23a4fb6ca00f",
+      "7ce9f74b0987c4a6dec0714b2460e69d2e79210b"
+    ],
+    "evidence": [
+      "specs/001-portfolio/spec.md",
+      "specs/001-portfolio/tasks.md",
+      "specs/001-portfolio/validation.md#local-checks"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-005",
+    "decision": "specs/001-portfolio/plan.md#implementation-decisions",
+    "tasks": [
+      "T011"
+    ],
+    "commits": [
+      "1d5ef16b4216ed2b158260cdd92c4d11360cf89b",
+      "7ce9f74b0987c4a6dec0714b2460e69d2e79210b"
+    ],
+    "evidence": [
+      "docs/development/cases/README.md",
+      "docs/development/cases/assistant.md",
+      "docs/development/cases/workbook-approval.md",
+      "docs/development/cases/encrypted-documents.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-006",
+    "decision": "specs/001-portfolio/plan.md#implementation-decisions",
+    "tasks": [
+      "T013"
+    ],
+    "commits": [
+      "1d5ef16b4216ed2b158260cdd92c4d11360cf89b"
+    ],
+    "evidence": [
+      "docs/portfolio/profile-card.md",
+      "specs/001-portfolio/validation.md#history-and-preservation"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-007",
+    "decision": "specs/001-portfolio/plan.md#implementation-decisions",
+    "tasks": [
+      "T001",
+      "T015",
+      "T016"
+    ],
+    "commits": [
+      "cc66d98e6c9c75b37e91f1ba23fb8d4045a9915e",
+      "a3b32ddd84c9d7d17a44a568c9f9466839761143"
+    ],
+    "evidence": [
+      "docs/portfolio/sanitation.md",
+      "docs/operations/history-migration.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-008",
+    "decision": "specs/001-portfolio/plan.md#implementation-decisions",
+    "tasks": [
+      "T015",
+      "T016"
+    ],
+    "commits": [
+      "a7df08765f000d347159bb1c6b09a78e1c487dcc",
+      "7bed084c680d4a52eb3f83bc95e4420378e69065",
+      "cc66d98e6c9c75b37e91f1ba23fb8d4045a9915e",
+      "05262308b7ea9d38ef6f17987c0b23a4fb6ca00f",
+      "1d5ef16b4216ed2b158260cdd92c4d11360cf89b",
+      "a3b32ddd84c9d7d17a44a568c9f9466839761143",
+      "5327bc597b9e0b57edb2431411493d6d7839846c"
+    ],
+    "evidence": [
+      "docs/portfolio/sanitation.md",
+      "CONTRIBUTING.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-009",
+    "decision": "specs/001-portfolio/plan.md#implementation-decisions",
+    "tasks": [
+      "T014",
+      "T015",
+      "T016"
+    ],
+    "commits": [
+      "a3b32ddd84c9d7d17a44a568c9f9466839761143",
+      "5327bc597b9e0b57edb2431411493d6d7839846c"
+    ],
+    "evidence": [
+      "scripts/prepare-demo-house.mjs",
+      "tests/synthetic-house-distribution.test.ts",
+      "docs/portfolio/sanitation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-010",
+    "decision": "specs/001-portfolio/plan.md#implementation-decisions",
+    "tasks": [
+      "T007",
+      "T017"
+    ],
+    "commits": [
+      "1d5ef16b4216ed2b158260cdd92c4d11360cf89b",
+      "7ce9f74b0987c4a6dec0714b2460e69d2e79210b"
+    ],
+    "evidence": [
+      "docs/operations/releases.md",
+      "docs/operations/history-migration.md",
+      "scripts/release-source.mjs",
+      "tests/release-source.test.ts"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-011",
+    "decision": "specs/001-portfolio/plan.md#implementation-decisions",
+    "tasks": [
+      "T008",
+      "T009",
+      "T012",
+      "T014",
+      "T019"
+    ],
+    "commits": [
+      "a3b32ddd84c9d7d17a44a568c9f9466839761143",
+      "7ce9f74b0987c4a6dec0714b2460e69d2e79210b"
+    ],
+    "evidence": [
+      "scripts/check-docs.mjs",
+      "tests/docs-check.test.ts",
+      ".github/workflows/ci.yml",
+      "specs/001-portfolio/validation.md#local-checks"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-012",
+    "decision": "specs/001-portfolio/plan.md#implementation-decisions",
+    "tasks": [
+      "T001",
+      "T018"
+    ],
+    "commits": [
+      "7bed084c680d4a52eb3f83bc95e4420378e69065",
+      "cc66d98e6c9c75b37e91f1ba23fb8d4045a9915e"
+    ],
+    "evidence": [
+      "docs/operations/history-migration.md",
+      "specs/001-portfolio/validation.md#history-and-preservation"
+    ],
+    "provenance": "private-history"
+  }
+]

@@ -1,0 +1,45 @@
+.folder-vault { margin: 0 0 20px; padding: 22px; border: 1px solid #d5ddeb; border-radius: 20px; background: #f3f6fc; color: #25364c; }
+.folder-vault-heading { display: flex; align-items: flex-start; gap: 14px; }
+.folder-vault-heading > span { font-size: 28px; }
+.folder-vault-heading > div { flex: 1; min-width: 0; }
+.folder-vault h3 { margin: 0 0 7px; overflow-wrap: anywhere; }
+.folder-vault p { margin: 0; font-size: 14px; line-height: 1.6; }
+.folder-vault-unlock { display: flex; align-items: flex-end; gap: 12px; margin-top: 18px; }
+.folder-vault-unlock label { display: grid; gap: 6px; flex: 1; max-width: 390px; font-size: 13px; font-weight: 600; }
+.folder-vault-unlock input, .folder-protection-fields input[type="password"], .folder-vault-reset input { width: 100%; min-width: 0; padding: 12px 14px; border: 1px solid #ccd5e4; border-radius: 10px; background: white; }
+.folder-vault .form-error { margin-top: 14px; }
+.folder-vault-admin { margin-top: 18px; }
+.folder-vault-admin-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.folder-vault-reset { display: grid; gap: 14px; margin-top: 16px; }
+.folder-vault-reset small { color: #617084; font-size: 13px; }
+.folder-vault .folder-vault-reset-success { margin-top: 14px; color: #245a3e; }
+.folder-vault-access { display: grid; gap: 14px; margin-top: 14px; }
+.folder-vault-access fieldset { display: grid; gap: 10px; padding: 14px; border: 1px solid #d5ddeb; border-radius: 12px; }
+.folder-vault-access legend { padding: 0 6px; font-size: 13px; }
+.folder-vault-access label { display: flex; align-items: center; gap: 10px; }
+.folder-vault-access label span { display: grid; gap: 3px; }
+.folder-vault-access small { color: #617084; }
+.folder-vault-access > button { justify-self: start; }
+.folder-encryption-pending > button { margin-top: 12px; }
+.folder-protection-fields { flex-basis: 100%; display: grid; gap: 10px; }
+.folder-protection-fields > label { display: flex; align-items: center; gap: 8px; }
+.folder-protection-fields input[type="checkbox"] { width: auto; min-width: 0; padding: 0; flex: 0 0 auto; }
+.folder-protection-passwords { display: flex; flex-wrap: wrap; gap: 12px; }
+.folder-protection-passwords label { display: grid; gap: 6px; flex: 1 1 220px; }
+.folder-protection-fields p, .folder-protection-fields small { margin: 0; color: #617084; font-size: 13px; line-height: 1.5; }
+.new-folder-form.protected-folder-form { flex-wrap: wrap; }
+.folder-card .folder-vault-status { display: inline-flex; gap: 5px; font-size: 12px; margin-top: 4px; }
+.folder-card .folder-card-open > .folder-vault-status { font-size: 12px; }
+@media (max-width: 640px) { .folder-vault { padding: 18px; } .folder-vault-heading { display: grid; grid-template-columns: 32px minmax(0, 1fr); } .folder-vault-heading > button { grid-column: 2; justify-self: start; } .folder-vault-unlock { flex-direction: column; align-items: stretch; } .folder-vault-unlock label { max-width: none; } }
+
+.folder-vault, .folder-vault-unlock label, .folder-vault-reset, .folder-vault-access, .folder-vault-access fieldset, .folder-protection-passwords label { min-width: 0; }
+.folder-vault-access label > span { min-width: 0; overflow-wrap: anywhere; }
+.folder-vault button:focus-visible, .folder-vault input:focus-visible { outline: 3px solid #87a693; outline-offset: 3px; }
+@media (max-width: 680px), (max-width: 900px) and (max-height: 500px) and (pointer: coarse) {
+  .folder-vault button, .folder-vault-access label, .folder-protection-fields > label { min-height: 44px; }
+  .folder-vault button { white-space: normal; overflow-wrap: anywhere; }
+  .folder-vault-unlock input, .folder-protection-fields input[type=password], .folder-vault-reset input:not([type=checkbox]) { min-height: 44px; font-size: 16px; }
+  .folder-vault-unlock { flex-direction: column; align-items: stretch; }
+  .folder-vault-unlock label { max-width: none; }
+  .folder-vault-admin-actions > button { flex: 1 1 180px; }
+}

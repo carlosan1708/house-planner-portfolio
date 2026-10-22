@@ -1,0 +1,15 @@
+.file-share-button{min-height:44px;padding:8px 12px;border:1px solid var(--line,#dbe3dd);border-radius:9px;background:#fff;color:var(--ink,#193b2d);font-size:12px;font-weight:600;cursor:pointer}
+.file-share-button:disabled{opacity:.5;cursor:not-allowed}
+.aesthetics-page .aesthetic-image-actions .file-share-button{min-height:44px;font-size:12px;flex:1 1 100%;text-align:center}
+.file-share-modal{z-index:180}
+.file-share-card{display:grid;gap:16px;min-width:0;width:min(480px,100%);max-height:100%;overflow:auto;overscroll-behavior:contain}
+.file-share-card .file-share-name{font-weight:600;color:var(--ink,#193b2d);overflow-wrap:anywhere}
+.file-share-field{display:grid;gap:7px;min-width:0;font-size:12px;font-weight:600;color:var(--ink,#193b2d)}
+.file-share-field :is(select,input){box-sizing:border-box;min-width:0;width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--line,#dbe3dd);border-radius:9px;background:#fff;color:inherit;font-size:16px}
+.file-share-result{display:grid;gap:12px;min-width:0;padding:14px;border-radius:12px;background:#f4f7f4}
+.file-share-result .file-share-expiration{overflow-wrap:anywhere;color:var(--ink,#193b2d)}
+.file-share-result [role=status]{font-size:12px;color:var(--muted,#65776c)}
+.file-share-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px}
+.file-share-actions button,.file-share-result button{min-height:44px}
+.file-share-card :is(button,select,input):focus-visible,.file-share-button:focus-visible{outline:3px solid #397d63;outline-offset:3px}
+@media(max-width:520px){.file-share-actions{display:grid;grid-template-columns:1fr}.file-share-actions .primary-button{grid-row:1}.file-share-card{padding:20px}.file-share-result{padding:12px}}

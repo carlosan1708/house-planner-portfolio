@@ -1,0 +1,14 @@
+.upload-progress { display: grid; gap: 7px; min-width: 0; margin: 14px 0; padding: 13px 15px; border: 1px solid #d7dfdb; border-radius: 12px; background: #f6f9f7; color: #244236; }
+.upload-progress-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; }
+.upload-progress-heading span { font-variant-numeric: tabular-nums; }
+.upload-progress progress { appearance: none; width: 100%; height: 7px; overflow: hidden; border: 0; border-radius: 8px; background: #dfe8e2; accent-color: #49745b; }
+.upload-progress progress::-webkit-progress-bar { background: #dfe8e2; border-radius: 8px; }
+.upload-progress progress::-webkit-progress-value { background: #49745b; border-radius: 8px; }
+.upload-progress progress::-moz-progress-bar { background: #49745b; border-radius: 8px; }
+.upload-progress small { color: #587062; font-size: 12px; overflow-wrap: anywhere; }
+.upload-progress.processing progress { opacity: .65; }
+.upload-progress.failed { border-color: #e5cdc5; background: #fdf7f4; color: #814637; }
+.upload-progress.failed small { color: #814637; }
+.upload-progress.failed progress { accent-color: #a37362; }
+.upload-progress.failed progress::-webkit-progress-value { background: #a37362; }
+.upload-progress.failed progress::-moz-progress-bar { background: #a37362; }

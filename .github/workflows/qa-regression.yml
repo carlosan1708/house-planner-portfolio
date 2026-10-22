@@ -1,0 +1,20 @@
+name: Cloud QA configuration guide
+
+# This public snapshot has no cloud identity, production secrets or deployment trust.
+# Configure a separate private operational repository before using cloud QA tooling.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  configuration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Explain the unconfigured cloud example
+        run: |
+          echo "Cloud QA is not configured in this public portfolio repository."
+          echo "Use the manual full-regression workflow for local synthetic coverage."
+          echo "See docs/qa-workflow.md before configuring independently authorized cloud work."

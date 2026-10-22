@@ -1,0 +1,18 @@
+.git
+.gitignore
+.next
+node_modules
+npm-debug.log
+.env
+.env.*
+!.env.example
+outputs
+tmp
+test-results
+playwright-report
+# Omit all local ignored credentials, emulator tooling and test artifacts.
+#!include:.gitignore
+.qa-tools
+qa-cloud-config.json
+gha-creds-*.json
+*.pem

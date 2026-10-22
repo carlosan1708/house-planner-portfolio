@@ -1,0 +1,9 @@
+HOUSE PLANNER — FICTIONAL DEMONSTRATION DOCUMENT
+
+Quote: COT-DEMO-019
+Supplier: Pacific Roofing
+Scope: Metal roofing and accessories
+Estimated amount: USD 7,665
+Status: Pending
+
+This file contains only fictional data and does not represent a real offer.

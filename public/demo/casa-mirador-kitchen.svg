@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Casa Mirador — oak and stone kitchen concept</title>
+  <desc id="desc">Fictional architectural illustration of an oak kitchen with a pale stone island, sage cabinetry, woven stools and warm pendant lights. Demo concept, not a photograph of a real project.</desc>
+  <defs>
+    <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#eee6d7"/><stop offset="1" stop-color="#d1c3ae"/></linearGradient>
+    <linearGradient id="floor" x2=".5" y2="1"><stop stop-color="#b9ab94"/><stop offset="1" stop-color="#e5d6be"/></linearGradient>
+    <linearGradient id="oak" x2="1" y2=".4"><stop stop-color="#b49168"/><stop offset=".5" stop-color="#d4b58a"/><stop offset="1" stop-color="#a98259"/></linearGradient>
+    <linearGradient id="stone" x2=".4" y2="1"><stop stop-color="#f4ecdc"/><stop offset="1" stop-color="#cbbb9f"/></linearGradient>
+    <linearGradient id="window" x2="0" y2="1"><stop stop-color="#b2c8bf"/><stop offset="1" stop-color="#d6d8b6"/></linearGradient>
+    <pattern id="grain" width="15" height="200" patternUnits="userSpaceOnUse"><path d="M2 0v200m9-200v200" stroke="#785c3d" stroke-width="1" opacity=".15"/></pattern>
+    <pattern id="tile" width="67" height="49" patternUnits="userSpaceOnUse"><rect width="67" height="49" fill="#d8d4bd"/><path d="M0 0h67v49H0Z" fill="none" stroke="#ece8d8" stroke-width="2"/></pattern>
+    <filter id="shadow" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="15"/></filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#wall)"/>
+  <path d="M0 800V574l300-98h900v324Z" fill="url(#floor)"/>
+  <path d="M0 0h300v476L0 574Z" fill="#d9d2c0"/>
+  <path d="M23 130 266 94v359L23 529Z" fill="#766f5f"/>
+  <path d="m34 140 219-32v336L34 512Z" fill="url(#window)"/>
+  <path d="M38 434q42-98 95-77t121-39v126L38 509Z" fill="#899a76"/>
+  <path d="m133 126-1 351m-95-162 214-51" stroke="#64705f" stroke-width="8"/>
+  <path d="m36 145 93 8 3 322-97 34Z" fill="#eef0da" opacity=".18"/>
+  <g stroke="#95846a" stroke-opacity=".18"><path d="m299 477-56 323m220-323 15 323m151-323 86 323m80-323 158 323m7-323 228 323M0 686h1200M143 575h1057"/></g>
+  <rect x="326" y="136" width="802" height="379" fill="#b4aa94"/>
+  <rect x="326" y="137" width="208" height="369" fill="url(#oak)"/>
+  <rect x="326" y="137" width="208" height="369" fill="url(#grain)"/>
+  <path d="M429 139v364m-97-173h195" stroke="#8c6f4f" stroke-width="3"/>
+  <path d="M414 271v44m30-44v44" stroke="#5c5b49" stroke-width="3"/>
+  <rect x="548" y="137" width="580" height="225" fill="url(#tile)"/>
+  <rect x="548" y="137" width="580" height="21" fill="#a28c6b"/>
+  <path d="M548 159h580" stroke="#fbe6b7" stroke-width="4"/>
+  <path d="m787 137-38 80h178l-43-80Z" fill="#d5cbb9"/>
+  <rect x="747" y="213" width="181" height="17" rx="2" fill="#c1b6a2"/>
+  <rect x="548" y="357" width="580" height="148" fill="#8e9b85"/>
+  <path d="M674 368v137m123-137v137m160-137v137m-403-80h237" stroke="#61735d" stroke-width="2"/>
+  <g stroke="#4e5e49" stroke-width="4"><path d="M594 384h35m94 0h35m90 0h34m119 0h34"/></g>
+  <rect x="546" y="345" width="586" height="19" fill="url(#stone)"/>
+  <rect x="803" y="379" width="135" height="110" fill="#3c433b"/>
+  <rect x="813" y="392" width="115" height="76" fill="#27342f"/>
+  <path d="M819 385h104" stroke="#9fa390" stroke-width="3"/>
+  <circle cx="822" cy="476" r="3" fill="#8f9785"/><circle cx="918" cy="476" r="3" fill="#8f9785"/>
+  <ellipse cx="867" cy="344" rx="51" ry="6" fill="#42483f"/>
+  <path d="M595 344v-45q0-18 17-18t17 18v9" fill="none" stroke="#8b7956" stroke-width="6"/>
+  <ellipse cx="617" cy="347" rx="38" ry="5" fill="#b0a38b"/>
+  <g fill="#ba8d62"><rect x="1019" y="296" width="43" height="48" rx="5"/><rect x="1071" y="312" width="30" height="32" rx="4"/></g>
+  <g fill="#d6bf92"><rect x="1019" y="290" width="43" height="8" rx="2"/><rect x="1071" y="307" width="30" height="7" rx="2"/></g>
+  <path d="M703 345v-55h29v55" fill="#c7af88"/><path d="m714 290-9-38m15 38 7-44" stroke="#767b5a" stroke-width="3"/>
+  <ellipse cx="703" cy="247" rx="10" ry="22" fill="#85906e" transform="rotate(-21 703 247)"/>
+  <ellipse cx="730" cy="243" rx="10" ry="22" fill="#687a57" transform="rotate(22 730 243)"/>
+  <ellipse cx="657" cy="688" rx="365" ry="43" fill="#78654c" opacity=".2" filter="url(#shadow)"/>
+  <path d="m354 470 485-42 216 102-555 65Z" fill="url(#stone)"/>
+  <path d="m353 470 147 125v153L353 605Z" fill="#bda98a"/>
+  <path d="m500 595 555-65v150l-555 68Z" fill="url(#oak)"/>
+  <path d="m500 595 555-65v150l-555 68Z" fill="url(#grain)"/>
+  <path d="m353 470 147 109 555-62v18l-555 66-147-115Z" fill="#f4e9d7"/>
+  <path d="m576 589 1 143m126-158v143m128-158v143m128-160v143" stroke="#94744d" stroke-width="2"/>
+  <path d="m841 434-91 22 100 35m-383-15 82 47 145-18" stroke="#b7aa91" fill="none" stroke-width="2" opacity=".45"/>
+  <ellipse cx="741" cy="482" rx="67" ry="21" fill="#927044"/>
+  <ellipse cx="741" cy="476" rx="67" ry="20" fill="#b78f59"/>
+  <g><circle cx="712" cy="470" r="14" fill="#9b9d61"/><circle cx="738" cy="469" r="15" fill="#d5b46b"/><circle cx="766" cy="474" r="14" fill="#ada46d"/><circle cx="738" cy="484" r="12" fill="#c78d4b"/></g>
+  <path d="m886 457 55-6 39 18-57 7Z" fill="#efe3ce"/><path d="m886 457 37 19v5l-37-17Zm37 19 57-7v5l-57 7Z" fill="#c8b99b"/>
+  <g stroke="#5e5944" stroke-width="8" fill="none"><path d="m562 662-22 112m90-127 25 108m97-112-18 110m93-127 25 105"/></g>
+  <g fill="#bb9764" stroke="#856a45" stroke-width="2"><ellipse cx="591" cy="647" rx="55" ry="23"/><ellipse cx="785" cy="626" rx="55" ry="23"/></g>
+  <g stroke="#e1c18e" stroke-width="3" opacity=".75"><path d="m547 641 81 6m-76-14 84 8m-88 9 77 6m116-38 82 7m-76-15 84 8m-88 9 78 6"/></g>
+  <path d="M591 0v173m234-173v192" stroke="#575548" stroke-width="3"/>
+  <ellipse cx="591" cy="245" rx="72" ry="40" fill="#f9dfa6" opacity=".3" filter="url(#glow)"/>
+  <ellipse cx="825" cy="264" rx="72" ry="40" fill="#f9dfa6" opacity=".3" filter="url(#glow)"/>
+  <path d="M536 214q11-59 55-59t55 59Z" fill="#a58353"/>
+  <path d="M770 233q11-59 55-59t55 59Z" fill="#a58353"/>
+  <path d="M540 211q51 17 102 0m132 19q51 17 102 0" stroke="#e4c793" stroke-width="8"/>
+  <path d="M546 206q45-13 90 0m144 19q45-13 90 0" stroke="#bfa06f" stroke-width="2" fill="none"/>
+  <g fill="#504f3f" font-family="Arial, sans-serif"><text x="345" y="84" font-size="12" letter-spacing="3">CASA MIRADOR · MATERIAL STUDY</text><text x="1140" y="764" font-size="10" text-anchor="end" letter-spacing="2">FICTIONAL DEMO · CONCEPT ILLUSTRATION</text></g>
+</svg>

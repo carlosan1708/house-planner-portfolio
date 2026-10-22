@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Casa Mirador — natural stone bathroom concept</title>
+  <desc id="desc">Fictional architectural illustration of a tranquil bathroom with travertine tiles, an oak vanity, an arched mirror, brass fixtures and a glass shower. Demo concept, not a photograph of a real project.</desc>
+  <defs>
+    <linearGradient id="wall" x2=".8" y2="1"><stop stop-color="#e2d9c7"/><stop offset="1" stop-color="#b8ab93"/></linearGradient>
+    <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#b7ac98"/><stop offset="1" stop-color="#d6c8ae"/></linearGradient>
+    <linearGradient id="oak" x2="1" y2=".2"><stop stop-color="#9b784d"/><stop offset=".55" stop-color="#c6a271"/><stop offset="1" stop-color="#a37e50"/></linearGradient>
+    <linearGradient id="mirror" x2=".7" y2="1"><stop stop-color="#a7b7a5"/><stop offset=".5" stop-color="#d2d2ba"/><stop offset="1" stop-color="#b9c0a9"/></linearGradient>
+    <linearGradient id="glass" x2="1" y2="0"><stop stop-color="#c2d6cd" stop-opacity=".1"/><stop offset="1" stop-color="#cadfd4" stop-opacity=".38"/></linearGradient>
+    <linearGradient id="brass" x2="1"><stop stop-color="#776442"/><stop offset=".5" stop-color="#c3aa75"/><stop offset="1" stop-color="#8e7549"/></linearGradient>
+    <pattern id="tiles" width="136" height="90" patternUnits="userSpaceOnUse"><rect width="136" height="90" fill="#c8bea9"/><path d="M0 0h136v90H0Z" stroke="#dfd7c7" stroke-width="2" fill="none"/><path d="m13 21 46 3 15-6m19 47 27 4M16 74l28-3" stroke="#9f947f" stroke-opacity=".18" fill="none"/></pattern>
+    <pattern id="oakGrain" width="13" height="200" patternUnits="userSpaceOnUse"><path d="M2 0v200m7-200v200" stroke="#765b3a" stroke-width=".7" opacity=".27"/></pattern>
+    <filter id="shadow" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="15"/></filter>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="15"/></filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#wall)"/>
+  <path d="M0 0h180v542L0 641Z" fill="#c9bca4"/>
+  <path d="M0 641 180 541h1020v259H0Z" fill="url(#floor)"/>
+  <g stroke="#a2947b" opacity=".32"><path d="m180 541-20 259m177-259 46 259m112-259 109 259m48-259 173 259m-16-259 236 259M0 716h1200M100 586h1100"/></g>
+  <path d="M796 47h362v504H796Z" fill="url(#tiles)"/>
+  <path d="M796 551h362l42 148-404-22Z" fill="#a69e8b"/>
+  <path d="m799 558 354 1 33 122-387-19Z" fill="#c0b6a0"/>
+  <path d="M1010 115v195m-1-144h71" fill="none" stroke="url(#brass)" stroke-width="8"/>
+  <ellipse cx="1084" cy="167" rx="40" ry="10" fill="#8c7954"/>
+  <ellipse cx="1084" cy="164" rx="41" ry="9" fill="#b6a071"/>
+  <g stroke="#e8e7d6" stroke-width="1.5" opacity=".6"><path d="M1059 182v183m12-183v183m12-183v183m12-183v183m12-183v183"/></g>
+  <circle cx="1010" cy="352" r="17" fill="#ab9264"/><path d="m1009 352 19-8" stroke="#d7c79a" stroke-width="5"/>
+  <rect x="819" y="351" width="94" height="117" fill="#9b927b"/>
+  <rect x="826" y="359" width="80" height="101" fill="#b1a58c"/>
+  <rect x="838" y="419" width="21" height="34" rx="4" fill="#ded7bf"/><rect x="866" y="409" width="19" height="44" rx="3" fill="#7b8c70"/>
+  <path d="M798 57v610m307-610v627m-307-569h307" stroke="#b7bda9" stroke-width="4"/>
+  <path d="M801 59h301v624l-301-17Z" fill="url(#glass)"/>
+  <path d="m811 74 75 3 202 594-109-5Z" fill="#f8fae8" opacity=".09"/>
+  <path d="M1097 302v86" stroke="#8a927f" stroke-width="6"/>
+  <path d="M1059 386v-83" stroke="#e4e6d4" stroke-width="3"/>
+  <path d="M0 76 134 47v324L0 420Z" fill="#8c9a7d"/>
+  <path d="M0 88 123 62v300L0 405Z" fill="#d5e0c5"/>
+  <path d="m58 77 1 305m-58-149 120-30" stroke="#7f876d" stroke-width="7"/>
+  <path d="M0 301q54-92 121-53v114L0 405Z" fill="#a3b18b"/>
+  <path d="M0 407 233 541h143L123 362Z" fill="#f8f0cb" opacity=".25"/>
+  <path d="M333 341V208a111 111 0 0 1 222 0v133Z" fill="#a89167"/>
+  <path d="M343 337V208a101 101 0 0 1 202 0v129Z" fill="url(#mirror)"/>
+  <path d="m353 221 85-89v192h-85Z" fill="#e4e5cc" opacity=".3"/>
+  <path d="M484 119q28 12 46 39v178h-46Z" fill="#87967f" opacity=".33"/>
+  <ellipse cx="444" cy="572" rx="247" ry="44" fill="#61523a" opacity=".2" filter="url(#shadow)"/>
+  <path d="M240 401h400l60 38H277Z" fill="#e4dbc7"/>
+  <path d="M277 439h423v117H277Z" fill="url(#oak)"/>
+  <path d="M277 439h423v117H277Z" fill="url(#oakGrain)"/>
+  <path d="M240 401v111l37 44V439Z" fill="#9a774c"/>
+  <path d="M281 500h414m-208-57v109" stroke="#80633f" stroke-width="2"/>
+  <path d="M397 464h49m95 0h49" stroke="#6b6148" stroke-width="3"/>
+  <path d="M239 398h405l59 36v13H276l-37-33Z" fill="#e8e1cf"/>
+  <ellipse cx="468" cy="409" rx="77" ry="26" fill="#c3b8a0"/>
+  <ellipse cx="468" cy="400" rx="77" ry="25" fill="#f6f0dd"/>
+  <ellipse cx="468" cy="395" rx="62" ry="16" fill="#ddd5bf"/>
+  <path d="M468 385v-40q0-17 18-17t18 17v8" fill="none" stroke="url(#brass)" stroke-width="7"/>
+  <path d="M583 400v-41h28v41" fill="#8e9b7d"/><path d="M598 360v-10h17" stroke="#535f47" stroke-width="5" fill="none"/>
+  <path d="M315 402v-39h28v39" fill="#d2bb91"/>
+  <path d="m324 365-8-28m15 28 6-33" stroke="#8d8c70" stroke-width="2"/>
+  <g stroke="#ab9465" stroke-width="4"><path d="M263 223v93m355-93v93"/></g>
+  <g fill="#fff2bd" opacity=".45" filter="url(#glow)"><ellipse cx="263" cy="267" rx="16" ry="47"/><ellipse cx="618" cy="267" rx="16" ry="47"/></g>
+  <g fill="#f2e7ca"><rect x="256" y="226" width="14" height="74" rx="7"/><rect x="611" y="226" width="14" height="74" rx="7"/></g>
+  <path d="M222 463h32v115h-32Z" fill="#dfd8c2"/>
+  <path d="M222 471h32v100h-32Z" fill="#d9d0b7"/>
+  <path d="M222 560h32m-32-7h32" stroke="#b8ab8d" stroke-width="2"/>
+  <path d="m358 651 258-7 95 62-284 15Z" fill="#e9dfc7"/>
+  <g stroke="#c3b697" stroke-width="2"><path d="m378 659 248-5m-229 16 248-7m-229 19 248-10m-229 20 248-10"/></g>
+  <path d="M105 565h76l-12 87h-50Z" fill="#b99b72"/>
+  <path d="M146 571V400m0 93-43-39m43-4 40-44" stroke="#617452" stroke-width="5" fill="none"/>
+  <g fill="#778b61"><ellipse cx="104" cy="444" rx="16" ry="39" transform="rotate(-41 104 444)"/><ellipse cx="180" cy="410" rx="17" ry="48" transform="rotate(33 180 410)"/><ellipse cx="145" cy="393" rx="18" ry="47"/><ellipse cx="173" cy="506" rx="16" ry="41" transform="rotate(46 173 506)"/></g>
+  <g fill="#5c5747" font-family="Arial, sans-serif"><text x="236" y="75" font-size="12" letter-spacing="3">CASA MIRADOR · NATURAL TEXTURES</text><text x="1140" y="764" font-size="10" text-anchor="end" letter-spacing="2">FICTIONAL DEMO · CONCEPT ILLUSTRATION</text></g>
+</svg>

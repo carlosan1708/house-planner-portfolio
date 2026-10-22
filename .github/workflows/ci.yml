@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GOOGLE_CLOUD_PROJECT: demo-house-planner-qa
+      HOUSE_PLANNER_ENVIRONMENT: qa
+      HOUSE_PLANNER_BUCKET: demo-house-planner-qa.firebasestorage.app
+      HOUSE_PLANNER_ADMIN_EMAIL: ""
+      HOUSE_PLANNER_PUBLIC_URL: http://127.0.0.1:3000
+      FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
+      FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080
+      STORAGE_EMULATOR_HOST: http://127.0.0.1:9199
+      FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
+      NEXT_PUBLIC_HOUSE_PLANNER_ENVIRONMENT: qa
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: demo-house-planner-qa
+      NEXT_PUBLIC_FIREBASE_API_KEY: demo-key
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: demo-house-planner-qa.firebaseapp.com
+      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: demo-house-planner-qa.firebasestorage.app
+      NEXT_PUBLIC_FIREBASE_APP_ID: demo-app
+      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: "000000000000"
+      NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
+      HOUSE_PLANNER_AI_ENABLED: "0"
+      QA_AI_ENABLED: "0"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run docs:check
+      - name: Select applicable Playwright coverage
+        id: browser_scope
+        shell: bash
+        run: |
+          if git rev-parse --verify HEAD^1 >/dev/null 2>&1; then
+            node scripts/ci-browser-scope.mjs
+          else
+            # The first portfolio snapshot has no parent; use one bounded smoke suite.
+            echo "initial_snapshot=true" >> "$GITHUB_OUTPUT"
+            echo "required=true" >> "$GITHUB_OUTPUT"
+          fi
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build -- --webpack
+      - run: npx playwright install --with-deps chromium
+        if: steps.browser_scope.outputs.required == 'true'
+      - name: Applicable Playwright coverage
+        if: steps.browser_scope.outputs.required == 'true'
+        shell: bash
+        env:
+          INITIAL_SNAPSHOT: ${{ steps.browser_scope.outputs.initial_snapshot }}
+        run: |
+          if [ "$INITIAL_SNAPSHOT" = "true" ]; then
+            npx playwright test e2e/ci-smoke.spec.ts --workers=2
+          else
+            node scripts/ci-browser-scope.mjs --run
+          fi
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: ci-browser-failure-${{ github.run_id }}
+          path: |
+            playwright-report
+            test-results
+            .qa-tools/logs
+          if-no-files-found: ignore
+          retention-days: 3

@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1050" viewBox="0 0 1400 1050" role="img" aria-labelledby="plan-title plan-desc">
+  <title id="plan-title">Casa Mirador · model-derived concept plan</title>
+  <desc id="plan-desc">120 m² enclosed floor area, 12.00 by 10.00 metres, 8 spaces. Room polygons, wall cuts, windows, doors, terrace and pergola are drawn from the Distribution 3D model. Fictional concept; not a construction document. North and door swings are unspecified.</desc>
+  <defs>
+    <pattern id="terrace-tile" width="40.151" height="40.151" patternUnits="userSpaceOnUse"><path d="M0 0H40.151V40.151" fill="none" stroke="#bfb59b" stroke-opacity=".32" stroke-width=".6"/></pattern>
+    <style>text{font-family:Arial,Helvetica,sans-serif}.room-label{font-size:17px;font-weight:500;fill:#344e40}.room-label.compact{font-size:14px}.room-area{font-size:13px;fill:#71816f}.outdoor-label{font-size:11px;font-weight:600;letter-spacing:1.2px;fill:#6d725c}.dimension{font-size:12px;letter-spacing:1.5px;fill:#778371}</style>
+  </defs>
+  <rect width="1400" height="1050" fill="#f1f2ea"/>
+  <rect x="32" y="32" width="1336" height="986" rx="14" fill="#fffefa" stroke="#dde3d6"/>
+  <text x="83" y="82" font-size="10" letter-spacing="2.8" fill="#6c826f">HOUSE PLANNER / FICTIONAL SAMPLE PROJECT</text>
+  <text x="80" y="130" font-size="34" fill="#2f4b3b">Casa Mirador</text>
+  <text x="82" y="159" font-size="13" fill="#798674">Ground floor · 120 m² enclosed · 8 spaces</text>
+  <text x="1317" y="94" font-size="11" letter-spacing="2" fill="#6c826f" text-anchor="end">MODEL-DERIVED PLAN</text>
+  <text x="1317" y="119" font-size="12" fill="#8a9382" text-anchor="end">Distribution 3D · revision 2</text>
+  <path d="M82 184H1318M1014 222V924" stroke="#e2e6da" stroke-width="1"/>
+  <polygon data-model-id="demo-terrace" points="248.868,900 695.547,900 695.547,736.887 248.868,736.887" fill="#eee7d7" stroke="#b5aa91" stroke-width="1.5"/>
+    <polygon points="248.868,900 695.547,900 695.547,736.887 248.868,736.887" fill="url(#terrace-tile)"/>
+  <polygon data-model-id="demo-pergola-beam-front" points="248.868,887.453 695.547,887.453 695.547,876.411 248.868,876.411" fill="#b49a71" fill-opacity="0.56" stroke="#8a7656" stroke-width=".7"/>
+<polygon data-model-id="demo-pergola-beam-back" points="248.868,749.434 695.547,749.434 695.547,738.392 248.868,738.392" fill="#b49a71" fill-opacity="0.56" stroke="#8a7656" stroke-width=".7"/>
+<polygon data-model-id="demo-pergola-rafter-1" points="256.396,889.962 264.426,889.962 264.426,736.887 256.396,736.887" fill="#b49a71" fill-opacity="0.56" stroke="#8a7656" stroke-width=".7"/>
+<polygon data-model-id="demo-pergola-rafter-2" points="340.713,889.962 348.743,889.962 348.743,736.887 340.713,736.887" fill="#b49a71" fill-opacity="0.56" stroke="#8a7656" stroke-width=".7"/>
+<polygon data-model-id="demo-pergola-rafter-3" points="425.03,889.962 433.06,889.962 433.06,736.887 425.03,736.887" fill="#b49a71" fill-opacity="0.56" stroke="#8a7656" stroke-width=".7"/>
+<polygon data-model-id="demo-pergola-rafter-4" points="509.347,889.962 517.377,889.962 517.377,736.887 509.347,736.887" fill="#b49a71" fill-opacity="0.56" stroke="#8a7656" stroke-width=".7"/>
+<polygon data-model-id="demo-pergola-rafter-5" points="593.664,889.962 601.694,889.962 601.694,736.887 593.664,736.887" fill="#b49a71" fill-opacity="0.56" stroke="#8a7656" stroke-width=".7"/>
+<polygon data-model-id="demo-pergola-rafter-6" points="677.981,889.962 686.011,889.962 686.011,736.887 677.981,736.887" fill="#b49a71" fill-opacity="0.56" stroke="#8a7656" stroke-width=".7"/>
+<polygon data-model-id="demo-pergola-post-1" points="256.396,882.434 265.43,882.434 265.43,873.4 256.396,873.4" fill="#546456" fill-opacity="1" stroke="#8a7656" stroke-width=".7"/>
+<polygon data-model-id="demo-pergola-post-2" points="677.981,882.434 687.015,882.434 687.015,873.4 677.981,873.4" fill="#546456" fill-opacity="1" stroke="#8a7656" stroke-width=".7"/>
+  <polygon data-model-id="demo-living" points="248.868,736.887 550,736.887 550,485.943 248.868,485.943" fill="#e4eadd" stroke="#faf9f3" stroke-width="1.4"/>
+<polygon data-model-id="demo-kitchen" points="550,736.887 700.566,736.887 700.566,485.943 550,485.943" fill="#ebe7d8" stroke="#faf9f3" stroke-width="1.4"/>
+<polygon data-model-id="demo-entry" points="700.566,736.887 851.132,736.887 851.132,485.943 700.566,485.943" fill="#eef0e6" stroke="#faf9f3" stroke-width="1.4"/>
+<polygon data-model-id="demo-bedroom" points="248.868,435.755 474.717,435.755 474.717,235 248.868,235" fill="#e4e8e4" stroke="#faf9f3" stroke-width="1.4"/>
+<polygon data-model-id="demo-primary" points="474.717,435.755 700.566,435.755 700.566,235 474.717,235" fill="#e9e4de" stroke="#faf9f3" stroke-width="1.4"/>
+<polygon data-model-id="demo-hall" points="248.868,485.943 851.132,485.943 851.132,435.755 248.868,435.755" fill="#f0eee4" stroke="#faf9f3" stroke-width="1.4"/>
+<polygon data-model-id="demo-bathroom" points="700.566,435.755 851.132,435.755 851.132,285.189 700.566,285.189" fill="#e0e9e7" stroke="#faf9f3" stroke-width="1.4"/>
+<polygon data-model-id="demo-laundry" points="700.566,285.189 851.132,285.189 851.132,235 700.566,235" fill="#ebe8dd" stroke="#faf9f3" stroke-width="1.4"/>
+  <g data-model-id="front" stroke="#344e40" stroke-linecap="butt"><line x1="248.868" y1="736.887" x2="284" y2="736.887" stroke-width="7.528"/><line x1="494.792" y1="736.887" x2="575.094" y2="736.887" stroke-width="7.528"/><line x1="665.434" y1="736.887" x2="750.755" y2="736.887" stroke-width="7.528"/><line x1="805.962" y1="736.887" x2="851.132" y2="736.887" stroke-width="7.528"/></g>
+<g data-model-id="demo-right" stroke="#344e40" stroke-linecap="butt"><line x1="851.132" y1="736.887" x2="851.132" y2="400.623" stroke-width="7.528"/><line x1="851.132" y1="340.396" x2="851.132" y2="235" stroke-width="7.528"/></g>
+<g data-model-id="demo-back" stroke="#344e40" stroke-linecap="butt"><line x1="248.868" y1="235" x2="299.057" y2="235" stroke-width="7.528"/><line x1="399.434" y1="235" x2="524.906" y2="235" stroke-width="7.528"/><line x1="625.283" y1="235" x2="851.132" y2="235" stroke-width="7.528"/></g>
+<g data-model-id="demo-left" stroke="#344e40" stroke-linecap="butt"><line x1="248.868" y1="736.887" x2="248.868" y2="235" stroke-width="7.528"/></g>
+<g data-model-id="demo-public-hall" stroke="#344e40" stroke-linecap="butt"><line x1="248.868" y1="485.943" x2="459.66" y2="485.943" stroke-width="7.528"/><line x1="534.943" y1="485.943" x2="750.755" y2="485.943" stroke-width="7.528"/><line x1="805.962" y1="485.943" x2="851.132" y2="485.943" stroke-width="7.528"/></g>
+<g data-model-id="demo-private-hall" stroke="#344e40" stroke-linecap="butt"><line x1="248.868" y1="435.755" x2="414.491" y2="435.755" stroke-width="7.528"/><line x1="457.151" y1="435.755" x2="640.34" y2="435.755" stroke-width="7.528"/><line x1="683" y1="435.755" x2="715.623" y2="435.755" stroke-width="7.528"/><line x1="755.774" y1="435.755" x2="851.132" y2="435.755" stroke-width="7.528"/></g>
+<g data-model-id="demo-bedrooms" stroke="#344e40" stroke-linecap="butt"><line x1="474.717" y1="435.755" x2="474.717" y2="235" stroke-width="7.528"/></g>
+<g data-model-id="demo-bedroom-bath" stroke="#344e40" stroke-linecap="butt"><line x1="700.566" y1="435.755" x2="700.566" y2="235" stroke-width="7.528"/></g>
+<g data-model-id="demo-bath-laundry" stroke="#344e40" stroke-linecap="butt"><line x1="700.566" y1="285.189" x2="715.623" y2="285.189" stroke-width="7.528"/><line x1="785.887" y1="285.189" x2="851.132" y2="285.189" stroke-width="7.528"/></g>
+  <g data-model-id="demo-front-door"><title>Door · 1.10 m</title><line x1="750.755" y1="736.887" x2="805.962" y2="736.887" stroke="#aa8960" stroke-width="2.8"/><line x1="750.755" y1="740.651" x2="750.755" y2="733.123" stroke="#344e40" stroke-width="1.5"/><line x1="805.962" y1="740.651" x2="805.962" y2="733.123" stroke="#344e40" stroke-width="1.5"/></g>
+<g data-model-id="demo-living-garden-door"><title>Glazed door · 4.20 m</title><line x1="284" y1="738.242" x2="494.792" y2="738.242" stroke="#67988f" stroke-width="1.6"/><line x1="284" y1="735.532" x2="494.792" y2="735.532" stroke="#67988f" stroke-width="1.6"/><line x1="336.698" y1="740.149" x2="336.698" y2="733.625" stroke="#67988f" stroke-width="1.4"/><line x1="389.396" y1="740.149" x2="389.396" y2="733.625" stroke="#67988f" stroke-width="1.4"/><line x1="442.094" y1="740.149" x2="442.094" y2="733.625" stroke="#67988f" stroke-width="1.4"/><line x1="284" y1="740.651" x2="284" y2="733.123" stroke="#344e40" stroke-width="1.5"/><line x1="494.792" y1="740.651" x2="494.792" y2="733.123" stroke="#344e40" stroke-width="1.5"/></g>
+<g data-model-id="demo-kitchen-window"><title>Window · 1.80 m</title><line x1="575.094" y1="738.242" x2="665.434" y2="738.242" stroke="#67988f" stroke-width="1.6"/><line x1="575.094" y1="735.532" x2="665.434" y2="735.532" stroke="#67988f" stroke-width="1.6"/><line x1="620.264" y1="740.149" x2="620.264" y2="733.625" stroke="#67988f" stroke-width="1.4"/><line x1="575.094" y1="740.651" x2="575.094" y2="733.123" stroke="#344e40" stroke-width="1.5"/><line x1="665.434" y1="740.651" x2="665.434" y2="733.123" stroke="#344e40" stroke-width="1.5"/></g>
+<g data-model-id="demo-living-hall"><title>Door · 1.50 m</title><line x1="459.66" y1="485.943" x2="534.943" y2="485.943" stroke="#aa8960" stroke-width="2.8"/><line x1="459.66" y1="489.708" x2="459.66" y2="482.179" stroke="#344e40" stroke-width="1.5"/><line x1="534.943" y1="489.708" x2="534.943" y2="482.179" stroke="#344e40" stroke-width="1.5"/></g>
+<g data-model-id="demo-entry-hall"><title>Door · 1.10 m</title><line x1="750.755" y1="485.943" x2="805.962" y2="485.943" stroke="#aa8960" stroke-width="2.8"/><line x1="750.755" y1="489.708" x2="750.755" y2="482.179" stroke="#344e40" stroke-width="1.5"/><line x1="805.962" y1="489.708" x2="805.962" y2="482.179" stroke="#344e40" stroke-width="1.5"/></g>
+<g data-model-id="demo-guest-entry"><title>Door · 0.85 m</title><line x1="414.491" y1="435.755" x2="457.151" y2="435.755" stroke="#aa8960" stroke-width="2.8"/><line x1="414.491" y1="439.519" x2="414.491" y2="431.991" stroke="#344e40" stroke-width="1.5"/><line x1="457.151" y1="439.519" x2="457.151" y2="431.991" stroke="#344e40" stroke-width="1.5"/></g>
+<g data-model-id="demo-primary-entry"><title>Door · 0.85 m</title><line x1="640.34" y1="435.755" x2="683" y2="435.755" stroke="#aa8960" stroke-width="2.8"/><line x1="640.34" y1="439.519" x2="640.34" y2="431.991" stroke="#344e40" stroke-width="1.5"/><line x1="683" y1="439.519" x2="683" y2="431.991" stroke="#344e40" stroke-width="1.5"/></g>
+<g data-model-id="demo-bath-entry"><title>Door · 0.80 m</title><line x1="715.623" y1="435.755" x2="755.774" y2="435.755" stroke="#aa8960" stroke-width="2.8"/><line x1="715.623" y1="439.519" x2="715.623" y2="431.991" stroke="#344e40" stroke-width="1.5"/><line x1="755.774" y1="439.519" x2="755.774" y2="431.991" stroke="#344e40" stroke-width="1.5"/></g>
+<g data-model-id="demo-laundry-entry"><title>Door · 1.40 m</title><line x1="715.623" y1="285.189" x2="785.887" y2="285.189" stroke="#aa8960" stroke-width="2.8"/><line x1="715.623" y1="288.953" x2="715.623" y2="281.425" stroke="#344e40" stroke-width="1.5"/><line x1="785.887" y1="288.953" x2="785.887" y2="281.425" stroke="#344e40" stroke-width="1.5"/></g>
+<g data-model-id="demo-guest-window"><title>Window · 2.00 m</title><line x1="299.057" y1="236.355" x2="399.434" y2="236.355" stroke="#67988f" stroke-width="1.6"/><line x1="299.057" y1="233.645" x2="399.434" y2="233.645" stroke="#67988f" stroke-width="1.6"/><line x1="349.245" y1="238.262" x2="349.245" y2="231.738" stroke="#67988f" stroke-width="1.4"/><line x1="299.057" y1="238.764" x2="299.057" y2="231.236" stroke="#344e40" stroke-width="1.5"/><line x1="399.434" y1="238.764" x2="399.434" y2="231.236" stroke="#344e40" stroke-width="1.5"/></g>
+<g data-model-id="demo-primary-window"><title>Window · 2.00 m</title><line x1="524.906" y1="236.355" x2="625.283" y2="236.355" stroke="#67988f" stroke-width="1.6"/><line x1="524.906" y1="233.645" x2="625.283" y2="233.645" stroke="#67988f" stroke-width="1.6"/><line x1="575.094" y1="238.262" x2="575.094" y2="231.738" stroke="#67988f" stroke-width="1.4"/><line x1="524.906" y1="238.764" x2="524.906" y2="231.236" stroke="#344e40" stroke-width="1.5"/><line x1="625.283" y1="238.764" x2="625.283" y2="231.236" stroke="#344e40" stroke-width="1.5"/></g>
+<g data-model-id="demo-bath-window"><title>Window · 1.20 m</title><line x1="852.487" y1="400.623" x2="852.487" y2="340.396" stroke="#67988f" stroke-width="1.6"/><line x1="849.777" y1="400.623" x2="849.777" y2="340.396" stroke="#67988f" stroke-width="1.6"/><line x1="854.896" y1="400.623" x2="847.368" y2="400.623" stroke="#344e40" stroke-width="1.5"/><line x1="854.896" y1="340.396" x2="847.368" y2="340.396" stroke="#344e40" stroke-width="1.5"/></g>
+  <text x="399.434" y="607.415" class="room-label" text-anchor="middle">Living &amp; dining</text><text x="399.434" y="632.415" class="room-area" text-anchor="middle">30 m²</text>
+<text x="625.283" y="607.415" class="room-label" text-anchor="middle">Kitchen</text><text x="625.283" y="632.415" class="room-area" text-anchor="middle">15 m²</text>
+<text x="775.849" y="607.415" class="room-label" text-anchor="middle">Entry</text><text x="775.849" y="632.415" class="room-area" text-anchor="middle">15 m²</text>
+<text x="361.792" y="331.377" class="room-label" text-anchor="middle">Guest bedroom</text><text x="361.792" y="356.377" class="room-area" text-anchor="middle">18 m²</text>
+<text x="587.642" y="331.377" class="room-label" text-anchor="middle">Primary bedroom</text><text x="587.642" y="356.377" class="room-area" text-anchor="middle">18 m²</text>
+<text x="550" y="465.849" class="room-label compact" text-anchor="middle">Hall · 12 m²</text>
+<text x="775.849" y="356.472" class="room-label" text-anchor="middle">Bathroom</text><text x="775.849" y="381.472" class="room-area" text-anchor="middle">9 m²</text>
+<text x="775.849" y="265.094" class="room-label compact" text-anchor="middle">Laundry · 3 m²</text>
+  <rect x="356.208" y="781.443" width="232" height="73" rx="6" fill="#f8f4e9" fill-opacity=".94"/>
+      <text x="472.208" y="805.443" class="outdoor-label" text-anchor="middle">OPEN TERRACE · PERGOLA</text>
+      <text x="472.208" y="828.443" class="room-area" text-anchor="middle">28.93 m² · 8.90 × 3.25 m</text>
+      <text x="472.208" y="847.443" font-size="10" fill="#7b7969" text-anchor="middle">Separate from enclosed floor area</text>
+  <g fill="none" stroke="#a0aa9d" stroke-width="1">
+      <path d="M248.868 222V192M851.132 222V192M248.868 201H851.132"/>
+      <path d="M235.868 736.887H191.868M235.868 235H191.868M200.868 736.887V235"/>
+      <path d="M244.868 206l8-10M847.132 206l8-10M195.868 740.887l10-8M195.868 239l10-8"/>
+    </g>
+    <rect x="502" y="189" width="96" height="24" fill="#fffefa"/>
+    <text x="550" y="205" class="dimension" text-anchor="middle">12.00 m</text>
+    <g transform="translate(200.868 485.9435) rotate(-90)"><rect x="-48" y="-12" width="96" height="24" fill="#fffefa"/><text y="4" class="dimension" text-anchor="middle">10.00 m</text></g>
+  <g transform="translate(1102 267)" fill="none" stroke="#5c745d" stroke-width="1.5"><path d="M0 25V-27l-5 8m5-8 5 8M-9 25H45l-8-5m8 5-8 5"/></g>
+  <text x="1102" y="225" font-size="12" fill="#5c745d" text-anchor="middle">+Y</text>
+  <text x="1158" y="296" font-size="12" fill="#5c745d">+X</text>
+  <text x="1050" y="332" font-size="10" letter-spacing="1.8" fill="#6c826f">MODEL ORIENTATION</text>
+  <text x="1050" y="353" font-size="12" fill="#899180">North is not specified</text>
+  <text x="1050" y="405" font-size="10" letter-spacing="1.8" fill="#6c826f">AREA SCHEDULE</text>
+  <text x="1280" y="405" font-size="12" fill="#7a8674" text-anchor="end">m²</text>
+  <path d="M1050 424H1280" stroke="#dce3d5"/>
+  <rect x="1050" y="443" width="9" height="9" rx="2" fill="#e4eadd" stroke="#c7cfc1"/>
+      <text x="1069" y="453" font-size="12" fill="#506451">Living &amp; dining</text>
+      <text x="1280" y="453" font-size="12" fill="#344e40" text-anchor="end">30</text>
+<rect x="1050" y="477" width="9" height="9" rx="2" fill="#ebe7d8" stroke="#c7cfc1"/>
+      <text x="1069" y="487" font-size="12" fill="#506451">Kitchen</text>
+      <text x="1280" y="487" font-size="12" fill="#344e40" text-anchor="end">15</text>
+<rect x="1050" y="511" width="9" height="9" rx="2" fill="#eef0e6" stroke="#c7cfc1"/>
+      <text x="1069" y="521" font-size="12" fill="#506451">Entry</text>
+      <text x="1280" y="521" font-size="12" fill="#344e40" text-anchor="end">15</text>
+<rect x="1050" y="545" width="9" height="9" rx="2" fill="#e4e8e4" stroke="#c7cfc1"/>
+      <text x="1069" y="555" font-size="12" fill="#506451">Guest bedroom</text>
+      <text x="1280" y="555" font-size="12" fill="#344e40" text-anchor="end">18</text>
+<rect x="1050" y="579" width="9" height="9" rx="2" fill="#e9e4de" stroke="#c7cfc1"/>
+      <text x="1069" y="589" font-size="12" fill="#506451">Primary bedroom</text>
+      <text x="1280" y="589" font-size="12" fill="#344e40" text-anchor="end">18</text>
+<rect x="1050" y="613" width="9" height="9" rx="2" fill="#f0eee4" stroke="#c7cfc1"/>
+      <text x="1069" y="623" font-size="12" fill="#506451">Hall</text>
+      <text x="1280" y="623" font-size="12" fill="#344e40" text-anchor="end">12</text>
+<rect x="1050" y="647" width="9" height="9" rx="2" fill="#e0e9e7" stroke="#c7cfc1"/>
+      <text x="1069" y="657" font-size="12" fill="#506451">Bathroom</text>
+      <text x="1280" y="657" font-size="12" fill="#344e40" text-anchor="end">9</text>
+<rect x="1050" y="681" width="9" height="9" rx="2" fill="#ebe8dd" stroke="#c7cfc1"/>
+      <text x="1069" y="691" font-size="12" fill="#506451">Laundry</text>
+      <text x="1280" y="691" font-size="12" fill="#344e40" text-anchor="end">3</text>
+  <path d="M1050 723H1280" stroke="#dce3d5"/>
+  <text x="1050" y="747" font-size="13" font-weight="600" fill="#344e40">Enclosed total</text>
+  <text x="1280" y="747" font-size="13" font-weight="600" fill="#344e40" text-anchor="end">120 m²</text>
+  <text x="1050" y="791" font-size="12" fill="#697565">Terrace 8.90 × 3.25 m</text>
+    <text x="1050" y="813" font-size="12" fill="#697565">Pergola rafter depth 3.05 m</text>
+  <g transform="translate(1050 856)"><rect width="50.189" height="6" fill="#405e48"/><rect x="50.189" width="50.189" height="6" fill="#dce3d5" stroke="#405e48" stroke-width=".6"/>
+    <text y="23" font-size="10" fill="#7a8674">0</text><text x="50.189" y="23" font-size="10" fill="#7a8674" text-anchor="middle">1</text><text x="100.377" y="23" font-size="10" fill="#7a8674" text-anchor="middle">2 m</text></g>
+  <text x="1050" y="905" font-size="10" fill="#8a9382">Concept scale · illustrated dimensions</text>
+  <path d="M82 946H1318" stroke="#e2e6da"/>
+  <g transform="translate(84 971)"><path d="M0-3H23M0 1H23" stroke="#67988f" stroke-width="1.6"/><text x="33" y="3" font-size="11" fill="#6a7b68">Glazing</text><path d="M126-1H149" stroke="#aa8960" stroke-width="2.8"/><text x="159" y="3" font-size="11" fill="#6a7b68">Door opening</text><rect x="296" y="-6" width="22" height="9" fill="#b49a71" fill-opacity=".6"/><text x="328" y="3" font-size="11" fill="#6a7b68">Pergola above</text></g>
+  <text x="1316" y="972" font-size="10" letter-spacing="1.3" fill="#71816d" text-anchor="end">FICTIONAL CONCEPT · NOT FOR CONSTRUCTION</text>
+  <text x="84" y="996" font-size="10" fill="#8b9383">Architecture follows the 3D model. Roof omitted for clarity; door swings and geographical north are unspecified.</text>
+</svg>

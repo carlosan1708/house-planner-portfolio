@@ -1,0 +1,74 @@
+[
+  {
+    "requirement": "FR-001",
+    "decision": "specs/008-project-skills/plan.md",
+    "tasks": [
+      "T001",
+      "T003"
+    ],
+    "commits": [
+      "b2bf58f3f0a3dfc6af08e2a4893644b4f781b89c"
+    ],
+    "evidence": [
+      "docs/development/project-skills.md",
+      ".agents/project-skills-provenance.md",
+      "scripts/reconstruct-project-skills.py",
+      "specs/008-project-skills/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-002",
+    "decision": "specs/008-project-skills/plan.md",
+    "tasks": [
+      "T001",
+      "T003"
+    ],
+    "commits": [
+      "b2bf58f3f0a3dfc6af08e2a4893644b4f781b89c"
+    ],
+    "evidence": [
+      "docs/development/project-skills.md",
+      ".agents/project-skills-provenance.md",
+      "scripts/reconstruct-project-skills.py",
+      "specs/008-project-skills/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-003",
+    "decision": "specs/008-project-skills/plan.md",
+    "tasks": [
+      "T002",
+      "T003"
+    ],
+    "commits": [
+      "b2bf58f3f0a3dfc6af08e2a4893644b4f781b89c"
+    ],
+    "evidence": [
+      "docs/development/project-skills.md",
+      ".agents/project-skills-provenance.md",
+      "scripts/reconstruct-project-skills.py",
+      "specs/008-project-skills/validation.md"
+    ],
+    "provenance": "private-history"
+  },
+  {
+    "requirement": "FR-004",
+    "decision": "specs/008-project-skills/plan.md",
+    "tasks": [
+      "T002",
+      "T003"
+    ],
+    "commits": [
+      "b2bf58f3f0a3dfc6af08e2a4893644b4f781b89c"
+    ],
+    "evidence": [
+      "docs/development/project-skills.md",
+      ".agents/project-skills-provenance.md",
+      "scripts/reconstruct-project-skills.py",
+      "specs/008-project-skills/validation.md"
+    ],
+    "provenance": "private-history"
+  }
+]

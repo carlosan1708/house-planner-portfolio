@@ -1,0 +1,4 @@
+interface:
+  display_name: "House Planner mobile UX"
+  short_description: "Improve navigation, touch controls and responsive flows"
+  default_prompt: "Use $house-planner-mobile-ux for the requested House Planner work, respecting AGENTS.md and the approved scope."

@@ -1,0 +1,9 @@
+HOUSE PLANNER — DOCUMENTO FICTICIO DE DEMOSTRACIÓN
+
+Factura: FAC-DEMO-001
+Proveedor: Estudio Norte
+Concepto: Anticipo de diseño arquitectónico
+Importe: USD 840
+Estado: Pagado
+
+Este archivo contiene únicamente datos ficticios y no representa una transacción real.

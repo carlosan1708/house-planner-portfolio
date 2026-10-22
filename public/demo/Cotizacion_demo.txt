@@ -1,0 +1,9 @@
+HOUSE PLANNER — DOCUMENTO FICTICIO DE DEMOSTRACIÓN
+
+Cotización: COT-DEMO-019
+Proveedor: Techos del Pacífico
+Concepto: Cubierta metálica y accesorios
+Importe estimado: USD 7.665
+Estado: Pendiente
+
+Este archivo contiene únicamente datos ficticios y no representa una oferta real.

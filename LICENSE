@@ -1,0 +1,67 @@
+House Planner Portfolio Inspection License
+
+Copyright (c) 2026 Carlos Andrés Rodríguez Trigueros.
+All rights reserved except for the permissions expressly stated below.
+
+1. Scope
+
+These terms apply to the House Planner application source code, documentation,
+and other original project materials to the extent owned by the copyright
+holder. Third-party materials are governed by their own licenses, as explained
+in section 5.
+
+2. Permitted inspection and hosted demonstration
+
+You may view, read, and inspect these materials to evaluate the author's
+portfolio and understand the project's design and implementation. You may also
+use the demonstration hosted by the author through its intended user interface
+as offered, for the purpose of evaluating the project. This does not grant
+permission to build, run, or host a separate copy of the application.
+
+Nothing in these terms restricts rights granted by the copyright holder to
+GitHub, its affiliates, or GitHub users under applicable GitHub terms, including
+the permissions to view and fork a public repository through GitHub. A GitHub
+fork does not itself grant additional rights to reuse the application.
+
+3. Other uses require prior written permission
+
+Except as expressly permitted in section 2, by applicable third-party licenses,
+or by applicable law, you must obtain the copyright holder's prior express
+written permission before you copy or reuse project materials, build or run
+the application, modify it or create derivative works, distribute it, sublicense
+it, or deploy or host it. This applies to personal, educational, internal, and
+commercial uses alike.
+
+Public availability and technical instructions in the repository do not grant
+additional permissions. This is a proprietary portfolio inspection license,
+not an open-source license. All rights not expressly granted are reserved.
+
+4. Permission requests
+
+Request permission from Carlos Andrés Rodríguez Trigueros at:
+carlosan1708@gmail.com
+
+Describe the materials and intended use. Any additional permission must be
+expressly granted in writing by the copyright holder; sending a request or
+receiving no response does not grant permission.
+
+5. Third-party materials
+
+Dependencies, vendored tools, templates, and other third-party materials retain
+their respective copyright notices and license terms. These terms do not
+replace, narrow, or relicense rights granted by those third parties. See
+THIRD_PARTY_NOTICES.md and the notices accompanying the relevant materials.
+
+6. Statutory rights and trademarks
+
+Nothing in these terms restricts rights available under applicable copyright
+exceptions or limitations, or other rights that cannot lawfully be restricted.
+No trademark rights are granted by this license.
+
+7. No warranty
+
+The project is provided as available, without warranties, to the extent allowed
+by applicable law. To that same extent, the copyright holder is not liable for
+loss or damage arising from access to or use of these materials. This section
+does not exclude liability or rights that applicable law does not permit to be
+excluded.

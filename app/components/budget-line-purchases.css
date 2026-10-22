@@ -1,0 +1,13 @@
+.budget-line-purchases { margin-top: 8px; font-size: 12px; font-weight: 400; text-align: left; }
+.budget-line-purchases summary { width: fit-content; min-height: 44px; align-content: center; cursor: pointer; color: #334155; font-weight: 600; border-radius: 6px; }
+.budget-line-purchases nav { display: grid; gap: 4px; margin-top: 4px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; }
+.budget-line-purchases a { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 8px; color: #1d4ed8; text-decoration: none; overflow-wrap: anywhere; }
+.budget-line-purchases a > span { display: inline; flex: 0 0 auto; }
+.budget-line-purchases a:hover { background: #eff6ff; text-decoration: underline; border-radius: 6px; }
+.budget-line-purchases a:focus-visible, .budget-line-purchases summary:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.budget-line-purchases small { display: block; padding: 4px 8px; color: #64748b; }
+.budget-line-list > .budget-line-card { border: 1px solid #eceff3; background: #fbfcfd; border-radius: 12px; padding: 13px 15px; min-width: 0; }
+.budget-line-card > button { display: flex; justify-content: space-between; gap: 20px; width: 100%; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; color: inherit; }
+.budget-line-card > button > span { min-width: 0; overflow-wrap: anywhere; }
+.budget-line-card > button:focus-visible { outline: 2px solid #2563eb; outline-offset: 4px; }
+.budget-line-card:hover { border-color: #94a3b8; }

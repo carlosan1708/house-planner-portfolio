@@ -1,0 +1,58 @@
+.aesthetics-page .aesthetic-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 6px;
+  color: #7a8980;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.aesthetics-page .aesthetic-breadcrumbs button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+  overflow-wrap: anywhere;
+}
+.aesthetics-page .aesthetic-breadcrumbs button[aria-current="page"] {
+  text-decoration: none;
+}
+.aesthetics-page .aesthetic-gallery-source {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: #64786a;
+  font-size: 11px;
+}
+.aesthetics-page .aesthetic-gallery-source select {
+  min-height: 36px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #dce4de;
+  border-radius: 8px;
+  background: #fff;
+  color: #46594b;
+  font: inherit;
+}
+.aesthetics-page .aesthetic-source-path {
+  display: block;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .aesthetics-page .aesthetic-gallery-source {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .aesthetics-page .aesthetic-gallery-source select {
+    width: 100%;
+  }
+}
