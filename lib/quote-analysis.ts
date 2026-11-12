@@ -1,5 +1,6 @@
 import type { Part } from "@google/genai";
-import { assistantModel, geminiClient, geminiConfigured } from "./gemini";
+import { geminiConfigured } from "./gemini";
+import { generateForTask, routeModel } from "./model-router";
 import { extractAssistantDocumentText } from "./document-index";
 import { calmQuoteRecommendation } from "./quote-language";
 import type { OfferComparison } from "./quote-offers";
@@ -163,12 +164,12 @@ function groundingSources(response: { candidates?: Array<{ groundingMetadata?: {
 
 async function groundedMarketComparison(input: { language: "en" | "es"; priceSearchTerms: string[] }) {
   const comparisonInputs = input.priceSearchTerms.join("; ");
-  const request = (retry: boolean) => geminiClient().models.generateContent({
-    model: process.env.GEMINI_SEARCH_MODEL?.trim() || "gemini-2.5-flash",
+  const webRoute = routeModel("quoteWeb", { baseline: process.env.GEMINI_SEARCH_MODEL?.trim() || "gemini-2.5-flash" });
+  const request = (retry: boolean) => generateForTask("quoteWeb", {
     contents: `${retry ? "Retry with a focused search. " : ""}Complete the current-market price comparison yourself using Google Search for these quote inputs relevant to Costa Rica: ${comparisonInputs}.
 Respond in ${input.language === "es" ? "Spanish" : "English"}. Use only prices supported by public pages returned by Google Search and cite those pages in the response. For every supported item, state its quoted amount, the observed market range, the numeric difference and whether it appears low, aligned or high. State currency and unit and whether tax, shipping or installation appears included. Never tell the owner to compare or search for prices. If no public source supports a price, state exactly that without estimating or inventing a range.${retry ? " Concentrate only on the supplied items and ensure every numeric market-price claim has a cited source." : ""}`,
     config: { tools: [{ googleSearch: {} }], temperature: 0, maxOutputTokens: 2500, labels: { application: "house-planner-quote-prices" } },
-  });
+  }, webRoute);
   let response = await request(false);
   let grounded = groundingSources(response);
   if (!grounded.sources.length) {
@@ -200,8 +201,7 @@ ${input.budgetContext}` }];
   for (const reference of input.references) parts.push(...await fileParts(reference, "SELECTED PLAN/REFERENCE"));
   for (const pastQuote of input.pastQuotes || []) parts.push(...await fileParts(pastQuote, "PAST QUOTE FOR SCOPE AND PRICE COMPARISON"));
   await input.onProgress?.("reading");
-  const response = await geminiClient().models.generateContent({
-    model: assistantModel(),
+  const response = await generateForTask("quoteAnalysis", {
     contents: [{ role: "user", parts }],
     config: { responseMimeType: "application/json", responseJsonSchema: analysisSchema, temperature: 0.1, maxOutputTokens: 14000, labels: { application: "house-planner-quotes" } },
   });
@@ -222,8 +222,7 @@ ${input.budgetContext}` }];
   let recommendation = core.recommendation;
   if (webComparison.status === "ready" && canRecommendWinner) {
     try {
-      const synthesis = await geminiClient().models.generateContent({
-        model: assistantModel(),
+      const synthesis = await generateForTask("quoteAnalysis", {
         contents: `Write the final recommendation for this contractor quote in ${input.language === "es" ? "Spanish" : "English"}.
 ${purchasingContext}
 The application has already completed the official-budget, plan, past-quote and current-market comparisons available to it. State the resulting conclusion directly. Do not recommend that the owner compare, search, investigate or review prices. You may recommend asking the provider only for an exact decision-critical fact that is still missing. Use calm, respectful language and keep the recommendation under 120 words.
@@ -252,7 +251,7 @@ QUESTION: ${input.question}` }];
   for (const quoteFile of input.quoteFiles) parts.push(...await fileParts(quoteFile, "QUOTE PACKAGE DOCUMENT"));
   for (const reference of input.references) parts.push(...await fileParts(reference, "PLAN/REFERENCE"));
   for (const pastQuote of input.pastQuotes || []) parts.push(...await fileParts(pastQuote, "PAST QUOTE"));
-  const response = await geminiClient().models.generateContent({ model: assistantModel(), contents: [{ role: "user", parts }], config: { ...(input.useWeb ? { tools: [{ googleSearch: {} }] } : {}), temperature: 0.15, maxOutputTokens: 3000, labels: { application: "house-planner-quote-chat" }, httpOptions: { retryOptions: { attempts: 2, initialDelay: 1, maxDelay: 2, httpStatusCodes: [429] } } } });
+  const response = await generateForTask("quoteAnalysis", { contents: [{ role: "user", parts }], config: { ...(input.useWeb ? { tools: [{ googleSearch: {} }] } : {}), temperature: 0.15, maxOutputTokens: 3000, labels: { application: "house-planner-quote-chat" }, httpOptions: { retryOptions: { attempts: 2, initialDelay: 1, maxDelay: 2, httpStatusCodes: [429] } } } });
   const grounded = groundingSources(response);
   return { text: trimText(response.text, 10_000), sources: grounded.sources };
 }

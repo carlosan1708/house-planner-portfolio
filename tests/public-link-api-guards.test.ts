@@ -3,6 +3,7 @@ import { POST as chat } from "@/app/api/assistant/chat/route";
 import { GET as conversations } from "@/app/api/assistant/conversations/route";
 import { POST as proposals } from "@/app/api/assistant/proposals/route";
 import { GET as notifications, PATCH as notificationPreferences } from "@/app/api/notifications/route";
+import type { AssistantStage } from "@/lib/assistant";
 import { DEFAULT_FOLDER_ACCESS, DEFAULT_MEMBER_PERMISSIONS, NOTIFICATION_PREFERENCES, USERS, type MemberRecord } from "@/lib/project";
 
 const mock = vi.hoisted(() => ({
@@ -10,7 +11,10 @@ const mock = vi.hoisted(() => ({
   collection: vi.fn(),
   set: vi.fn(async () => undefined),
   recipients: vi.fn(async () => [{ uid: "member", name: "Member", email: "private@example.test" }]),
-  chat: vi.fn(async () => ({ conversationId: "conversation", assistantMessageId: "message", text: "Answer", language: "es", citations: [] })),
+  chat: vi.fn(async (_actor: MemberRecord, _input: unknown, onStage: (stage: AssistantStage) => void) => {
+    onStage("documents");
+    return { conversationId: "conversation", assistantMessageId: "message", text: "Answer", language: "es", citations: [] };
+  }),
   list: vi.fn(async () => []),
   get: vi.fn(async () => ({ id: "conversation", messages: [] })),
   confirm: vi.fn(async () => ({ draftId: "draft", reused: true })),
@@ -72,8 +76,13 @@ describe("public link account boundaries", () => {
     mock.actor = { ...viewer, accessLinkId: "a".repeat(64) };
     const response = await chat(request("assistant/chat", "POST", { message: "Help me", language: "es" }));
     expect(response.status).toBe(200);
-    expect(await response.text()).toContain("Answer");
-    expect(mock.chat).toHaveBeenCalledWith(mock.actor, { conversationId: undefined, message: "Help me", language: "es" });
+    const reader = response.body!.pipeThrough(new TextDecoderStream()).getReader();
+    expect((await reader.read()).value).toContain('event: status\ndata: {"state":"thinking"}');
+    expect((await reader.read()).value).toContain('event: status\ndata: {"state":"documents"}');
+    let answer = "";
+    for (let chunk = await reader.read(); !chunk.done; chunk = await reader.read()) answer += chunk.value;
+    expect(answer).toContain("Answer");
+    expect(mock.chat).toHaveBeenCalledWith(mock.actor, { conversationId: undefined, message: "Help me", language: "es" }, expect.any(Function));
     expect((await conversations(request("assistant/conversations", "GET"))).status).toBe(200);
     expect(mock.list).toHaveBeenCalledWith(mock.actor);
     expect((await conversations(request("assistant/conversations?id=conversation", "GET"))).status).toBe(200);

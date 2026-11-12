@@ -9,6 +9,10 @@ The source was first published on 2026-10-21. At the author's request, the publi
 was replaced on 2026-10-22 before the first GitHub release, with fresh CI required for that
 replacement. Earlier public CI records may retain the previous commit reference.
 
+The November 2026 update adds the resumable assistant, optional document indexing, task-based
+model routing, and plan-based visualizations with progress and a per-project plan suggestion.
+The public copy continues to require an explicit opt-in for live AI and uses synthetic test data.
+
 ## Source and history boundaries
 
 The original Git history, branches, tags, pull requests, Actions logs, cloud credentials,

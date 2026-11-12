@@ -1,3 +1,5 @@
+import { writeRagJob } from "@/lib/rag-jobs";
+import { documentKey, ragEnabled } from "@/lib/rag-sources";
 import { expensePaymentDocumentIds } from "@/lib/expense-records";
 import { FieldValue } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
@@ -33,6 +35,7 @@ function invoiceJson(document: FirebaseFirestore.QueryDocumentSnapshot | Firebas
     previewUrl: `/api/files?id=${encodeURIComponent(document.id)}&preview=${isImage ? "image" : "pdf"}`,
     description: String(data.description || "").slice(0, 500),
     linkedCount,
+    ...(ragEnabled(String(data.projectId)) ? { assistantIndexProjectId: data.projectId } : {}),
   };
 }
 
@@ -94,11 +97,14 @@ export async function POST(request: Request) {
       summaryParams: { size: file.size, contentType },
       changes: [{ field: "invoice", before: null, after: file.name, format: "text" }],
       visibility: { requiredTabs: ["expenses"] },
-    }, (transaction) => transaction.set(ref, {
+    }, (transaction) => {
+      transaction.set(ref, {
       projectId: actor.projectId, objectKey, fileName: file.name, contentType, size: file.size,
       folderId: invoiceFolder.id, uploadedBy: actor.email, source: "expenses", thumbnailObjectKey,
       createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp(),
-    }));
+      });
+      writeRagJob(transaction, actor.projectId, documentKey(ref.id));
+    });
   } catch (error) {
     await projectBucket.file(objectKey).delete({ ignoreNotFound: true }).catch(() => undefined);
     if (thumbnailObjectKey) await projectBucket.file(thumbnailObjectKey).delete({ ignoreNotFound: true }).catch(() => undefined);
@@ -133,7 +139,10 @@ export async function DELETE(request: Request) {
     target: { type: "invoice", id, label: String(document.data()?.fileName || "Invoice"), section: "expenses", exists: false },
     changes: [{ field: "deleted", before: false, after: true, format: "status" }],
     visibility: { requiredTabs: ["expenses"] },
-  }, (transaction) => transaction.set(ref, { deletedAt: FieldValue.serverTimestamp(), deletedBy: actor.email, updatedAt: FieldValue.serverTimestamp() }, { merge: true }), async (transaction) => {
+  }, (transaction) => {
+    transaction.set(ref, { deletedAt: FieldValue.serverTimestamp(), deletedBy: actor.email, updatedAt: FieldValue.serverTimestamp() }, { merge: true });
+    writeRagJob(transaction, actor.projectId, documentKey(ref.id), { purge: true });
+  }, async (transaction) => {
     const latest = await transaction.get(ref);
     const payments = await transaction.get(firestore.collection(EXPENSE_PAYMENTS).where("projectId", "==", actor.projectId));
     if (!latest.exists || latest.data()?.deletedAt || payments.docs.some((payment) => !payment.data().deletedAt && expensePaymentDocumentIds(payment.data()).includes(`legacy:${id}`))) throw new ReceiptConflict("Unlink this receipt from its payments before deleting it");

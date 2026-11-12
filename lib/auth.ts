@@ -60,6 +60,7 @@ export async function getSessionMember(): Promise<MemberRecord | null> {
       status: data.status === "approved" || data.status === "rejected" ? data.status : "pending",
       permissions: normalizePermissions(data.permissions),
       folderAccess: normalizeFolderAccess(data.folderAccess),
+      projectMembershipVerified: membership?.id === membershipId(projectId, token.uid) && data.uid === token.uid && data.status === "approved" && !data.accessLinkId,
       ...(typeof data.accessLinkId === "string" ? { accessLinkId: data.accessLinkId } : {}),
       ...(data.linkDefaultLanguage === "es" || data.linkDefaultLanguage === "en" ? { linkDefaultLanguage: data.linkDefaultLanguage } : {}),
     };

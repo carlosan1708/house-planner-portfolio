@@ -123,6 +123,7 @@ async function sourceFor(actor: MemberRecord, input: Pick<FileShareInput, "kind"
   ]);
   const data = source.data();
   if (!source.exists || !data || data.projectId !== actor.projectId || data.deletedAt) unavailable();
+  if (data.assistantPlanSource !== undefined) throw new FileShareError("Images derived from private plans require project access", 409);
   if (data.encrypted === true || data.encryptedMetadata || data.vaultFolderId || data.encryptionCleanupPending === true) {
     throw new FileShareError("Encrypted files or files awaiting encryption cleanup cannot be shared", 409);
   }

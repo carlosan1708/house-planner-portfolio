@@ -15,9 +15,9 @@ remain server-side and are not included in browser code or model prompts.
    anonymous read links cannot invoke it. Conversations belong to a project and user.
 2. [runAssistantTurn](../../lib/assistant-service.ts) loads bounded conversation history and sends
    the model declared tools. Tools execute on the server and recheck applicable permissions.
-3. Budget tools search official lines. [Document retrieval](../../lib/document-index.ts) filters
-   authorized ordinary PDF/DOCX files, searches extracted text and returns bounded lexical excerpts.
-   This implementation does not use a vector database or perform OCR on scanned documents.
+3. Budget tools search official lines. The optional [project document index](../../lib/rag-search.ts)
+   uses Firestore vector search, Gemini embeddings and OCR for scanned pages. Projects outside the
+   index use [lexical retrieval](../../lib/document-index.ts). Both paths enforce project access.
 4. Notes are shared within a project and protected by Notes permission. Authorized editors and
    administrators can opt individual notes into AI context; opt-out removes prior note-based
    replies from subsequent model context. Notes are not author-only records.
@@ -50,15 +50,30 @@ checks context and base revisions. Confirmation is not official publication.
 Encrypted documents remain excluded from search and other plaintext integrations even after an
 administrator unlocks them. Folder moves, access changes and note opt-out change what fresh tools can retrieve.
 
-The current conversation-history filter revalidates note citations only. Previously generated
-document or budget replies are not rechecked against later folder/section permission changes
-or encryption moves before entering a subsequent model turn. Fresh retrieval remains guarded;
-do not interpret that as complete permission revalidation of historical answers.
+The conversation-history filter rechecks recorded document and note dependencies before reuse.
+New budget and expense replies record their section requirements. Older replies with fewer stored
+dependencies have corresponding limits on what can be revalidated.
 
 The service currently bounds tool rounds and output size. Grounding instructions and citations
 help review; they do not guarantee correct reasoning, complete retrieval or resistance to every
 instruction embedded in a source. SSE delivery chunks a completed application response and should
 not be described as provider-token streaming.
+
+## Persistent actions and plan images
+
+Firestore stores messages, pending choices, workflow state and the last confirmed plan per user and
+project. The [run coordinator](../../lib/assistant-run.ts) resumes interrupted actions and routes
+financial writes through the existing review and expense operations.
+
+The [model router](../../lib/model-router.ts) selects models for tasks such as receipt extraction,
+document ranking, quote analysis, plan analysis and image generation. An image request begins with a
+plan choice. The [image workflow](../../lib/assistant-image-run.ts) analyzes relevant sheets, reports
+progress, and saves a private Cloud Storage image with its model and source references. The user
+can reuse a suggested plan after confirming it. Source access is checked again before rendering
+or delivering an image.
+
+Live AI and plan image generation require separate opt-ins in an independently configured workspace.
+The synthetic demo uses scripted examples. See [the public snapshot boundary](../portfolio/snapshot.md).
 
 ## Evidence
 

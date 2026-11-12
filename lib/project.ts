@@ -119,6 +119,7 @@ export type MemberRecord = {
   status: AccessStatus;
   permissions: MemberPermissions;
   folderAccess: FolderAccess;
+  projectMembershipVerified?: boolean;
   accessLinkId?: string;
   anonymousLink?: boolean;
   linkDefaultLanguage?: "es" | "en";

@@ -105,3 +105,11 @@ export function readWorkspaceDestination(url: URL | string, fallbackProjectId?: 
 export function workspaceShareUrl(origin: string, destination: WorkspaceDestination): string {
   return new URL(buildWorkspacePath(destination), new URL(origin).origin).href;
 }
+
+export function workspacePathWithLanguage(href: string, language: "en" | "es"): string {
+  if (!href.startsWith("/projects/")) return href;
+  const url = new URL(href, "http://workspace.local");
+  if (!parseWorkspacePath(url.pathname)) return href;
+  url.searchParams.set("lang", language);
+  return `${url.pathname}${url.search}${url.hash}`;
+}

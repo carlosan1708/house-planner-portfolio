@@ -5,6 +5,7 @@ import { AESTHETIC_PDF_TYPE } from "@/lib/aesthetics";
 import { firestore } from "@/lib/firebase-admin";
 import { normalizeOverviewPreferences, parseOverviewUpdate, type OverviewPreferences } from "@/lib/overview";
 import { AESTHETIC_IMAGES, CONFIG, PROJECT_NOTES, projectConfigDoc, type MemberRecord } from "@/lib/project";
+import { visibleGeneratedAesthetics } from "@/lib/assistant-plan-sources";
 
 const privateHeaders = { "Cache-Control": "private, no-store" };
 
@@ -12,13 +13,14 @@ function hasResourceAccess(actor: MemberRecord, resource: "aesthetics" | "notes"
   return (resource !== "notes" || !actor.isPersonal) && (actor.role === "admin" || actor.permissions[resource]);
 }
 
-async function availableIds(projectId: string, ids: string[], resource: "aesthetics" | "notes") {
+async function availableIds(actor: MemberRecord, ids: string[], resource: "aesthetics" | "notes") {
   if (!ids.length) return [];
   const collection = resource === "aesthetics" ? AESTHETIC_IMAGES : PROJECT_NOTES;
   const documents = await firestore.getAll(...ids.map((id) => firestore.collection(collection).doc(id)));
-  const available = new Set(documents.filter((document) => {
+  const visible = resource === "aesthetics" ? await visibleGeneratedAesthetics(actor, documents, document => document.data()) : documents;
+  const available = new Set(visible.filter((document) => {
     const data = document.data();
-    return document.exists && data?.projectId === projectId && !data.deletedAt
+    return document.exists && data?.projectId === actor.projectId && !data.deletedAt
       && (resource !== "aesthetics" || data.contentType !== AESTHETIC_PDF_TYPE);
   }).map((document) => document.id));
   return ids.filter((id) => available.has(id));
@@ -26,8 +28,8 @@ async function availableIds(projectId: string, ids: string[], resource: "aesthet
 
 async function visiblePreferences(actor: MemberRecord, preferences: OverviewPreferences): Promise<OverviewPreferences> {
   const [imageIds, noteIds] = await Promise.all([
-    hasResourceAccess(actor, "aesthetics") ? availableIds(actor.projectId, preferences.imageIds, "aesthetics") : [],
-    hasResourceAccess(actor, "notes") ? availableIds(actor.projectId, preferences.noteIds, "notes") : [],
+    hasResourceAccess(actor, "aesthetics") ? availableIds(actor, preferences.imageIds, "aesthetics") : [],
+    hasResourceAccess(actor, "notes") ? availableIds(actor, preferences.noteIds, "notes") : [],
   ]);
   return { imageIds, noteIds };
 }
@@ -53,8 +55,8 @@ export async function PATCH(request: Request) {
   }
 
   const [images, notes] = await Promise.all([
-    update.imageIds ? availableIds(actor.projectId, update.imageIds, "aesthetics") : [],
-    update.noteIds ? availableIds(actor.projectId, update.noteIds, "notes") : [],
+    update.imageIds ? availableIds(actor, update.imageIds, "aesthetics") : [],
+    update.noteIds ? availableIds(actor, update.noteIds, "notes") : [],
   ]);
   if ((update.imageIds && images.length !== update.imageIds.length) || (update.noteIds && notes.length !== update.noteIds.length)) {
     return NextResponse.json({ error: "One or more selected photos or notes are unavailable" }, { status: 400 });

@@ -67,7 +67,7 @@ async function saveOrdinaryIndex<T extends string>(ref: FirebaseFirestore.Docume
   });
 }
 
-export async function extractAssistantDocumentText(bytes: Buffer, fileName: string, contentType: string) {
+export async function extractAssistantDocumentText(bytes: Buffer, fileName: string, contentType: string, maxBytes: number | null = MAX_INDEX_BYTES) {
   const name = fileName.toLocaleLowerCase();
   const type = contentType.toLocaleLowerCase();
   let text = "";
@@ -78,7 +78,8 @@ export async function extractAssistantDocumentText(bytes: Buffer, fileName: stri
     try { text = (await parser.getText()).text; }
     finally { await parser.destroy(); }
   }
-  return truncateUtf8(text.replace(/\u0000/g, "").replace(/[ \t]+\n/g, "\n").trim());
+  const clean = text.replace(/\u0000/g, "").replace(/[ \t]+\n/g, "\n").trim();
+  return maxBytes === null ? clean : truncateUtf8(clean, maxBytes);
 }
 
 export async function indexDocumentBytes(input: {

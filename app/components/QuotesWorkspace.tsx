@@ -1,5 +1,6 @@
 "use client";
 
+import AssistantIndexStatus from "./AssistantIndexStatus";
 import { trackUsageInteraction } from "@/lib/usage-client";
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
@@ -25,7 +26,7 @@ type Analysis = {
   webComparison: { summary: string; sources: Source[]; queries: string[]; status: "ready" | "unavailable" | "not_requested" };
 };
 type QuoteFile = { name: string; supplier?: string; contentType: string; size: number; fileUrl: string };
-type Quote = { id: string; fileName: string; size: number; files: QuoteFile[]; uploadedBy: string; status: "analyzing" | "ready" | "failed"; error: string; referenceIds: string[]; referenceNames: string[]; pastQuoteIds: string[]; pastQuoteNames: string[]; webRequested: boolean; analysis: Analysis | null; createdAt: string; fileUrl: string };
+type Quote = { id: string; fileName: string; size: number; files: QuoteFile[]; uploadedBy: string; status: "analyzing" | "ready" | "failed"; error: string; referenceIds: string[]; referenceNames: string[]; pastQuoteIds: string[]; pastQuoteNames: string[]; webRequested: boolean; analysis: Analysis | null; createdAt: string; fileUrl: string; assistantIndexProjectId?: string };
 type Reference = { id: string; name: string; contentType: string; createdAt: string };
 type Message = { id: string; role: "user" | "assistant"; text: string; sources: Source[] };
 
@@ -336,6 +337,9 @@ function QuotesWorkspaceContent({ language, mode, canEdit, allowChat = true }: Q
       <main ref={results} tabIndex={-1} className="quote-results" aria-label={t(language, "Quote review", "Revisión de cotización")}>
         {!selected && !loading && <div className="quote-empty"><span>⌕</span><b>{t(language, "Your next quote starts here", "Tu próxima cotización comienza aquí")}</b><p>{t(language, "The review will focus on essential questions, main risks, scope gaps, plan conflicts and budget differences.", "La revisión se enfocará en preguntas esenciales, riesgos principales, vacíos de alcance, conflictos con planos y diferencias del presupuesto.")}</p></div>}
         {selected && <div className="quote-record-toolbar"><small>{new Date(selected.createdAt).toLocaleDateString(language === "es" ? "es-CR" : "en-US")} · {t(language, selected.files.length === 1 ? "1 document" : `${selected.files.length} documents`, selected.files.length === 1 ? "1 documento" : `${selected.files.length} documentos`)}</small><div>{selected.files.length > 1 ? <details className="quote-file-menu"><summary>{t(language, "Open documents", "Abrir documentos")} ({selected.files.length})</summary><div>{selected.files.map((file) => <a key={file.fileUrl} onClick={() => trackUsageInteraction("document.open")} href={file.fileUrl} target="_blank" rel="noopener noreferrer">↗ <span>{file.name}</span><small>{file.supplier} · {formatSize(file.size)}</small></a>)}</div></details> : <a className="secondary-button" onClick={() => trackUsageInteraction("document.open")} href={selected.files[0]?.fileUrl || selected.fileUrl} target="_blank" rel="noopener noreferrer">↗ {t(language, "Open original", "Abrir original")}</a>}{canEdit && <button type="button" className="quote-delete-button" disabled={busy || selected.status === "analyzing"} title={selected.status === "analyzing" ? t(language, "Wait for the analysis to finish", "Espera a que termine el análisis") : undefined} onClick={() => setDeleteTarget(selected)}>{t(language, "Delete quote", "Eliminar cotización")}</button>}</div></div>}
+        {selected?.assistantIndexProjectId && <ul>{selected.files.map((file, index) => <li key={file.fileUrl}>
+          {file.name} · <AssistantIndexStatus key={`${selected.id}:${index}`} id={selected.id} kind="quote" index={index} projectId={selected.assistantIndexProjectId} language={language} />
+        </li>)}</ul>}
         {selected?.status === "failed" && <div className="quote-empty"><span>!</span><b>{t(language, "Analysis failed", "El análisis falló")}</b><p>{selected.error}</p></div>}
         {selected?.status === "analyzing" && <div className="quote-empty"><span className="quote-spinner">◌</span><b>{t(language, "Reading the full quote and plans", "Leyendo la cotización y los planos completos")}</b></div>}
         {selected?.status === "ready" && analysis && <>

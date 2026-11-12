@@ -23,6 +23,7 @@ import SiteFooter from "./SiteFooter";
 import BudgetWorkspace from "./components/BudgetWorkspace";
 import ExpensesWorkspace from "./components/ExpensesWorkspace";
 import AssistantPanel from "./components/AssistantPanel";
+import AssistantIndexStatus from "./components/AssistantIndexStatus";
 import ActivityWorkspace, { ActivitySummaryCard } from "./components/ActivityWorkspace";
 import MobileCapture from "./components/MobileCapture";
 import MobileWorkspaceNavigation from "./components/MobileWorkspaceNavigation";
@@ -131,6 +132,7 @@ type DocumentRecord = {
   thumbnailUrl?: string | null;
   previewUrl?: string | null;
   aiIndexStatus?: string | null;
+  assistantIndexProjectId?: string;
   description?: string;
   quoteReferenceSupported?: boolean;
   quoteReferenceEnabled?: boolean;
@@ -662,7 +664,7 @@ export default function HousePlanner({
     // Record references belong to their original section and must not leak into a new section.
     if (next.section !== destinationRef.current.section || next.projectId !== destinationRef.current.projectId) {
       url.searchParams.delete("item"); url.searchParams.delete("countdown");
-      for (const key of ["budgetLine", "expenseTab", "newExpense", "newDocument"]) url.searchParams.delete(key);
+      for (const key of ["budgetLine", "expenseTab", "expenseRecord", "newExpense", "newDocument"]) url.searchParams.delete(key);
     }
     return `${buildWorkspacePath(next)}${url.search}${url.hash}`;
   }
@@ -2713,11 +2715,13 @@ export default function HousePlanner({
       {(mode === "demo" || (!user.anonymousLink && !projectMismatch && !user.isPersonal)) && (
         <AssistantPanel
           mode={mode}
+          projectId={user.projectId}
           language={language}
           role={user.role}
           canBudget={hasTabAccess("budget")}
           canDocuments={hasTabAccess("documents")}
           canNotes={hasTabAccess("notes")}
+          canExpenses={hasTabAccess("expenses")}
           onOpenBudget={(draftId) => {
             setAssistantDraftId(draftId || null);
             setActive("budget");
@@ -3866,10 +3870,11 @@ function Documents({
                     <small>
                       {formatBytes(doc.size)}
                       {doc.isImage ? ` · ${t(language, "Photo", "Foto")}` : ""}
-                      {["ready", "completed"].includes(doc.aiIndexStatus || "") ? ` · ${t(language, "Assistant ready", "Listo para el asistente")}` : ""}
-                      {doc.aiIndexStatus === "in_progress" ? ` · ${t(language, "Assistant indexing", "Indexando para el asistente")}` : ""}
-                      {doc.aiIndexStatus === "failed" ? ` · ${t(language, "Assistant index failed", "Falló el índice del asistente")}` : ""}
+                      {!doc.assistantIndexProjectId && ["ready", "completed"].includes(doc.aiIndexStatus || "") ? ` · ${t(language, "Assistant ready", "Listo para el asistente")}` : ""}
+                      {!doc.assistantIndexProjectId && doc.aiIndexStatus === "in_progress" ? ` · ${t(language, "Assistant indexing", "Indexando para el asistente")}` : ""}
+                      {!doc.assistantIndexProjectId && doc.aiIndexStatus === "failed" ? ` · ${t(language, "Assistant index failed", "Falló el índice del asistente")}` : ""}
                     </small>
+                    {doc.assistantIndexProjectId && <AssistantIndexStatus id={doc.id} projectId={doc.assistantIndexProjectId} language={language} />}
                     {!isFeatured && canManage && !doc.encrypted && doc.quoteReferenceSupported && (
                       <label className="quote-reference-document-toggle" onPointerDown={(event) => event.stopPropagation()}>
                         <input

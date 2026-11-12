@@ -5,6 +5,7 @@ import { requireTabAccess } from "@/lib/auth";
 import { firestore, projectBucket } from "@/lib/firebase-admin";
 import { aestheticId, AESTHETIC_IMAGE_TYPES } from "@/lib/aesthetics";
 import { AESTHETIC_FOLDERS, AESTHETIC_IMAGES } from "@/lib/project";
+import { visibleGeneratedAesthetics } from "@/lib/assistant-plan-sources";
 import { AestheticArchiveError, AESTHETIC_ARCHIVE_MAX_BYTES, AESTHETIC_ARCHIVE_MAX_IMAGE_BYTES, aestheticArchiveImagePath, claimAestheticArchiveMemory, planAestheticArchive } from "@/lib/aesthetic-archive";
 
 export const runtime = "nodejs";
@@ -80,7 +81,8 @@ export async function GET(request: Request) {
       firestore.collection(AESTHETIC_FOLDERS).where("projectId", "==", actor.projectId).get(),
       firestore.collection(AESTHETIC_IMAGES).where("projectId", "==", actor.projectId).get(),
     ]);
-    const plan = planAestheticArchive(actor.projectId, folderId, folders.docs.map(doc => ({ id: doc.id, data: doc.data() })), images.docs.map(doc => ({ id: doc.id, data: doc.data() })));
+    const visible = await visibleGeneratedAesthetics(actor, images.docs, doc => doc.data());
+    const plan = planAestheticArchive(actor.projectId, folderId, folders.docs.map(doc => ({ id: doc.id, data: doc.data() })), visible.map(doc => ({ id: doc.id, data: doc.data() })));
     const originals: { file: StorageFile; size: number; path: string }[] = [];
     let totalBytes = 0;
     // Validate every object before transferring image bytes. Four independent
@@ -108,6 +110,14 @@ export async function GET(request: Request) {
     // JPEG/WebP/AVIF/PNG originals are already compressed. STORE avoids wasting
     // CPU and keeps the bounded in-memory archive predictable.
     const bytes = await zip.generateAsync({ type: "uint8array", compression: "STORE", streamFiles: true });
+    const archivedKeys = new Set(plan.images.map(image => image.objectKey));
+    const protectedImages = visible.filter(doc => doc.data().assistantPlanSource !== undefined && archivedKeys.has(doc.data().objectKey));
+    if (protectedImages.length) {
+      const current = await requireTabAccess("aesthetics");
+      if (!current || current.uid !== actor.uid || current.projectId !== actor.projectId ||
+        (await visibleGeneratedAesthetics(current, protectedImages, doc => doc.data())).length !== protectedImages.length)
+        throw new AestheticArchiveError("Cambió el acceso a una imagen. Volvé a generar el ZIP.", 403);
+    }
     zip = null;
     originals.length = 0;
     const filename = encodeURIComponent(plan.filename).replace(/['()*]/g, character => `%${character.charCodeAt(0).toString(16).toUpperCase()}`);

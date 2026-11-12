@@ -1,0 +1,32 @@
+.payment-reminders { display: grid; gap: 20px; min-width: 0; }
+.reminder-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.reminder-heading h2 { margin: 0 0 8px; }
+.reminder-heading p { margin: 0; max-width: 680px; color: #64748b; line-height: 1.5; }
+.reminder-summary { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px; background: #f8fafc; min-width: 0; }
+.reminder-summary h3 { margin: 0 0 6px; }
+.reminder-summary p { margin: 0; color: #64748b; }
+.reminder-summary-amounts { display: flex; flex-wrap: wrap; gap: 16px 24px; min-width: 0; }
+.reminder-summary-amounts > div { min-width: 0; }
+.reminder-summary-amounts strong { display: block; font-size: 28px; overflow-wrap: anywhere; }
+.reminder-summary-amounts small { color: #64748b; }
+.reminder-summary-unpriced { flex-basis: 100%; }
+.reminder-filters { display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: 12px; }
+.reminder-filters label { display: grid; gap: 6px; }
+.reminder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+.reminder-card { padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px; background: white; min-width: 0; }
+.reminder-title { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.reminder-title h3 { margin: 0 0 16px; overflow-wrap: anywhere; }
+.reminder-title span { padding: 4px 8px; background: #f1f5f9; border-radius: 8px; font-size: 12px; }
+.reminder-card > strong { font-size: 24px; display: block; overflow-wrap: anywhere; }
+.reminder-card p, .reminder-card small { color: #64748b; overflow-wrap: anywhere; }
+.reminder-notes { white-space: pre-wrap; }
+.reminder-card footer { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.payment-reminders button { min-height: 44px; }
+.reminder-form fieldset { border: 0; padding: 0; margin: 0; min-width: 0; display: grid; gap: 14px; }
+.reminder-form { display: flex; flex-direction: column; }
+.reminder-form > .expense-form-fields { overflow: auto; min-height: 0; }
+.reminder-form > footer { flex-shrink: 0; }
+@media (max-width: 600px) {
+  .reminder-heading { flex-direction: column; }
+  .reminder-filters { grid-template-columns: minmax(0, 1fr); }
+}

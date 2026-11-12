@@ -6,6 +6,7 @@ export const EXPENSE_CURRENCIES = ["CRC", "USD"] as const;
 export type ExpenseCurrency = ProjectCurrency;
 
 export type ExpenseMedia = {
+  assistantIndexProjectId?: string;
   id: string;
   name: string;
   contentType: string;

@@ -57,7 +57,10 @@ it("locks the canonical denomination before preparing a proposal and preserves i
 
 it("keeps read-only assistant budget tools free of the financial currency lock", async () => {
   mocks.generate.mockResolvedValueOnce({ functionCalls: [{ id: "read", name: "get_budget_summary", args: {} }] }).mockResolvedValueOnce({ text: "The project uses USD" });
-  await runAssistantTurn(actor, { message: "What is the budget?" });
+  const onStage = vi.fn();
+  await runAssistantTurn(actor, { message: "What is the budget?" }, onStage);
+  expect(onStage.mock.calls).toEqual([["answering"], ["budget"], ["answering"]]);
+  expect(onStage.mock.invocationCallOrder[1]).toBeLessThan(mocks.budget.mock.invocationCallOrder[0]);
   expect(mocks.budget).toHaveBeenCalledWith(actor.projectId);
   expect(mocks.lock).not.toHaveBeenCalled();
 });

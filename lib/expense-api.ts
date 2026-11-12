@@ -1,3 +1,4 @@
+import { ragEnabled } from "./rag-config";
 import { firestore } from "./firebase-admin";
 import { budgetPayload } from "./workbook-store";
 import { DOCUMENTS } from "./project";
@@ -50,6 +51,7 @@ export function mediaJson(document: FirebaseFirestore.QueryDocumentSnapshot | Fi
   return {
     id: document.id,
     name: String(data.fileName || "Archivo"),
+    ...(ragEnabled(String(data.projectId)) ? { assistantIndexProjectId: data.projectId } : {}),
     contentType,
     size: Number(data.size || 0),
     createdAt: expenseIso(data.createdAt),

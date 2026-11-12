@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
       "node_modules/@napi-rs/canvas-linux-x64-gnu/**/*",
       "node_modules/pdfjs-dist/**/*",
     ],
+    "/api/assistant/documents/dispatch": [
+      "node_modules/@napi-rs/canvas/**/*",
+      "node_modules/@napi-rs/canvas-linux-x64-gnu/**/*",
+      "node_modules/pdfjs-dist/**/*",
+    ],
     "/api/files": [
       "node_modules/@napi-rs/canvas/**/*",
       "node_modules/@napi-rs/canvas-linux-x64-gnu/**/*",

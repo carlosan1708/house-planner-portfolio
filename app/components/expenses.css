@@ -226,6 +226,27 @@
   min-width: 0;
 }
 
+.payment-history-concept {
+  display: block;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  color: #1d4ed8;
+  text-align: left;
+  font: inherit;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.payment-receipt-links button {
+  min-height: 44px;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .payment-item p,
 .payment-item span {
   overflow-wrap: anywhere;

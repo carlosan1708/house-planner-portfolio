@@ -51,8 +51,10 @@ export async function projectCurrencyLocked(projectId: string, data: DocumentDat
   const records = await Promise.all(collections.map(async (collection) => {
     const candidateQuery = firestore.collection(collection).where("projectId", "==", projectId);
     // Viewing a pristine starter can materialize its zero-valued budget projection.
-    const query = editableStarter && collection === BUDGET_LINES ? candidateQuery : candidateQuery.limit(1);
+    const query = collection === EXPENSES || editableStarter && collection === BUDGET_LINES ? candidateQuery : candidateQuery.limit(1);
     const snapshot = await (transaction ? transaction.get(query) : query.get());
+    // Standalone reminders keep their own denomination and are not financial setup.
+    if (collection === EXPENSES) return snapshot.docs.some((document) => document.data().kind !== "payment_reminder");
     if (editableStarter && collection === BUDGET_LINES) return snapshot.docs.some((document) => {
       const line = document.data();
       return ["objective", "quote", "paid", "excess"].some((field) => Number(line[field] ?? 0) !== 0);

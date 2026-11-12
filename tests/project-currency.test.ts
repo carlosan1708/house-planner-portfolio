@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { BUDGET_LINES, CONFIG, DEFAULT_FOLDER_ACCESS, DEFAULT_MEMBER_PERMISSIONS, LEGACY_PROJECT_ID, MEMBERSHIPS, PROJECTS, PURCHASES, WORKBOOK_DRAFTS, membershipId, type MemberRecord } from "@/lib/project";
+import { BUDGET_LINES, CONFIG, DEFAULT_FOLDER_ACCESS, DEFAULT_MEMBER_PERMISSIONS, EXPENSES, LEGACY_PROJECT_ID, MEMBERSHIPS, PROJECTS, PURCHASES, WORKBOOK_DRAFTS, membershipId, type MemberRecord } from "@/lib/project";
 
 const mock = vi.hoisted(() => ({
   records: new Map<string, Record<string, unknown>>(), queue: Promise.resolve(), nextId: 0,
@@ -105,6 +105,17 @@ describe("canonical project currency", () => {
   it("treats the legacy default workbook as initialized before CONFIG or cached lines exist", async () => {
     expect(await projectCurrencyLocked(LEGACY_PROJECT_ID, {})).toBe(true);
     expect(await firestore.runTransaction(transaction => projectCurrencyLocked(LEGACY_PROJECT_ID, {}, transaction))).toBe(true);
+  });
+
+  it("keeps standalone reminders independent of project currency initialization", async () => {
+    mock.records.set(`${EXPENSES}/reminder`, { projectId: "shared", kind: "payment_reminder", currency: "CRC", amount: 300000 });
+    expect(await projectCurrencyLocked("shared", {})).toBe(false);
+    expect(await firestore.runTransaction(transaction => projectCurrencyLocked("shared", {}, transaction))).toBe(false);
+    expect((await edit()).status).toBe(200);
+    expect(mock.records.get(`${EXPENSES}/reminder`)).toMatchObject({ currency: "CRC", amount: 300000 });
+    mock.records.set(`${EXPENSES}/receipt`, { projectId: "shared", kind: "attachment" });
+    expect(await projectCurrencyLocked("shared", {})).toBe(true);
+    expect(await firestore.runTransaction(transaction => projectCurrencyLocked("shared", {}, transaction))).toBe(true);
   });
 
   it("keeps an explicit untouched starter editable after its zero-value budget projection is read", async () => {

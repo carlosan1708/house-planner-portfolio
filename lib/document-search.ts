@@ -1,7 +1,8 @@
 import { ThinkingLevel } from "@google/genai";
 import { requireTabAccess } from "./auth";
 import { firestore } from "./firebase-admin";
-import { geminiClient, geminiConfigured } from "./gemini";
+import { geminiConfigured } from "./gemini";
+import { generateForTask, routeModel } from "./model-router";
 import { DOCUMENTS, FOLDERS, type MemberRecord } from "./project";
 import {
   DOCUMENT_SEARCH_MODEL, DOCUMENT_SEARCH_RESULT_LIMIT, DocumentSearchFailure, documentSearchActor,
@@ -57,8 +58,8 @@ export async function semanticDocumentSearch(actor: MemberRecord, input: { query
   const timer = setTimeout(abort, 30_000);
   try {
     if (controller.signal.aborted) throw new DocumentSearchFailure("semantic_unavailable", 503);
-    const response = await geminiClient().models.generateContent({
-      model: DOCUMENT_SEARCH_MODEL, contents,
+    const response = await generateForTask("documentRanking", {
+      contents,
       config: {
         systemInstruction: instructions, temperature: 0, candidateCount: 1, maxOutputTokens: 1500,
         responseMimeType: "application/json", responseJsonSchema: {
@@ -71,7 +72,7 @@ export async function semanticDocumentSearch(actor: MemberRecord, input: { query
         httpOptions: { timeout: 30_000, retryOptions: { attempts: 1 } },
         abortSignal: controller.signal, labels: { application: "house-planner-document-search" },
       },
-    });
+    }, routeModel("documentRanking", { baseline: DOCUMENT_SEARCH_MODEL }));
     if (controller.signal.aborted) throw new DocumentSearchFailure("semantic_unavailable", 503);
     const scores = parseDocumentSearchScores(response.text, sent);
     const current = await requireTabAccess("documents");

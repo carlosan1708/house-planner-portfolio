@@ -44,13 +44,13 @@ describe("scripted demo in the actual assistant panel", () => {
     expect(container.querySelector(".assistant-message.assistant")?.textContent).toContain("$55,000");
     expect(container.querySelector(".assistant-message.assistant")?.textContent).toContain("$6,200");
     expect(container.querySelector(".assistant-message.assistant")?.textContent).toContain("$500 excess");
-    await click("▦ Fictional demo budget"); expect(props.onOpenBudget).toHaveBeenCalledWith(undefined);
+    await click("Fictional demo budget"); expect(props.onOpenBudget).toHaveBeenCalledWith(undefined);
     expect(container.querySelector(".assistant-proposal")).toBeNull();
 
     await click("New conversation"); await click("What are the house dimensions?");
     expect(container.querySelector(".assistant-message.assistant")?.textContent).toContain("120 m²");
     expect(container.querySelector(".assistant-message.assistant")?.textContent).toContain("two bedrooms and one bathroom");
-    expect(container.querySelector(".assistant-citations a")?.getAttribute("href")).toBe("/demo/casa-mirador-plan.svg");
+    expect(container.querySelector(".assistant-sources a")?.getAttribute("href")).toBe("/demo/casa-mirador-plan.svg");
     await click("Conversation history"); expect(container.textContent).toContain("not saved");
     expect(api).not.toHaveBeenCalled();
   });
@@ -76,7 +76,7 @@ describe("scripted demo in the actual assistant panel", () => {
       : Response.json({ conversations: [{ id: "private", title: "Private conversation", lastMessage: "Existing history", updatedAt: "" }] }));
     vi.stubGlobal("fetch", api);
     await render(); await click("Open project assistant");
-    expect(api).toHaveBeenCalledWith("/api/assistant/conversations");
+    expect(api).toHaveBeenCalledWith("/api/assistant/conversations", expect.objectContaining({ signal: expect.any(AbortSignal) }));
     await click("Conversation history"); await click("Private conversationExisting history");
     expect(container.textContent).toContain("Private project information");
     const realRequests = api.mock.calls.length;
