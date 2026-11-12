@@ -2,7 +2,7 @@ import { projectCurrency } from "./currency";
 import { lockProjectCurrency, validateProjectCurrency } from "./project-currency";
 import { FieldValue } from "firebase-admin/firestore";
 import type { MemberRecord } from "./project";
-import { AGENT_PROPOSALS, CONFIG, projectConfigDoc, projectStoragePrefix, WORKBOOK_DRAFTS } from "./project";
+import { AGENT_CONVERSATIONS, AGENT_PROPOSALS, CONFIG, projectConfigDoc, projectStoragePrefix, WORKBOOK_DRAFTS } from "./project";
 import { firestore, projectBucket } from "./firebase-admin";
 import { ASSISTANT_FIELD_COLUMNS, type BudgetProposalChange } from "./assistant";
 import { BUDGET_SHEET, type UniverWorkbook } from "./workbook";
@@ -33,6 +33,8 @@ export async function confirmAssistantProposal(actor: MemberRecord, proposalId: 
   if (!proposalSnapshot.exists || proposal?.projectId !== actor.projectId || proposal?.createdByUid !== actor.uid) throw new Error("proposal_not_found");
   if (proposal.status === "confirmed" && proposal.draftId) return { draftId: String(proposal.draftId), reused: true };
   if (proposal.status !== "pending") throw new Error("proposal_not_pending");
+  const thread = typeof proposal.conversationId === "string" ? firestore.collection(AGENT_CONVERSATIONS).doc(proposal.conversationId) : null;
+  if (thread && (await thread.get()).data()?.deletedAt) throw new Error("proposal_not_pending");
   const currency = await lockProjectCurrency(actor.projectId);
   if (proposal.currency !== undefined && projectCurrency(proposal.currency) !== currency) throw new Error("stale_proposal_currency");
   const config = await workbookConfig(actor.projectId);
@@ -57,6 +59,7 @@ export async function confirmAssistantProposal(actor: MemberRecord, proposalId: 
       const currentConfig = await transaction.get(firestore.collection(CONFIG).doc(projectConfigDoc(actor.projectId)));
       if (Number(currentConfig.data()?.workbookPlanVersion || 1) !== config.planVersion || Number(currentConfig.data()?.workbookActualsRevision || 0) !== config.actualsRevision
         || config.objectKey && currentConfig.data()?.workbookObjectKey !== config.objectKey) throw new Error("stale_proposal");
+      if (thread && (await transaction.get(thread)).data()?.deletedAt) throw new Error("proposal_not_pending");
       const fresh = await transaction.get(proposalRef);
       const data = fresh.data();
       if (data?.status === "confirmed" && data.draftId) throw new Error(`already_confirmed:${data.draftId}`);

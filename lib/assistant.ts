@@ -1,4 +1,6 @@
 import type { BudgetLine } from "./workbook";
+import type { AgentOutcome, AgentView } from "./assistant-run-types";
+import type { RagCitationSource } from "./rag-search";
 
 export const ASSISTANT_EDITABLE_FIELDS = [
   "chapter", "item", "type", "subcategory", "objective", "quote", "paid", "supplier",
@@ -6,6 +8,7 @@ export const ASSISTANT_EDITABLE_FIELDS = [
 
 export type AssistantEditableField = (typeof ASSISTANT_EDITABLE_FIELDS)[number];
 export type AssistantLanguage = "en" | "es";
+export type AssistantStage = "thinking" | "answering" | "documents" | "notes" | "budget" | "proposal" | "verifying";
 export type AssistantCitation = {
   id: string;
   kind: "budget" | "document" | "note";
@@ -13,6 +16,7 @@ export type AssistantCitation = {
   href?: string;
   budgetLineId?: string;
   documentId?: string;
+  source?: RagCitationSource;
 };
 export type BudgetMatch = BudgetLine & { score: number; matchedOn: string[] };
 export type BudgetProposalChange = {
@@ -39,6 +43,9 @@ export type AssistantMessage = {
   createdAt: string;
   citations?: AssistantCitation[];
   proposal?: AssistantProposal | null;
+  view?: AgentView | null;
+  actions?: AgentOutcome[];
+  image?: { name: string; pages: number[]; references: number[]; model: string; href: string; canSave: boolean };
 };
 
 export const ASSISTANT_FIELD_COLUMNS: Record<AssistantEditableField, number> = {

@@ -12,7 +12,7 @@ const purchase = { id: "purchase", title: "Materiales para pisos", purchaseDate:
 const payment = { id: "old-payment", budgetLineId: null, budgetLineLabel: "", purchaseId: "purchase", amount: 400, paymentDate: "2026-10-15", payee: "Primer abono", reference: "", notes: "", documentId: null, documentTitle: "", documentType: null, documentIds: [] as string[], accountingMode: "ledger", paymentKind: "partial", createdAt: "", updatedAt: "" };
 
 test.beforeAll(async () => {
-  const bundle = await build({ stdin: { contents: `import React from 'react'; import {createRoot} from 'react-dom/client'; import ExpensesWorkspace from './app/components/ExpensesWorkspace'; createRoot(document.getElementById('root')).render(<main style={{padding:16}}><ExpensesWorkspace mode="real" language="es" isOwner projectId="synthetic-project"/></main>);`, resolveDir: process.cwd(), loader: "tsx" }, bundle: true, write: false, outfile: "receipt-ui.js", platform: "browser", define: { "process.env.NODE_ENV": '"production"' }, plugins: [{ name: "receipt-image", setup(builder) { builder.onResolve({ filter: /^next\/image$/ }, () => ({ path: "next/image", namespace: "receipt-mock" })); builder.onLoad({ filter: /.*/, namespace: "receipt-mock" }, () => ({ contents: "import React from 'react'; export default function Image({unoptimized,fill,priority,...props}){return <img {...props}/>;}", loader: "tsx", resolveDir: process.cwd() })); } }] });
+  const bundle = await build({ stdin: { contents: `import React from 'react'; import {createRoot} from 'react-dom/client'; import ExpensesWorkspace from './app/components/ExpensesWorkspace'; createRoot(document.getElementById('root')).render(<main style={{padding:16}}><ExpensesWorkspace mode="real" language="es" isOwner={new URLSearchParams(location.search).get("role")!=="viewer"} projectId="synthetic-project"/></main>);`, resolveDir: process.cwd(), loader: "tsx" }, bundle: true, write: false, outfile: "receipt-ui.js", platform: "browser", define: { "process.env.NODE_ENV": '"production"' }, plugins: [{ name: "receipt-image", setup(builder) { builder.onResolve({ filter: /^next\/image$/ }, () => ({ path: "next/image", namespace: "receipt-mock" })); builder.onLoad({ filter: /.*/, namespace: "receipt-mock" }, () => ({ contents: "import React from 'react'; export default function Image({unoptimized,fill,priority,...props}){return <img {...props}/>;}", loader: "tsx", resolveDir: process.cwd() })); } }] });
   const css = await readFile("app/globals.css", "utf8") + (bundle.outputFiles.find((file) => file.path.endsWith(".css"))?.text || "");
   const javascript = bundle.outputFiles.find((file) => file.path.endsWith(".js"))!.text;
   server = createServer((request, response) => { if (request.url === "/receipt-ui.js") { response.setHeader("content-type", "text/javascript"); response.end(javascript); } else { response.setHeader("content-type", "text/html"); response.end(`<html lang="es"><meta name="viewport" content="width=device-width,initial-scale=1"><style>:root{--font-geist-sans:Arial;--font-geist-mono:monospace}${css}</style><div id="root"></div><script src="/receipt-ui.js"></script></html>`); } });
@@ -20,10 +20,17 @@ test.beforeAll(async () => {
 });
 test.afterAll(async () => { if (server) await new Promise<void>((done) => server.close(() => done())); });
 
-async function mockApi(page: Page, agreedTotal = 1000, options: { paymentsModelVersion?: 2; excelImport?: boolean } = {}) {
+async function mockApi(page: Page, agreedTotal = 1000, options: { paymentsModelVersion?: 2; excelImport?: boolean; history?: boolean } = {}) {
   const calls: Array<{ path: string; method: string; body?: Record<string, unknown> }> = [];
-  let payments = [structuredClone(payment)], documents = Array.from({ length: 18 }, (_, index) => ({ ...receipt, id: `receipt-${index + 1}`, title: index ? `Comprobante de materiales con nombre largo ${index + 1}` : receipt.title }));
+  let payments: Array<Omit<typeof payment, "budgetLineId" | "purchaseId"> & { budgetLineId: string | null; purchaseId: string | null }> = [structuredClone(payment)];
+  let documents = Array.from({ length: 18 }, (_, index) => ({ ...receipt, id: `receipt-${index + 1}`, title: index ? `Comprobante de materiales con nombre largo ${index + 1}` : receipt.title }));
   if (options.excelImport) Object.assign(payments[0], { source: "excel-import", accountingMode: "historical-detail", budgetLineId: "import-line", purchaseId: null, payee: "", paymentDate: "", documentIds: [receipt.id] });
+  if (options.history) payments = [
+    { ...payment, id: "history-a", amount: 800, paymentDate: "2026-10-16", payee: "Anticipo municipal" },
+    { ...payment, id: "history-b", amount: 400, paymentDate: "2026-09-28", payee: "Planos" },
+    { ...payment, id: "history-c", amount: 200, paymentDate: "2026-09-20", payee: "Instalaciones" },
+    { ...payment, id: "history-d", amount: 200, paymentDate: "2026-08-23", payee: "Visualización" },
+  ].map((item) => ({ ...item, budgetLineId: "import-line", budgetLineLabel: "Servicios de diseño", purchaseId: null, accountingMode: "historical-detail", documentIds: [receipt.id] }));
   await page.route("**/api/**", async (route) => {
     const request = route.request(), path = new URL(request.url()).pathname;
     if (path === "/api/files") return route.fulfill({ contentType: "image/png", body: image });
@@ -38,10 +45,10 @@ async function mockApi(page: Page, agreedTotal = 1000, options: { paymentsModelV
       if (request.method() === "POST") { payments = [...payments, { ...payment, ...json, id: "new-payment" }]; return route.fulfill({ json: { id: "new-payment" } }); }
       if (request.method() === "PATCH") { payments = payments.map((item) => item.id === json.id ? { ...item, ...json } : item); return route.fulfill({ json: { ok: true } }); }
       if (request.method() === "DELETE") { payments = payments.filter((item) => item.id !== new URL(request.url()).searchParams.get("id")); return route.fulfill({ json: { ok: true } }); }
-      return route.fulfill({ json: { payments, completedLineIds: options.excelImport ? ["import-line"] : [], ...(options.paymentsModelVersion === 2 ? { paymentsModelVersion: 2 } : {}) } });
+      return route.fulfill({ json: { payments, completedLineIds: options.excelImport || options.history ? ["import-line"] : [], ...(options.paymentsModelVersion === 2 ? { paymentsModelVersion: 2 } : {}) } });
     }
-    const total = options.excelImport ? payments.reduce((sum, item) => sum + item.amount, 0) : 0;
-    return route.fulfill({ json: { expenses: options.excelImport ? [{ id: "import-line", budgetLineId: "import-line", description: "Importación de pisos", chapter: "Acabados", subcategory: "Pisos", vendor: "", amount: total, attachments: [] }] : [], budgetLines: options.excelImport ? [{ id: "import-line", item: "Importación de pisos", chapter: "Acabados", paid: total, supplier: "" }] : [], summary: { total } } });
+    const total = options.excelImport || options.history ? payments.reduce((sum, item) => sum + item.amount, 0) : 0;
+    return route.fulfill({ json: { expenses: options.excelImport || options.history ? [{ id: "import-line", budgetLineId: "import-line", description: "Importación de pisos", chapter: "Acabados", subcategory: "Pisos", vendor: "", amount: total, attachments: [] }] : [], budgetLines: options.excelImport || options.history ? [{ id: "import-line", item: "Importación de pisos", chapter: "Acabados", paid: total, supplier: "" }] : [], summary: { total } } });
   });
   return calls;
 }
@@ -208,3 +215,35 @@ test("preserves an exact decimal settlement and turns a smaller edited amount in
   await dialog.getByRole("button", { name: "Guardar pago", exact: true }).click();
   expect(partialCalls[0].body).toMatchObject({ amount: 300.25, paymentKind: "partial" });
 });
+
+
+for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }, { width: 844, height: 390 }]) {
+  test(`preserves all reviewed payment details in the new expenses UI at ${viewport.width}x${viewport.height}`, async ({ page }, testInfo) => {
+    await page.setViewportSize(viewport);
+    const calls = await mockApi(page, 1000, { history: true });
+    await page.goto(`${address}/projects/synthetic-project/expenses?budgetLine=import-line&role=viewer`);
+    await expect(page.locator(".expense-tabs .active")).toContainText("Pagos");
+    await expect(page.locator(".payment-item")).toHaveCount(4);
+    await expect(page.locator(".expense-total")).toContainText(/1[.,\s]600/);
+    const row = page.locator(".payment-item").filter({ hasText: "Planos" });
+    await expect(row).toContainText("2026-09-28");
+    await expect(row).toContainText("₡400");
+    await expect(row.getByRole("button", { name: "Ver comprobantes de Planos", exact: true })).toHaveText(/1 comprobante/);
+    await row.getByRole("button", { name: "Ver pago Planos", exact: true }).click();
+    const details = page.getByRole("dialog", { name: "Detalle del pago", exact: true });
+    await expect(details).toContainText("2026-09-28");
+    await expect(details).toContainText(receipt.title);
+    await expect(details.getByRole("button", { name: "Editar pago", exact: true })).toHaveCount(0);
+    await details.getByRole("button", { name: "Cerrar", exact: true }).click();
+    await expect(row.getByRole("button", { name: "Ver pago Planos", exact: true })).toBeFocused();
+    await page.getByRole("button", { name: "Partidas pagadas", exact: true }).click();
+    await expect(page.locator(".paid-line")).toHaveAttribute("open", "");
+    await expect(page.locator(".paid-line")).toContainText("Detalle histórico revisado");
+    await expect(page.locator(".paid-line .payment-item")).toHaveCount(4);
+    await page.reload();
+    await expect(page.locator(".paid-line .payment-item")).toHaveCount(4);
+    await assertNoOverflow(page);
+    if (viewport.width === 390) await page.screenshot({ path: testInfo.outputPath("reviewed-payment-history.png"), fullPage: true });
+    expect(calls).toEqual([]);
+  });
+}

@@ -99,8 +99,8 @@ See the [assistant architecture](docs/architecture/assistant.md),
 flowchart LR
   Browser[Browser: React and Univer] --> App[Next.js server on Cloud Run]
   App --> Auth[Firebase Authentication]
-  App --> Data[(Firestore: membership and metadata)]
-  App --> Files[(Private Cloud Storage: documents and XLSX)]
+  App --> Data[(Firestore: project data, conversations and workflow state)]
+  App --> Files[(Private Cloud Storage: documents, XLSX and renders)]
   App --> Model[Gemini on Vertex AI]
   Model --> Tools[Server-executed tools]
   Tools --> Checks[Permission and proposal validation]
@@ -109,6 +109,12 @@ flowchart LR
 
 The model does not receive independent database credentials. Tools and application routes
 remain responsible for access checks and writes. [Read the system design](docs/architecture/system.md).
+
+In a configured workspace, the assistant can resume a pending action, retrieve authorized project
+documents, and generate a conceptual image from a plan you choose. It shows progress through plan
+analysis and image generation, and suggests the last accessible plan you confirmed in the project.
+Firestore holds conversation and workflow state, and Cloud Storage holds the generated image.
+The public demo uses scripted assistant examples. [Assistant architecture](docs/architecture/assistant.md).
 
 ## Development approach: Spec-Driven Development
 

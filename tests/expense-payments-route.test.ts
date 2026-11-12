@@ -108,7 +108,7 @@ describe("unified payment model writes", () => {
   });
   it("deletes a payment without deleting its receipts or recreating Excel amounts", async () => {
     activate(); mocks.records.set("documents/receipt", { projectId: "project-1" });
-    mocks.records.set("payments/old", { projectId: "project-1", budgetLineId: "architecture", amount: 400, documentIds: ["receipt"] });
+    mocks.records.set("payments/old", { projectId: "project-1", budgetLineId: "architecture", amount: 400, source: "excel-import", documentIds: ["receipt"] });
     expect((await DELETE(new Request("http://localhost/api/expenses/payments?id=old", { method: "DELETE", body: JSON.stringify({ paymentsModelVersion: 2 }) }))).status).toBe(200);
     expect(activePayments()).toEqual([]); expect(mocks.records.get("documents/receipt")?.deletedAt).toBeUndefined();
     expect(mocks.records.get("config/project-1")).toMatchObject({ paymentLedgerRevision: 8, paymentProjectionPending: true });

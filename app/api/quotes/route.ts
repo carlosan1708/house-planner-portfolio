@@ -1,3 +1,5 @@
+import { writeRagJob } from "@/lib/rag-jobs";
+import { quoteKey, ragEnabled } from "@/lib/rag-sources";
 import { projectCurrency } from "@/lib/currency";
 import { lockProjectCurrency } from "@/lib/project-currency";
 import { parseOfferAssignments } from "@/lib/quote-offers";
@@ -30,6 +32,7 @@ function publicQuote(document: FirebaseFirestore.DocumentSnapshot, authors?: Pro
     contentType: files[0]?.contentType || "",
     size: files.reduce((sum, file) => sum + file.size, 0),
     files: files.map((file, index) => ({ name: file.name, supplier: file.supplier || "", contentType: file.contentType, size: file.size, fileUrl: `/api/quotes?id=${encodeURIComponent(document.id)}&file=1&index=${index}` })),
+    ...(ragEnabled(String(data.projectId)) ? { assistantIndexProjectId: data.projectId } : {}),
     uploadedBy: String(data.uploadedBy || ""),
     status: data.status === "ready" || data.status === "failed" ? data.status : "analyzing",
     error: data.status === "failed" ? String(data.error || "Analysis could not be completed") : "",
@@ -49,6 +52,8 @@ export async function GET(request: Request) {
   const actor = await requireTabAccess("quotes");
   if (!actor) return NextResponse.json({ error: "Quotes access required" }, { status: 403 });
   const url = new URL(request.url);
+  const requestedProject = url.searchParams.get("project");
+  if (requestedProject && (requestedProject !== actor.projectId || !actor.projectMembershipVerified)) return NextResponse.json({ error: "Quote not found" }, { status: 404 });
   const id = url.searchParams.get("id");
   if (id && url.searchParams.get("file") === "1") {
     if (!projectBucket) return NextResponse.json({ error: "Storage is unavailable" }, { status: 503 });
@@ -58,7 +63,7 @@ export async function GET(request: Request) {
     const files = storedQuoteFiles(data);
     const index = Number(url.searchParams.get("index") || 0);
     const file = Number.isInteger(index) && index >= 0 ? files[index] : undefined;
-    if (!file) return NextResponse.json({ error: "Quote file not found" }, { status: 404 });
+    if (!file || (requestedProject && !file.objectKey.startsWith(`${projectStoragePrefix(actor.projectId)}/quotes/`))) return NextResponse.json({ error: "Quote file not found" }, { status: 404 });
     const [bytes] = await projectBucket.file(file.objectKey).download();
     return new Response(new Uint8Array(bytes), { headers: {
       "Content-Type": file.contentType || "application/octet-stream",
@@ -141,7 +146,13 @@ export async function POST(request: Request) {
         storedFiles.push({ fileName: upload.file.name, contentType: upload.contentType, size: upload.file.size, objectKey, supplier: supplierByFile.get(index)! });
       }
       const first = storedFiles[0];
-      await ref.set({ title: form.has("offers") ? offers.map((offer) => offer.supplier).join(" vs ") : files[0].name, projectId: actor.projectId, currency, files: storedFiles, objectKey: first.objectKey, fileName: first.fileName, contentType: first.contentType, size: storedFiles.reduce((sum, item) => sum + item.size, 0), uploadedBy: actor.email, referenceIds: references.map((item) => item.id), referenceNames: references.map((item) => item.name), pastQuoteIds: pastDocuments.map((document) => document.id), pastQuoteNames: pastDocuments.map((document) => storedQuoteLabel(document.data())), webRequested: useWeb, status: "analyzing", createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp() });
+      const record = { title: form.has("offers") ? offers.map((offer) => offer.supplier).join(" vs ") : files[0].name, projectId: actor.projectId, currency, files: storedFiles, objectKey: first.objectKey, fileName: first.fileName, contentType: first.contentType, size: storedFiles.reduce((sum, item) => sum + item.size, 0), uploadedBy: actor.email, referenceIds: references.map((item) => item.id), referenceNames: references.map((item) => item.name), pastQuoteIds: pastDocuments.map((document) => document.id), pastQuoteNames: pastDocuments.map((document) => storedQuoteLabel(document.data())), webRequested: useWeb, status: "analyzing", createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp() };
+      if (ragEnabled(actor.projectId)) {
+        const batch = firestore.batch();
+        batch.set(ref, record);
+        storedFiles.forEach((_, index) => writeRagJob(batch, actor.projectId, quoteKey(ref.id, index)));
+        await batch.commit();
+      } else await ref.set(record);
       recordStored = true;
       progress("budget");
       const budgetContext = await quoteBudgetContext(actor.projectId, actor.role === "admin" || actor.permissions.budget);
@@ -196,7 +207,14 @@ export async function DELETE(request: Request) {
   if (!document.exists || data?.projectId !== actor.projectId) return NextResponse.json({ error: "Quote not found" }, { status: 404 });
   if (data?.status === "analyzing") return NextResponse.json({ error: "Wait for the analysis to finish before deleting this quote" }, { status: 409 });
 
+  if (ragEnabled(actor.projectId)) {
+    const batch = firestore.batch();
+    batch.delete(ref, { lastUpdateTime: document.updateTime! });
+    storedQuoteFiles(data).forEach((_, index) => writeRagJob(batch, actor.projectId, quoteKey(id, index), { purge: true }));
+    await batch.commit();
+  }
   await firestore.recursiveDelete(ref);
+
   const quotePrefix = `${projectStoragePrefix(actor.projectId)}/quotes/`;
   const objectKeys = storedQuoteFiles(data).map((file) => file.objectKey).filter((objectKey) => objectKey.startsWith(quotePrefix));
   if (projectBucket) {

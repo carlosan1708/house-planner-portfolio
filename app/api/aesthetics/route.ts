@@ -6,6 +6,7 @@ import { commitActivity } from "@/lib/activity";
 import { ensureDefaultAestheticFolders } from "@/lib/aesthetic-folders";
 import { aestheticClassification, aestheticFolderKind, aestheticId, aestheticImageIds, aestheticName, aestheticNotes, isAestheticImageClassification, AESTHETIC_CAROUSEL_LIMIT, AESTHETIC_IMAGE_TYPES, AESTHETIC_PDF_TYPE, MAX_AESTHETIC_NOTES_LENGTH } from "@/lib/aesthetics";
 import { requireTabAccess } from "@/lib/auth";
+import { canReadGeneratedAesthetic, visibleGeneratedAesthetics } from "@/lib/assistant-plan-sources";
 import { firestore, projectBucket } from "@/lib/firebase-admin";
 import { AESTHETIC_FOLDERS, AESTHETIC_IMAGES, projectStoragePrefix } from "@/lib/project";
 
@@ -51,9 +52,13 @@ export async function GET() {
     firestore.collection(AESTHETIC_FOLDERS).where("projectId", "==", actor.projectId).get(),
     firestore.collection(AESTHETIC_IMAGES).where("projectId", "==", actor.projectId).get(),
   ]);
+  const visible = await visibleGeneratedAesthetics(actor, images.docs.filter(item => !item.data().deletedAt), item => item.data());
+  const ids = new Set(visible.map(item => item.id));
   return NextResponse.json({
-    folders: folders.docs.filter((item) => !item.data().deletedAt).map(folderJson).sort((a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name)),
-    images: images.docs.filter((item) => !item.data().deletedAt).map(imageJson).sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+    folders: folders.docs.filter((item) => !item.data().deletedAt).map(folderJson).map(folder => ({
+      ...folder, carouselImageIds: folder.carouselImageIds.filter(id => !id.startsWith("assistant-") || ids.has(id)),
+    })).sort((a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name)),
+    images: visible.map(imageJson).sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
   }, { headers: { "Cache-Control": "private, no-store" } });
 }
 
@@ -179,7 +184,8 @@ export async function PATCH(request: Request) {
       const requested = aestheticImageIds(body.imageIds);
       const images = requested.length ? await firestore.getAll(...requested.map((imageId) => firestore.collection(AESTHETIC_IMAGES).doc(imageId))) : [];
       const isPlans = aestheticFolderKind(current.data()?.kind, current.data()?.name) === "plans";
-      const valid = new Set(images.filter((image) => image.exists && image.data()?.projectId === actor.projectId && !image.data()?.deletedAt && (image.data()?.contentType === AESTHETIC_PDF_TYPE) === isPlans).map((image) => image.id));
+      const visible = await visibleGeneratedAesthetics(actor, images, image => image.data());
+      const valid = new Set(visible.filter((image) => image.exists && image.data()?.projectId === actor.projectId && !image.data()?.deletedAt && (image.data()?.contentType === AESTHETIC_PDF_TYPE) === isPlans).map((image) => image.id));
       if (requested.some((imageId) => !valid.has(imageId))) return NextResponse.json({ error: "One or more carousel items are unavailable or have an incompatible format" }, { status: 400 });
       const selected = requested;
       const before = aestheticImageIds(current.data()?.carouselImageIds);
@@ -198,6 +204,8 @@ export async function PATCH(request: Request) {
     const ref = firestore.collection(AESTHETIC_IMAGES).doc(id);
     const current = await ref.get();
     if (!current.exists || current.data()?.projectId !== actor.projectId || current.data()?.deletedAt) return NextResponse.json({ error: "Image not found" }, { status: 404 });
+    const source = current.data()?.assistantPlanSource;
+    if (source !== undefined && !await canReadGeneratedAesthetic(actor, source)) return NextResponse.json({ error: "Image not found" }, { status: 404 });
     if (body.action === "classification") {
       if (!isAestheticImageClassification(body.classification)) return NextResponse.json({ error: "Choose a valid image classification" }, { status: 400 });
       if (current.data()?.contentType === AESTHETIC_PDF_TYPE) return NextResponse.json({ error: "Classification is available for images only" }, { status: 409 });

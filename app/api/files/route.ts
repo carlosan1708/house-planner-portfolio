@@ -1,3 +1,5 @@
+import { writeRagJob } from "@/lib/rag-jobs";
+import { canReadRagSource, documentKey, ragEnabled, ragFolders, resolveRagSource, validRagKey } from "@/lib/rag-sources";
 import { FieldValue } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 import mammoth from "mammoth";
@@ -107,13 +109,21 @@ export async function GET(request: Request) {
   const purchaseFolder = findExpensePurchaseFolder(folders);
   const vaults = await vaultAccess(actor, folders);
   const url = new URL(request.url);
+  const requestedProject = url.searchParams.get("project");
+  if (requestedProject && (requestedProject !== actor.projectId || !actor.projectMembershipVerified)) return NextResponse.json({ error: "Document not found" }, { status: 404 });
   const id = url.searchParams.get("id");
   if (id) {
+    if (requestedProject && !validRagKey(documentKey(id))) return NextResponse.json({ error: "Document not found" }, { status: 404 });
     if (!projectBucket) return NextResponse.json({ error: "Storage is unavailable" }, { status: 503 });
     const snap = await firestore.collection(DOCUMENTS).doc(id).get();
     if (!snap.exists || snap.data()?.projectId !== actor.projectId) return NextResponse.json({ error: "Document not found" }, { status: 404 });
     let data = snap.data()!;
     if (data.deletedAt) return NextResponse.json({ error: "Document not found" }, { status: 404 });
+    if (requestedProject) {
+      const folderState = ragFolders(folders);
+      const source = resolveRagSource(actor.projectId, documentKey(id), data, folderState);
+      if (!source || !canReadRagSource(actor, source, folderState)) return NextResponse.json({ error: "Document not found" }, { status: 404 });
+    }
     const documentFolderId = typeof data.folderId === "string" ? data.folderId : null;
     const documentTopLevelId = folderTopLevelId(documentFolderId, topLevelMap);
     const isExpenseMedia = Boolean((invoiceFolder && documentTopLevelId === invoiceFolder.id) || (purchaseFolder && documentTopLevelId === purchaseFolder.id));
@@ -218,6 +228,7 @@ export async function GET(request: Request) {
       previewKind: kind,
       previewUrl: kind ? `/api/files?id=${encodeURIComponent(doc.id)}&preview=${kind}` : null,
       aiIndexStatus: typeof data.aiIndexStatus === "string" ? data.aiIndexStatus : null,
+      ...(!root && ragEnabled(actor.projectId) ? { assistantIndexProjectId: actor.projectId } : {}),
       description: String(data.description || data.aiDescription || "").slice(0, 400),
       quoteReferenceSupported: isQuoteDocument(data.fileName, data.contentType),
       quoteReferenceEnabled: data.quoteReferenceEnabled === true,
@@ -285,6 +296,7 @@ export async function POST(request: Request) {
       transaction.set(ref, { projectId: actor.projectId, objectKey, fileName: file.name, contentType, size: file.size, folderId: folderId || null, uploadedBy: actor.email, createdAt: FieldValue.serverTimestamp(), thumbnailObjectKey, quoteReferenceEnabled: false,
         ...(key && root ? sealVaultDocument({ fileName: file.name, contentType, size: file.size, uploadedBy: actor.email }, key, actor.projectId, ref.id, root.id) : {}),
       }, { merge: true });
+      if (!key) writeRagJob(transaction, actor.projectId, documentKey(ref.id));
       transaction.set(firestore.collection(CONFIG).doc(projectConfigDoc(actor.projectId)), { projectId: actor.projectId, documentsVersion: FieldValue.increment(1), documentsUpdatedAt: FieldValue.serverTimestamp(), documentsUpdatedBy: actor.email, documentsUpdatedFolderIds: [folderId || null] }, { merge: true });
     });
   } catch (error) {
@@ -292,7 +304,8 @@ export async function POST(request: Request) {
     if (thumbnailObjectKey) await projectBucket.file(thumbnailObjectKey).delete({ ignoreNotFound: true }).catch(() => undefined);
     throw error;
   }
-  const index = key ? { status: "encrypted" } : await indexDocumentBytes({ projectId: actor.projectId, documentId: ref.id, bytes, fileName: file.name, contentType, folderId: folderId || null });
+  const index = key ? { status: "encrypted" } : ragEnabled(actor.projectId) ? { status: "pending" }
+    : await indexDocumentBytes({ projectId: actor.projectId, documentId: ref.id, bytes, fileName: file.name, contentType, folderId: folderId || null });
   return NextResponse.json({ id: ref.id, aiIndexStatus: index.status }, { status: 201 });
 }
 
@@ -387,6 +400,7 @@ export async function PATCH(request: Request) {
           ...(migrating ? { encryptionCleanupPending: true, encryptionCleanupKeys: [String(previous.objectKey), ...(previous.thumbnailObjectKey ? [String(previous.thumbnailObjectKey)] : [])] } : {}),
           updatedAt: FieldValue.serverTimestamp(),
         }, { lastUpdateTime: mutationSnapshot.updateTime! });
+        if (migrating) writeRagJob(transaction, actor.projectId, documentKey(ref.id), { purge: true });
         transaction.set(firestore.collection(CONFIG).doc(projectConfigDoc(actor.projectId)), { projectId: actor.projectId,
           documentsVersion: FieldValue.increment(1), documentsUpdatedAt: FieldValue.serverTimestamp(), documentsUpdatedBy: actor.email,
           documentsUpdatedFolderIds: movesFolder ? [...new Set([currentFolderId, folderId || null])] : [currentFolderId],
@@ -425,6 +439,7 @@ export async function PATCH(request: Request) {
     visibility: { folderTopLevelIds: [oldTop, newTop].filter((id): id is string => Boolean(id)), allowUnfiledRequired: !currentFolderId || (movesFolder && !folderId) },
   }, (transaction) => {
     transaction.update(ref, update, { lastUpdateTime: snap.updateTime! });
+    if (movesFolder) writeRagJob(transaction, actor.projectId, documentKey(ref.id), { cleanup: true });
     transaction.set(firestore.collection(CONFIG).doc(projectConfigDoc(actor.projectId)), { projectId: actor.projectId, documentsVersion: FieldValue.increment(1), documentsUpdatedAt: FieldValue.serverTimestamp(), documentsUpdatedBy: actor.email, documentsUpdatedFolderIds: movesFolder ? [...new Set([currentFolderId, folderId || null])] : [currentFolderId] }, { merge: true });
   });
   if (movesFolder) await updateDocumentIndexFolder(actor.projectId, body.id, folderId || null);
@@ -464,6 +479,7 @@ export async function DELETE(request: Request) {
       { lastUpdateTime: access!.revision! });
     transaction.update(ref, { deletedAt: FieldValue.serverTimestamp(), deletedBy: actor.email, updatedAt: FieldValue.serverTimestamp() },
       { lastUpdateTime: snap.updateTime! });
+    writeRagJob(transaction, actor.projectId, documentKey(id), { purge: true });
     transaction.set(firestore.collection(CONFIG).doc(projectConfigDoc(actor.projectId)), { projectId: actor.projectId, documentsVersion: FieldValue.increment(1), documentsUpdatedAt: FieldValue.serverTimestamp(), documentsUpdatedBy: actor.email, documentsUpdatedFolderIds: [folderId] }, { merge: true });
   });
   await removeDocumentIndex(actor.projectId, id);

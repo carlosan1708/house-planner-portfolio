@@ -36,12 +36,13 @@ describe("completed business usage", () => {
   });
 
   it("covers the current purchase, document and payment actions", () => {
-    for (const resource of ["purchase", "document", "payment"]) {
+    for (const resource of ["purchase", "document", "payment", "reminder"]) {
       expect(activityUsageAction(`expense.${resource}_created`)).toBe("record.create");
       expect(activityUsageAction(`expense.${resource}_updated`)).toBe("record.update");
       expect(activityUsageAction(`expense.${resource}_deleted`)).toBe("record.delete");
     }
     expect(activityUsageAction("expense.payment_status_updated")).toBe("record.update");
+    expect(activityUsageAction("expense.reminder_status_updated")).toBe("record.update");
     expect(activityUsageAction("expense.purchase_photo_added")).toBe("file.upload");
     expect(activityUsageAction("expense.document_files_added")).toBe("file.upload");
     expect(activityUsageAction("expense.purchase_photo_deleted")).toBe("record.delete");

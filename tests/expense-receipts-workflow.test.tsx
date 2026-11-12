@@ -19,7 +19,7 @@ let host: HTMLDivElement, root: Root;
 beforeEach(() => { vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true); window.history.replaceState({}, "", "/projects/house/expenses"); host = document.createElement("div"); document.body.appendChild(host); root = createRoot(host); });
 afterEach(() => { act(() => root.unmount()); vi.unstubAllGlobals(); document.body.innerHTML = ""; window.history.replaceState({}, "", "/"); });
 
-function api(options: { failSave?: boolean; legacy?: boolean; purchaseAmount?: number; budgetLines?: BudgetLine[]; purchaseBudgetLineId?: string; failInitialLoad?: boolean; payments?: ExpensePaymentRecord[] } = {}) {
+function api(options: { failSave?: boolean; failDelete?: boolean; paymentsModelVersion?: number; completedLineIds?: string[]; legacy?: boolean; purchaseAmount?: number; budgetLines?: BudgetLine[]; purchaseBudgetLineId?: string; failInitialLoad?: boolean; payments?: ExpensePaymentRecord[] } = {}) {
   let documents = [{ ...structuredClone(receipt), id: options.legacy ? "legacy:old-file" : receipt.id }], payments = structuredClone(options.payments || [payment]), failed = false, failedLoad = false;
   const request = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = String(input);
@@ -27,6 +27,12 @@ function api(options: { failSave?: boolean; legacy?: boolean; purchaseAmount?: n
     if (url.endsWith("/documents")) {
       if (init?.method === "POST") { documents = [...documents, { ...receipt, id: "uploaded", title: "Nueva.jpg", files: [{ ...file, name: "Nueva.jpg" }] }]; return Response.json({ id: "uploaded" }, { status: 201 }); }
       return Response.json({ documents, purchases: [purchase] });
+    }
+    if (url.includes("/payments") && init?.method === "DELETE") {
+      if (options.failDelete) return Response.json({ error: "No se pudo eliminar" }, { status: 503 });
+      const id = new URL(url, "http://localhost").searchParams.get("id");
+      payments = payments.filter((item) => item.id !== id);
+      return Response.json({ ok: true });
     }
     if (url.endsWith("/payments")) {
       if (init?.method === "POST" || init?.method === "PATCH") {
@@ -36,18 +42,19 @@ function api(options: { failSave?: boolean; legacy?: boolean; purchaseAmount?: n
         else payments = [...payments, { ...payment, ...body, id: "new-payment" }];
         return Response.json({ id: body.id || "new-payment" });
       }
-      return Response.json({ payments, completedLineIds: [] });
+      return Response.json({ payments, completedLineIds: options.completedLineIds || [], paymentsModelVersion: options.paymentsModelVersion });
     }
     if (options.failInitialLoad && !failedLoad) { failedLoad = true; return Response.json({ error: "No se pudieron cargar los pagos" }, { status: 503 }); }
-    return Response.json({ expenses: [], budgetLines: options.budgetLines || [], summary: { total: 0 } });
+    const lines = options.budgetLines || [];
+    return Response.json({ expenses: lines.filter((line) => line.paid > 0).map((line) => ({ id: line.id, budgetLineId: line.id, description: line.item, amount: line.paid, chapter: line.chapter, subcategory: line.subcategory, vendor: line.supplier, attachments: [] })), budgetLines: lines, summary: { total: lines.reduce((sum, line) => sum + line.paid, 0) } });
   });
   vi.stubGlobal("fetch", request);
   return { request, writes: () => request.mock.calls.filter(([, init]) => init?.method), payments: () => payments };
 }
 async function render(owner = true) { await act(async () => root.render(createElement(ExpensesWorkspace, { mode: "real", language: "es", isOwner: owner }))); await act(async () => { await new Promise((resolve) => setTimeout(resolve, 35)); }); }
-async function renderEmbedded(options: { onPaymentClose?: () => void; onPaymentSaved?: (payment: { budgetLineId: string; amount: number }) => void | Promise<void>; owner?: boolean } = {}) {
-  const { owner = true, ...callbacks } = options;
-  await act(async () => root.render(createElement(ExpensesWorkspace, { mode: "real", language: "es", isOwner: owner, paymentContext: { budgetLineId: budgetLine.id, item: budgetLine.item }, ...callbacks })));
+async function renderEmbedded(options: { onPaymentClose?: () => void; onPaymentSaved?: (payment: { budgetLineId: string; amount: number }) => void | Promise<void>; owner?: boolean; paymentId?: string; paymentsModelVersion?: number } = {}) {
+  const { owner = true, paymentId, paymentsModelVersion, ...callbacks } = options;
+  await act(async () => root.render(createElement(ExpensesWorkspace, { mode: "real", language: "es", isOwner: owner, paymentContext: { budgetLineId: budgetLine.id, item: budgetLine.item, paymentId, paymentsModelVersion }, ...callbacks })));
   await settleEmbedded();
 }
 async function settleEmbedded() { for (let turn = 0; turn < 2; turn += 1) await act(async () => { await new Promise((resolve) => setTimeout(resolve, 20)); }); }
@@ -300,5 +307,105 @@ describe("payments already included in Excel", () => {
     expect(dialog().querySelector<HTMLSelectElement>(accountingSelect)?.value).toBe("ledger");
     expect(dialog().querySelector<HTMLOptionElement>(`${accountingSelect} option[value="historical-detail"]`)?.disabled).toBe(true);
     expect(dialog().textContent).not.toContain("Histórico de Excel disponible por detallar");
+  });
+});
+
+
+describe("imported payment actions inside the budget", () => {
+  const imported: ExpensePaymentRecord = { ...payment, id: "excel-import", source: "excel-import", budgetLineId: budgetLine.id, budgetLineLabel: budgetLine.item, purchaseId: null, payee: "", documentIds: [receipt.id] };
+  const setup = (extra: { failDelete?: boolean } = {}) => api({ ...extra, paymentsModelVersion: 2, budgetLines: [{ ...budgetLine, paid: imported.amount }], payments: [imported] });
+
+  it("edits the same imported payment with its receipts instead of adding another payment", async () => {
+    const mock = setup(), onPaymentSaved = vi.fn();
+    await renderEmbedded({ paymentId: imported.id, paymentsModelVersion: 2, onPaymentSaved });
+    expect(dialog().textContent).toContain("Pago de Excel sin detalle");
+    await value('input[name="expense-payment-crc-amount"]', "300");
+    await click("Guardar pago", dialog());
+    expect(mock.writes()).toHaveLength(1);
+    expect(mock.writes()[0][1]?.method).toBe("PATCH");
+    expect(JSON.parse(String(mock.writes()[0][1]?.body))).toMatchObject({ id: imported.id, amount: 300, documentIds: [receipt.id], paymentsModelVersion: 2 });
+    expect(mock.payments()).toHaveLength(1);
+    expect(mock.payments()[0].source).toBe("excel-import");
+    expect(onPaymentSaved).toHaveBeenCalledWith({ budgetLineId: budgetLine.id, amount: 300 });
+  });
+
+  it("confirms deletion and refreshes the parent budget before closing", async () => {
+    const mock = setup(), onPaymentClose = vi.fn();
+    const confirm = vi.spyOn(window, "confirm").mockReturnValue(true);
+    let finish!: () => void;
+    const onPaymentSaved = vi.fn(() => new Promise<void>((resolve) => { finish = resolve; }));
+    await renderEmbedded({ paymentId: imported.id, paymentsModelVersion: 2, onPaymentClose, onPaymentSaved });
+    await click("Eliminar", dialog());
+    expect(confirm).toHaveBeenCalledWith(expect.stringContaining("comprobantes relacionados se conservarán"));
+    expect(mock.writes()).toHaveLength(1);
+    expect(mock.writes()[0][0]).toBe(`/api/expenses/payments?id=${imported.id}`);
+    expect(mock.writes()[0][1]).toMatchObject({ method: "DELETE", body: JSON.stringify({ paymentsModelVersion: 2 }) });
+    expect(mock.payments()).toEqual([]);
+    expect(dialog().textContent).toContain("Pago eliminado");
+    expect(onPaymentSaved).toHaveBeenCalledWith({ budgetLineId: budgetLine.id, amount: 0 });
+    expect(onPaymentClose).not.toHaveBeenCalled();
+    await act(async () => finish());
+    expect(onPaymentClose).toHaveBeenCalledOnce(); expect(dialog()).toBeNull();
+    confirm.mockRestore();
+  });
+
+  it("keeps the payment when deletion is cancelled or rejected", async () => {
+    const mock = setup({ failDelete: true });
+    const confirm = vi.spyOn(window, "confirm").mockReturnValue(false);
+    await renderEmbedded({ paymentId: imported.id, paymentsModelVersion: 2 });
+    await click("Eliminar", dialog()); expect(mock.writes()).toHaveLength(0);
+    confirm.mockReturnValue(true); await click("Eliminar", dialog());
+    expect(dialog().textContent).toContain("No se pudo eliminar");
+    expect(dialog().querySelector('input[name="expense-payment-crc-amount"]')).not.toBeNull();
+    expect(mock.payments()).toHaveLength(1);
+    confirm.mockRestore();
+  });
+
+  it("does not restore the form after deletion commits but the budget refresh fails", async () => {
+    const mock = setup(), onPaymentClose = vi.fn();
+    const confirm = vi.spyOn(window, "confirm").mockReturnValue(true);
+    await renderEmbedded({ paymentId: imported.id, paymentsModelVersion: 2, onPaymentClose, onPaymentSaved: async () => { throw new Error("Refresh failed"); } });
+    await click("Eliminar", dialog());
+    expect(dialog().querySelector('[role="alert"]')?.textContent).toContain("Pago eliminado. No se pudo actualizar el presupuesto");
+    expect(dialog().querySelector('input[name="expense-payment-crc-amount"]')).toBeNull();
+    expect(mock.writes()).toHaveLength(1); expect(mock.payments()).toEqual([]);
+    await click("Cerrar", dialog()); expect(onPaymentClose).toHaveBeenCalledOnce();
+    confirm.mockRestore();
+  });
+});
+
+
+describe("payment history in the current expenses UI", () => {
+  const history = [
+    { ...payment, id: "history-a", budgetLineId: budgetLine.id, budgetLineLabel: budgetLine.item, payee: "Anticipo municipal", amount: 800, paymentDate: "2026-10-16", documentIds: [receipt.id] },
+    { ...payment, id: "history-b", budgetLineId: budgetLine.id, budgetLineLabel: budgetLine.item, payee: "Planos", amount: 400, paymentDate: "2026-09-28", documentIds: [receipt.id] },
+    { ...payment, id: "history-c", budgetLineId: budgetLine.id, budgetLineLabel: budgetLine.item, payee: "Instalaciones", amount: 200, paymentDate: "2026-09-20", documentIds: [receipt.id] },
+    { ...payment, id: "history-d", budgetLineId: budgetLine.id, budgetLineLabel: budgetLine.item, payee: "Visualización", amount: 200, paymentDate: "2026-08-23", documentIds: [receipt.id] },
+  ];
+  it("opens a budget-line link on its payment breakdown and exposes individual details to a reader", async () => {
+    const mock = api({ payments: history, budgetLines: [{ ...budgetLine, paid: 1600 }], paymentsModelVersion: 2 });
+    window.history.replaceState({}, "", `/projects/house/expenses?budgetLine=${budgetLine.id}`);
+    await render(false);
+    expect(host.querySelector(".expense-tabs .active")?.textContent).toBe("Pagos4");
+    expect(host.querySelectorAll(".payment-item")).toHaveLength(4);
+    await click("Ver pago Planos");
+    expect(dialog().textContent).toContain("2026-09-28");
+    expect(dialog().textContent).toContain(receipt.title);
+    expect(dialog().textContent).not.toContain("Editar pago");
+    await click("Cerrar", dialog());
+    expect(mock.writes()).toHaveLength(0);
+  });
+  it("keeps reviewed historical payments visible in the paid-line view", async () => {
+    const mock = api({ payments: history, budgetLines: [{ ...budgetLine, paid: 1600 }], completedLineIds: [budgetLine.id] });
+    window.history.replaceState({}, "", `/projects/house/expenses?budgetLine=${budgetLine.id}&expenseTab=paid`);
+    await render();
+    const card = host.querySelector<HTMLDetailsElement>(".paid-line")!;
+    expect(card.open).toBe(true);
+    expect(card.textContent).toContain("Detalle histórico revisado");
+    expect(card.querySelectorAll(".payment-item")).toHaveLength(4);
+    expect(card.textContent).not.toContain("permanece oculto");
+    await click("Ver comprobantes de Planos", card);
+    expect(dialog().textContent).toContain(receipt.title);
+    expect(mock.writes()).toHaveLength(0);
   });
 });

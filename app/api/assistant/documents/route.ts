@@ -1,27 +1,45 @@
-import { NextResponse } from "next/server";
-import { canAccessFolder, requireTabAccess } from "@/lib/auth";
-import { firestore, projectBucket } from "@/lib/firebase-admin";
-import { DOCUMENTS } from "@/lib/project";
-import { indexDocumentBytes, refreshDocumentIndex } from "@/lib/document-index";
-import { buildTopLevelFolderMap, folderTopLevelId, listProjectFolders } from "@/lib/folders";
+import { requireApproved } from "@/lib/auth";
+import { firestore } from "@/lib/firebase-admin";
+import { ragJob, ragStatusForSource, writeRagJob, type RagJob } from "@/lib/rag-jobs";
+import { canReadRagSource, ragEnabled, ragFolderState, ragSourceRef, resolveRagSource, validRagKey, type RagKey } from "@/lib/rag-sources";
 
-export async function POST(request: Request) {
-  const actor = await requireTabAccess("documents", ["admin", "editor"]);
-  if (!actor) return NextResponse.json({ error: "Documents editor access required" }, { status: 403 });
-  const body = await request.json().catch(() => null) as { id?: string; action?: "index" | "status" } | null;
-  if (!body?.id) return NextResponse.json({ error: "Document is required" }, { status: 400 });
-  const ref = firestore.collection(DOCUMENTS).doc(body.id);
-  const snapshot = await ref.get();
-  const data = snapshot.data();
-  if (!snapshot.exists || data?.projectId !== actor.projectId || data?.deletedAt) return NextResponse.json({ error: "Document not found" }, { status: 404 });
-  const folderId = typeof data.folderId === "string" ? data.folderId : null;
-  const folders = await listProjectFolders(actor.projectId);
-  const topLevelId = folderTopLevelId(folderId, buildTopLevelFolderMap(folders));
-  if (data.encrypted === true || folders.some((folder) => folder.id === topLevelId && folder.encrypted))
-    return NextResponse.json({ error: "Encrypted documents are excluded from the assistant" }, { status: 403 });
-  if (!canAccessFolder(actor, folderId, topLevelId)) return NextResponse.json({ error: "Document not found" }, { status: 404 });
-  if (body.action === "status") return NextResponse.json({ status: await refreshDocumentIndex(actor.projectId, body.id) });
-  if (!projectBucket) return NextResponse.json({ error: "Storage unavailable" }, { status: 503 });
-  const [bytes] = await projectBucket.file(String(data.objectKey)).download();
-  return NextResponse.json(await indexDocumentBytes({ projectId: actor.projectId, documentId: body.id, bytes, fileName: String(data.fileName || "document"), contentType: String(data.contentType || "application/octet-stream"), folderId }));
+export const runtime = "nodejs";
+
+const reply = (data: object, status = 200) => Response.json(data, { status, headers: { "Cache-Control": "private, no-store" } });
+
+async function handle(request: Request, change: boolean) {
+  const actor = await requireApproved();
+  if (!actor) return reply({ error: "Project access required" }, 403);
+  const params = new URL(request.url).searchParams;
+  const input = change ? await request.json().catch(() => null) : Object.fromEntries(params);
+  if (!input || typeof input.id !== "string" || (input.projectId && input.projectId !== actor.projectId))
+    return reply({ error: "Invalid attachment" }, 400);
+  const key: RagKey = { kind: input.kind ?? "document", id: input.id, index: Number(input.index ?? 0) };
+  if (!validRagKey(key)) return reply({ error: "Invalid attachment" }, 400);
+  if (!ragEnabled(actor.projectId)) return reply({ status: "disabled" });
+  if (!actor.projectMembershipVerified) return reply({ error: "Project membership required" }, 403);
+  const ref = ragSourceRef(key);
+  const jobRef = ragJob(actor.projectId, key);
+  const [folders, record, job] = await Promise.all([ragFolderState(actor.projectId), ref.get(), jobRef.get()]);
+  const source = resolveRagSource(actor.projectId, key, record.data(), folders, true);
+  if (!source || !canReadRagSource(actor, source, folders)) return reply({ error: "Attachment not found" }, 404);
+  const canRetry = actor.role !== "viewer";
+  const status = source.format === "unsupported" ? "unsupported" : ragStatusForSource(job.data() as RagJob | undefined, source);
+  if (!change || input.action === "status") return reply({ status, canRetry });
+  if (input.action !== "index") return reply({ error: "Invalid indexing action" }, 400);
+  if (!canRetry) return reply({ error: "Editor access required" }, 403);
+  if (status === "unsupported") return reply({ status, canRetry: false }, 415);
+  const queued = await firestore.runTransaction(async (transaction) => {
+    const [current, currentJob] = await transaction.getAll(ref, jobRef);
+    if (!current.updateTime || !record.updateTime?.isEqual(current.updateTime) || currentJob.exists !== job.exists ||
+      (currentJob.updateTime && !job.updateTime?.isEqual(currentJob.updateTime)))
+      return false;
+    if (status === "indexing" || (status === "pending" && currentJob.exists)) return false;
+    writeRagJob(transaction, actor.projectId, key, { cleanup: currentJob.exists });
+    return true;
+  });
+  return queued ? reply({ status: "pending", canRetry }, 202) : reply({ error: "Attachment or index state changed" }, 409);
 }
+
+export const GET = (request: Request) => handle(request, false);
+export const POST = (request: Request) => handle(request, true);

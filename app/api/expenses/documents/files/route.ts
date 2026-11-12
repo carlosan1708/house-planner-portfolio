@@ -1,3 +1,5 @@
+import { writeRagJob } from "@/lib/rag-jobs";
+import { documentKey } from "@/lib/rag-sources";
 import { FieldValue } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 import sharp from "sharp";
@@ -45,7 +47,10 @@ export async function POST(request: Request) {
     }
     const currentIds = Array.isArray(record.data()?.fileIds) ? record.data()!.fileIds.filter((value: unknown): value is string => typeof value === "string") : [];
     await commitActivity(actor, { category: "expense", action: "expense.document_files_added", target: { type: "expense_document", id, label: String(record.data()?.title || "Comprobante"), section: "expenses" }, summaryParams: { fileCount: added.length }, changes: [{ field: "files", before: currentIds.length, after: currentIds.length + added.length }] }, (transaction) => {
-      for (const item of added) transaction.set(item.ref, { projectId: actor.projectId, expenseDocumentId: id, mediaRole: "financial_document", source: "expense_document", objectKey: item.objectKey, thumbnailObjectKey: item.thumbnailObjectKey, fileName: item.file.name, contentType: item.file.type, size: item.file.size, folderId: folder.id, uploadedBy: actor.email, createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp(), deletedAt: null });
+      for (const item of added) {
+        transaction.set(item.ref, { projectId: actor.projectId, expenseDocumentId: id, mediaRole: "financial_document", source: "expense_document", objectKey: item.objectKey, thumbnailObjectKey: item.thumbnailObjectKey, fileName: item.file.name, contentType: item.file.type, size: item.file.size, folderId: folder.id, uploadedBy: actor.email, createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp(), deletedAt: null });
+        writeRagJob(transaction, actor.projectId, documentKey(item.ref.id));
+      }
       transaction.set(record.ref, { fileIds: [...currentIds, ...added.map((item) => item.ref.id)], updatedAt: FieldValue.serverTimestamp(), updatedBy: actor.email }, { merge: true });
     });
   } catch (error) {
@@ -65,6 +70,7 @@ export async function DELETE(request: Request) {
   if (ids.length <= 1) return NextResponse.json({ error: "Un comprobante debe conservar al menos un archivo" }, { status: 409 });
   await commitActivity(actor, { category: "expense", action: "expense.document_file_deleted", target: { type: "expense_document", id: documentId, label: String(record.data()?.title || "Comprobante"), section: "expenses" }, changes: [{ field: "file", before: file.data()?.fileName, after: null }] }, (transaction) => {
     transaction.set(file.ref, { deletedAt: FieldValue.serverTimestamp(), deletedBy: actor.email, updatedAt: FieldValue.serverTimestamp() }, { merge: true });
+    writeRagJob(transaction, actor.projectId, documentKey(file.id), { purge: true });
     transaction.set(record.ref, { fileIds: ids.filter((id: string) => id !== fileId), updatedAt: FieldValue.serverTimestamp(), updatedBy: actor.email }, { merge: true });
   });
   return NextResponse.json({ ok: true, recoverable: true });

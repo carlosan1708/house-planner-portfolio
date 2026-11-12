@@ -134,6 +134,18 @@ async function fixtures(page: Page, options: { currency?: "USD" | "CRC"; payment
       return route.fulfill({ json: { documents, purchases } });
     }
     if (path === "/api/expenses/payments") {
+      if (request.method() === "DELETE") {
+        const id = new URL(request.url()).searchParams.get("id");
+        const index = payments.findIndex((item) => item.id === id);
+        if (index < 0) return route.fulfill({ status: 404, json: { error: "Pago inexistente" } });
+        const removed = payments.splice(index, 1)[0];
+        const selected = canonical.lines.find((item) => item.id === removed.budgetLineId)!;
+        selected.paid = payments.filter((item) => item.budgetLineId === selected.id).reduce((sum, item) => sum + Number(item.amount), 0);
+        canonical.actualsRevision++;
+        canonical.spent = canonical.lines.reduce((total, item) => total + item.paid, 0);
+        canonical.remaining = canonical.objective - canonical.spent;
+        return route.fulfill({ json: { ok: true } });
+      }
       if (body) {
         if (options.failPayment) return route.fulfill({ status: 503, json: { error: "No se pudo registrar el pago de prueba" } });
         const selected = canonical.lines.find((item) => item.id === body.budgetLineId);
@@ -250,6 +262,9 @@ test("contains keyboard focus in the payment panel and closes on its backdrop", 
 
 test("keeps the same scope across products, documents, paid lines, and reload", async ({ page }) => {
   await fixtures(page); await page.goto(scopedUrl());
+  await expect(page.locator(".expense-tabs .active")).toContainText("Pagos");
+  await expect(page.locator(".payment-item")).toHaveCount(1);
+  await page.locator(".expense-tabs").getByRole("button", { name: /Comprobantes/ }).click();
   await expect(page.locator(".document-card")).toHaveCount(1);
   await page.locator(".expense-tabs").getByRole("button", { name: /Productos/ }).click();
   await expect(page.locator(".purchase-card")).toHaveCount(1); await page.reload();
@@ -283,7 +298,7 @@ test("opens an independent receipt and consumes the action so reload does not re
 
 test("viewers cannot create even through a creation URL, and restricted users have no payment controls", async ({ page }) => {
   await fixtures(page); await page.goto(scopedUrl("&newExpense=1&role=viewer"));
-  await expect(page.locator(".document-card")).toHaveCount(1); await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.locator(".payment-item")).toHaveCount(1); await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(page.getByRole("button", { name: /Nuevo comprobante/ })).toHaveCount(0);
   await page.goto(`${address}/projects/house/budget?role=restricted`);
   await expect(page.locator(".budget-line-card")).toHaveCount(3); await expect(page.locator(".budget-line-purchases")).toHaveCount(0);
@@ -299,7 +314,10 @@ test("allows a first payment for an unpaid line and preserves a missing line sco
   await page.goto(`${address}/projects/house/expenses?budgetLine=missing&newDocument=1`);
   await expect(page.locator(".expense-budget-scope")).toContainText("Partida no disponible");
   await expect(page.getByRole("dialog")).toHaveCount(0); await expect(page.locator(".document-card")).toHaveCount(0);
-  await page.getByRole("button", { name: "Ver todas las compras" }).click(); await expect(page.locator(".document-card")).toHaveCount(2);
+  await page.getByRole("button", { name: "Ver todos los gastos" }).click();
+  await expect(page.locator(".payment-item")).toHaveCount(1);
+  await page.locator(".expense-tabs").getByRole("button", { name: /Comprobantes/ }).click();
+  await expect(page.locator(".document-card")).toHaveCount(2);
 });
 
 const paidValue = (page: Page, item: string) => page.locator("output").and(page.getByLabel(`${item} Pagado`, { exact: true }));
@@ -736,7 +754,7 @@ test("edits a fresh v2 payment from Budget with its receipts while preserving th
   await expect(form.locator('input[name="expense-payment-crc-amount"]')).toHaveValue("2500");
   await expect(page.getByRole("dialog")).toHaveCount(1);
   await expect(form.getByRole("combobox", { name: "Aplicación al presupuesto", exact: true })).toHaveCount(0);
-  await expect(form.getByRole("button", { name: "Eliminar", exact: true })).toHaveCount(0);
+  await expect(form.getByRole("button", { name: "Eliminar", exact: true })).toBeVisible();
   await expect(form.getByLabel("Comprobantes de este pago", { exact: true })).toContainText(invoice.title);
   await expect(form.getByLabel("Comprobantes de este pago", { exact: true })).toContainText(transferReceipt.title);
   await form.getByText("Más detalles opcionales", { exact: true }).click();
@@ -778,7 +796,7 @@ for (const viewport of [{ width: 320, height: 740 }, { width: 390, height: 844 }
       await expect(page.getByRole("dialog")).toHaveCount(1);
       await expect(form.getByLabel("Fecha", { exact: true })).toHaveValue("");
       await expect(form.getByRole("combobox", { name: "Aplicación al presupuesto", exact: true })).toHaveCount(0);
-      await expect(form.getByRole("button", { name: "Eliminar", exact: true })).toHaveCount(0);
+      await expect(form.getByRole("button", { name: "Eliminar", exact: true })).toBeVisible();
       await form.locator('input[name="expense-payment-crc-amount"]').fill("10000");
       await expect(form.getByRole("status", { name: "Pagado después de guardar", exact: true })).toHaveText(crc(12500));
       await form.getByLabel("Descripción (opcional)", { exact: true }).fill("Anticipo de pisos");
@@ -1175,7 +1193,7 @@ for (const viewport of [{ width: 320, height: 700 }, { width: 390, height: 844 }
   test(`receipts and the creation dialog fit at ${viewport.width}x${viewport.height}`, async ({ browser }, testInfo) => {
     const context = await browser.newContext({ viewport, hasTouch: true, isMobile: true }); const page = await context.newPage();
     try {
-      await fixtures(page); await page.goto(scopedUrl()); await expect(page.locator(".document-card")).toBeVisible();
+      await fixtures(page); await page.goto(scopedUrl("&expenseTab=documents")); await expect(page.locator(".document-card")).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.screenshot({ path: testInfo.outputPath(`receipts-${viewport.width}.png`), fullPage: true });
       await page.getByRole("button", { name: /Nuevo comprobante/ }).click();
@@ -1188,3 +1206,25 @@ for (const viewport of [{ width: 320, height: 700 }, { width: 390, height: 844 }
     } finally { await context.close(); }
   });
 }
+
+
+test("deletes an imported payment from Budget and refreshes the paid total and history", async ({ page }) => {
+  const writes = await fixtures(page, { paymentHistory: true, paymentsModelVersion: 2, excelImport: true });
+  await page.goto(`${address}/projects/house/budget`);
+  await paymentHistoryToggle(page, line.item).click();
+  await paymentHistoryPanel(page, line.item).getByRole("button", { name: "Ver pago Pago de Excel sin detalle", exact: true }).click();
+  await page.getByRole("dialog", { name: "Detalle del pago", exact: true }).getByRole("button", { name: "Editar pago", exact: true }).click();
+  const form = page.getByRole("dialog", { name: "Pago", exact: true });
+  await expect(form.getByRole("heading", { name: "Pago de Excel sin detalle", exact: true })).toBeVisible();
+  page.once("dialog", async (dialog) => {
+    expect(dialog.message()).toContain("comprobantes relacionados se conservarán");
+    await dialog.accept();
+  });
+  await form.getByRole("button", { name: "Eliminar", exact: true }).click();
+  await expect(form).toHaveCount(0);
+  await expect(paidValue(page, line.item)).toHaveText(crc(2500));
+  expect(writes).toContainEqual({ paymentsModelVersion: 2 });
+  await paymentHistoryToggle(page, line.item).click();
+  await expect(paymentHistoryPanel(page, line.item)).not.toContainText("Pago de Excel sin detalle");
+  await expect(paymentHistoryTable(page, line.item).locator("tbody tr")).toHaveCount(1);
+});
