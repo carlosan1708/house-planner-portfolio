@@ -1,15 +1,15 @@
 # Run House Planner locally
 
 These instructions are for the author and developers with [written permission](LICENSE).
-Install Node.js 22+ and Git, then open the public repository folder in VS Code.
+Install Node.js 22+. If you downloaded the ZIP, extract it and open the extracted
+`house-planner-portfolio` folder in VS Code. If you prefer to clone it with Git, run:
 
 ```powershell
 git clone https://github.com/carlosan1708/house-planner-portfolio.git
 cd house-planner-portfolio
-npm ci
 ```
 
-If you already cloned the repository, open its integrated terminal and start with `npm ci`.
+From the project folder, install dependencies with `npm ci`.
 
 ## Anonymous demo
 
@@ -52,13 +52,14 @@ before running `npm run dev:local`. The first start may download emulator binari
 Open [QA Primary](http://127.0.0.1:3016/projects/qa-primary/overview?lang=en), choose **Open private
 workspace**, and sign in with one of the synthetic accounts:
 
-| Role | Email |
-|---|---|
-| Administrator | `qa.houseplanner.20260830@example.com` |
-| Editor | `qa.houseplanner.editor@example.com` |
-| Viewer | `qa.houseplanner.reader@example.com` |
+| Role | Email | Demo password |
+|---|---|---|
+| Administrator | `qa.houseplanner.20260830@example.com` | `CasaDemoAdmin2026` |
+| Editor | `qa.houseplanner.editor@example.com` | `CasaDemoEditor2026` |
+| Viewer | `qa.houseplanner.reader@example.com` | `CasaDemoLector2026` |
 
-Use the matching password printed by the launcher. Passwords are generated on each start.
+`npm run dev:local` recreates these accounts on each start. The passwords are public fixtures for
+the loopback Firebase Auth emulator and are only used by this development command.
 To test roles simultaneously, use separate browser profiles so their session cookies are isolated.
 
 The launcher starts Firebase Auth, Firestore and Storage on loopback, seeds the synthetic projects,
