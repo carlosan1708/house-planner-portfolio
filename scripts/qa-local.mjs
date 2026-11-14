@@ -174,9 +174,10 @@ try {
   await waitForNext(next);
   await execute([resolve(root, "scripts", "seed-qa.mjs")], "QA fixture seed");
   if (workspace) {
-    const owner = QA_IDENTITIES.find((identity) => identity.key === "owner");
     process.stdout.write(`Local workspace: ${baseUrl}/projects/qa-primary/overview?lang=en\n`);
-    process.stdout.write(`Emulator sign-in: ${owner.email} / ${env[owner.passwordEnv]}\n`);
+    for (const identity of QA_IDENTITIES.filter(({ key }) => ["owner", "editor", "viewer"].includes(key))) {
+      process.stdout.write(`Emulator sign-in (${identity.role}): ${identity.email} / ${env[identity.passwordEnv]}\n`);
+    }
     process.stdout.write("Press Ctrl+C to stop the app and emulators. Local data is discarded.\n");
     const serviceExit = await Promise.race([next, emulators].map((child) => new Promise((done) => {
       if (child.exitCode !== null || child.signalCode !== null) done(child.exitCode);

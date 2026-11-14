@@ -7,45 +7,10 @@ configured installation.
 Start with [the README](README.md) for product context and [testing](docs/development/testing.md)
 for what each validation level proves.
 
-## Requirements and local demo
+## Local development
 
-Use Node.js 22+, npm and Git. Clone the authorized repository, then run:
-
-```powershell
-npm ci
-Copy-Item .env.example .env.local
-npm run dev -- --hostname 127.0.0.1
-```
-
-Open `http://127.0.0.1:3000/?mode=demo&lang=en`. On macOS/Linux use
-`cp .env.example .env.local`. The example uses the synthetic Firebase project
-`demo-house-planner-qa`, loopback addresses, dummy browser configuration and disabled live AI.
-The fictional demo uses scripted assistant examples and needs no cloud credentials.
-
-## Local workspace with sign-in
-
-Install Java 21 or newer and put its `bin` directory on your PATH. Install the pinned Firebase CLI
-once. The first emulator start may download emulator binaries.
-
-```powershell
-npm install --global firebase-tools@15.13.0
-$env:QA_FIREBASE_CLI_PATH = Join-Path (npm root --global) 'firebase-tools/lib/bin/firebase.js'
-npm run dev:local
-```
-
-On macOS/Linux, set the CLI path with
-`export QA_FIREBASE_CLI_PATH="$(npm root --global)/firebase-tools/lib/bin/firebase.js"` before
-running the same npm command.
-
-Open the local workspace URL printed by the launcher, open the private workspace if prompted, and enter the
-synthetic email and the generated password printed in that terminal. The seeded account is an
-administrator of **QA Primary**. It can work with the local budget, documents and other project
-features. The launcher configures Firebase Authentication, Firestore and Storage on loopback and creates
-a temporary vault recovery key. It needs no Firebase login, service-account JSON, or Google ADC.
-The workspace runs on port 3016, with emulator ports 4901 through 4906. Keep the terminal open while
-using the app. Ctrl+C stops the stack and discards its in-memory data and credentials.
-
-Use the project-specific configuration below for live AI, semantic indexing, email or Sheets.
+The [local development README](README.local.md) includes the demo, emulator setup and
+synthetic accounts.
 
 ## Commands
 

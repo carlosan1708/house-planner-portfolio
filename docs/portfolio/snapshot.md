@@ -15,7 +15,7 @@ The public copy continues to require an explicit opt-in for live AI and uses syn
 
 The public and private application sources were compared against the latest merged private
 main tree. The public checkout includes the emulator-only assistant fixture and a signed-in
-local workspace launcher that provisions synthetic credentials. See the [local instructions](../../DEVELOPMENT.md#local-workspace-with-sign-in).
+local workspace launcher that provisions synthetic credentials. See the [local instructions](../../README.local.md#local-workspace-with-sign-in).
 
 ## Source and history boundaries
 

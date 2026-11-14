@@ -151,24 +151,9 @@ they do not claim that those earlier features were originally developed with Spe
 
 ## Run locally with permission
 
-With Node.js 22+ and Git, clone this repository and start the anonymous demo:
-
-```powershell
-git clone https://github.com/carlosan1708/house-planner-portfolio.git
-cd house-planner-portfolio
-npm ci
-Copy-Item .env.example .env.local
-npm run dev -- --hostname 127.0.0.1
-```
-
-Open [the local demo](http://127.0.0.1:3000/?mode=demo&lang=en). It uses fictional workbooks
-and files and runs without an account, Firebase emulators, or cloud credentials.
-On macOS/Linux use `cp .env.example .env.local`.
-
-To sign in and work with synthetic projects, follow the [local workspace setup](DEVELOPMENT.md#local-workspace-with-sign-in)
-and run `npm run dev:local`. The launcher starts Firebase emulators and generates a fresh
-local password for the seeded administrator. For Vertex AI, Sheets and email, see
-[independent installation setup](DEVELOPMENT.md#independently-authorized-installation).
+Follow the [local development README](README.local.md) to run the anonymous demo or
+sign in with synthetic administrator, editor and viewer accounts. See the
+[development guide](DEVELOPMENT.md#independently-authorized-installation) for cloud integrations.
 
 ## Technology
 
