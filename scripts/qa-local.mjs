@@ -1,6 +1,6 @@
 import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { randomBytes } from "node:crypto";
-import { createWriteStream, existsSync, mkdirSync } from "node:fs";
+import { createWriteStream, existsSync, mkdirSync, readFileSync } from "node:fs";
 import { createServer, connect } from "node:net";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -21,10 +21,17 @@ if (manual && [".env", ".env.local", ".env.development", ".env.development.local
 }
 const suite = process.argv.find((arg) => arg.startsWith("--suite="))?.slice(8) || "permissions";
 qaSuitePlan(suite);
-const source = {
-  commit: execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim(),
-  tree: execFileSync("git", ["rev-parse", "HEAD^{tree}"], { cwd: root, encoding: "utf8" }).trim(),
-};
+// git archive expands the commit and tree for development from an extracted ZIP.
+const archiveSource = resolve(root, ".git-archive-source");
+const [archiveCommit, archiveTree] = workspace && existsSync(archiveSource)
+  ? readFileSync(archiveSource, "utf8").trim().split(/\s+/)
+  : [];
+const source = /^[0-9a-f]{40}$/.test(archiveCommit ?? "") && /^[0-9a-f]{40}$/.test(archiveTree ?? "")
+  ? { commit: archiveCommit, tree: archiveTree }
+  : {
+      commit: execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim(),
+      tree: execFileSync("git", ["rev-parse", "HEAD^{tree}"], { cwd: root, encoding: "utf8" }).trim(),
+    };
 const projectId = QA_EMULATOR_PROJECT;
 const ports = workspace
   ? { app: 3016, auth: 4901, firestore: 4902, storage: 4903, hub: 4904, logging: 4905, firestoreWebsocket: 4906 }
@@ -58,8 +65,14 @@ Object.assign(env, {
   QA_AI_MODE: "disabled", QA_AI_ENABLED: "0", QA_MANUAL_APP_AGENT: manual ? "1" : "0", QA_BOOTSTRAP_ACCESS_TOKEN: "", QA_CLOUD_PROXY: "0", QA_TARGET_URL: "",
   METADATA_SERVER_DETECTION: "none", FIREBASE_CLI_DISABLE_USAGE_ANALYTICS: "1", NEXT_TELEMETRY_DISABLED: "1", CI: "1",
 });
+const demoPasswords = new Map([
+  ["owner", "CasaDemoAdmin2026"],
+  ["editor", "CasaDemoEditor2026"],
+  ["viewer", "CasaDemoLector2026"],
+]);
 for (const identity of QA_IDENTITIES) {
-  env[identity.passwordEnv] = randomBytes(24).toString("base64url");
+  const demoPassword = workspace ? demoPasswords.get(identity.key) : undefined;
+  env[identity.passwordEnv] = demoPassword ?? randomBytes(24).toString("base64url");
   env[`QA_${identity.key.toUpperCase()}_EMAIL`] = identity.email;
 }
 assertIsolatedQaEnvironment(env);
@@ -175,7 +188,7 @@ try {
   await execute([resolve(root, "scripts", "seed-qa.mjs")], "QA fixture seed");
   if (workspace) {
     process.stdout.write(`Local workspace: ${baseUrl}/projects/qa-primary/overview?lang=en\n`);
-    for (const identity of QA_IDENTITIES.filter(({ key }) => ["owner", "editor", "viewer"].includes(key))) {
+    for (const identity of QA_IDENTITIES.filter(({ key }) => demoPasswords.has(key))) {
       process.stdout.write(`Emulator sign-in (${identity.role}): ${identity.email} / ${env[identity.passwordEnv]}\n`);
     }
     process.stdout.write("Press Ctrl+C to stop the app and emulators. Local data is discarded.\n");
