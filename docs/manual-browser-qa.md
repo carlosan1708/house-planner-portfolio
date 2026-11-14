@@ -36,7 +36,10 @@ Before starting:
 3. Confirm the signed-in identity, role, and project before writes. Start with the owner, viewer, and outsider; add editor, restricted viewer, or companion when the affected behavior needs them. Use the six fixed identities described in [QA workflow](qa-workflow.md#synthetic-identities).
 4. Use separate isolated browser sessions where supported, or sign out completely and verify the next identity before testing sequentially. Different tabs alone do not isolate cookies. Keep credentials and session tokens out of reports and screenshots.
 
-**Current prerequisite:** `npm run qa:local` launches Playwright and automatically stops the app/emulators when the suite ends. It has no manual/keep-open mode. Before the first local manual run, provide a guarded keep-open mode or a separately managed emulator session that reuses credential isolation, fixture seeding, source verification, lease coordination, cleanup, and process shutdown. This document does not implement that mode or introduce a runnable manual command.
+**Local app-agent session:** From a clean committed checkout without local env overrides,
+run `npm run qa:local -- --manual=app-agent` with the Firebase CLI, Java and Chromium installed.
+The guarded REPL keeps the app and emulators running, provides helpers for synthetic sign-in and
+lease management, and stops the stack when you exit. Ordinary `qa:local` suites exit after running.
 
 ### Browser-control fallback
 
@@ -50,7 +53,7 @@ If a native PDF preview is blank in Chromium's headless shell, repeat that obser
 
 Use fresh isolated browser contexts for the selected identities, perform ordinary UI sign-in, and acquire the guarded lease before writes. Track every disposable record or baseline edit, complete cleanup, release the lease, close the browser and proxy, and stop the REPL and any managed local processes. Any temporary QA-only IAM permission explicitly authorized for setup must also be removed and its cleanup recorded.
 
-There is no dedicated manual-session launcher at present. Codex can prepare this ordinary REPL fallback using the installed library and existing QA exports; it does not add a new repository command or remove the local keep-open prerequisite above. Runtime availability and a completed manual pass are separate results.
+For other flows, prepare a separately managed emulator session with the same target, source, lease and cleanup checks. Runtime availability and a completed manual pass are separate results.
 
 ## Core browser checklist
 

@@ -13,6 +13,10 @@ The November 2026 update adds the resumable assistant, optional document indexin
 model routing, and plan-based visualizations with progress and a per-project plan suggestion.
 The public copy continues to require an explicit opt-in for live AI and uses synthetic test data.
 
+The public and private application sources were compared against the latest merged private
+main tree. The public checkout includes the emulator-only assistant fixture and a signed-in
+local workspace launcher that provisions synthetic credentials. See the [local instructions](../../DEVELOPMENT.md#local-workspace-with-sign-in).
+
 ## Source and history boundaries
 
 The original Git history, branches, tags, pull requests, Actions logs, cloud credentials,

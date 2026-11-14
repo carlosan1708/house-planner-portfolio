@@ -14,23 +14,45 @@ Use Node.js 22+, npm and Git. Clone the authorized repository, then run:
 ```powershell
 npm ci
 Copy-Item .env.example .env.local
-npm run dev
+npm run dev -- --hostname 127.0.0.1
 ```
 
-Open `http://localhost:3000/?mode=demo&lang=en`. The example configuration uses the synthetic
-`demo-house-planner-qa` project, loopback emulator addresses, dummy browser configuration and
-`QA_AI_ENABLED=0`. No author-owned production credentials are required. Demo workbooks/files
-are fictional; demo mode does not enable the assistant.
+Open `http://127.0.0.1:3000/?mode=demo&lang=en`. On macOS/Linux use
+`cp .env.example .env.local`. The example uses the synthetic Firebase project
+`demo-house-planner-qa`, loopback addresses, dummy browser configuration and disabled live AI.
+The fictional demo uses scripted assistant examples and needs no cloud credentials.
 
-The emulator processes are needed for authenticated local QA. Anonymous demo rendering does not
-require them. Background calls may report unavailable local emulators until those are started;
-they must never be redirected to a live project merely to remove that message.
+## Local workspace with sign-in
+
+Install Java 21 or newer and put its `bin` directory on your PATH. Install the pinned Firebase CLI
+once. The first emulator start may download emulator binaries.
+
+```powershell
+npm install --global firebase-tools@15.13.0
+$env:QA_FIREBASE_CLI_PATH = Join-Path (npm root --global) 'firebase-tools/lib/bin/firebase.js'
+npm run dev:local
+```
+
+On macOS/Linux, set the CLI path with
+`export QA_FIREBASE_CLI_PATH="$(npm root --global)/firebase-tools/lib/bin/firebase.js"` before
+running the same npm command.
+
+Open the local workspace URL printed by the launcher, open the private workspace if prompted, and enter the
+synthetic email and the generated password printed in that terminal. The seeded account is an
+administrator of **QA Primary**. It can work with the local budget, documents and other project
+features. The launcher configures Firebase Authentication, Firestore and Storage on loopback and creates
+a temporary vault recovery key. It needs no Firebase login, service-account JSON, or Google ADC.
+The workspace runs on port 3016, with emulator ports 4901 through 4906. Keep the terminal open while
+using the app. Ctrl+C stops the stack and discards its in-memory data and credentials.
+
+Use the project-specific configuration below for live AI, semantic indexing, email or Sheets.
 
 ## Commands
 
 | Command | Purpose |
 |---|---|
-| `npm run dev` | Local application |
+| `npm run dev` | Anonymous local demo |
+| `npm run dev:local` | Signed-in workspace with loopback emulators and synthetic credentials |
 | `npm run docs:check` | Offline documentation, references and SDD checks |
 | `npm run lint` | ESLint |
 | `npm test` | Vitest unit, route, component and synthetic workbook/model tests |
@@ -58,7 +80,9 @@ Live AI is disabled by default in this snapshot. Enabling `HOUSE_PLANNER_AI_ENAB
 requires an independently authorized installation, its own Vertex AI permissions, a configured
 `GEMINI_MODEL`, and reviewed access, rate and spend controls. Model availability and cost must
 be checked before live calls. Sheets and email integrations have separate OAuth/runtime
-requirements. Consult [Sheets setup](docs/google-sheets-editing.md) and [release operations](docs/operations/releases.md).
+requirements. Enable plan images with `HOUSE_PLANNER_ASSISTANT_IMAGES=1` and configure document
+indexing with [the RAG guide](docs/assistant-rag.md). Consult [Sheets setup](docs/google-sheets-editing.md)
+and [release operations](docs/operations/releases.md) for their credentials and deployment settings.
 
 The private operational repository continues to own production deployment. Public scripts use
 example identities and fail-closed release policy placeholders; they do not authorize deployment
