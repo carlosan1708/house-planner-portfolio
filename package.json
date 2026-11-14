@@ -5,6 +5,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "dev": "next dev",
+    "dev:local": "node scripts/qa-local.mjs --workspace",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

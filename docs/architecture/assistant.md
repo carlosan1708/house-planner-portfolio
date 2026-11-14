@@ -84,3 +84,5 @@ or draft writes. [Notes tests](../../tests/project-notes-route.test.ts) cover co
 These checks use deterministic/mocked boundaries, not a measured live-model evaluation.
 
 See the [reconstructed design case](../development/cases/assistant.md).
+
+[Document index setup](../assistant-rag.md) describes prerequisites for an independent installation.

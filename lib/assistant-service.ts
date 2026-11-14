@@ -1,3 +1,4 @@
+import { manualAppAgentEnabled, manualAppAgentResponse } from "./qa-manual-app-agent";
 import { randomUUID } from "node:crypto";
 import { appToolDeclarations, appView, cleanAgentUploads, expenseEditor, isActionTool, liveAgent, readAppTool, stageAgentFile } from "./assistant-app-tools";
 import { agentToday, proposeAgentAction, requestRunInput, requestedConfirmation, validSources, visibleRun } from "./assistant-run";
@@ -178,7 +179,8 @@ export async function runAssistantTurn(
   input: { conversationId?: string; message: string; language?: AssistantLanguage; file?: File; resume?: Run; resumeResponse?: string; selection?: string; onConversation?: (id: string) => void },
   onStage?: (stage: AssistantStage) => void,
 ) {
-  if (!geminiConfigured()) throw new Error("gemini_not_configured");
+  const manualQa = manualAppAgentEnabled(actor);
+  if (!manualQa && !geminiConfigured()) throw new Error("gemini_not_configured");
   const message = input.message.trim();
   if (!message || message.length > 8000) throw new Error("invalid_message");
   const language = detectAssistantLanguage(message, input.language === "es" ? "es" : "en");
@@ -233,11 +235,11 @@ export async function runAssistantTurn(
   const contents: Content[] = [...historyContext, { role: "user", parts: [{ text: currentContext ? `${message}\n\n${currentContext}` : message }] }];
   let response;
   let paused = false;
-  const modelRoute = routeModel("assistant");
+  const modelRoute = manualQa ? undefined : routeModel("assistant");
   const declarations = [...tools, ...(allowAppTools ? appToolDeclarations : []), ...(allowImages ? [imageTool] : [])];
   for (let round = 0; round < (allowAppTools ? 10 : 6) && !paused; round += 1) {
     onStage?.("answering");
-    response = await generateForTask("assistant", {
+    response = manualQa ? await manualAppAgentResponse(contents) : await generateForTask("assistant", {
       contents,
       config: {
         systemInstruction: assistantInstructions(language, allowAppTools) + (allowImages ? "\nFor an explicit request to generate a project visualization, including interiors, exteriors, gardens or landscaping, call requestPlanImage so the user can choose a plan. For example, 'Generame una imagen de cómo se podría ver mi jardín' requests this tool. A request to analyze, describe or open a plan alone does not request an image." : ""),

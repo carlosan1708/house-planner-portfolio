@@ -9,6 +9,16 @@ import { QA_IDENTITIES } from "../lib/qa-fixtures.mjs";
 import { qaSuitePlan, validateQaEnvironment, validateQaTarget } from "./qa-target-policy.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const workspace = process.argv.includes("--workspace");
+const manual = process.argv.includes("--manual=app-agent");
+if (workspace && manual) throw new Error("Choose a local workspace or manual QA");
+if ((workspace || manual) && process.argv.some((arg) => arg.startsWith("--suite="))) throw new Error("Choose one mode: workspace, manual QA, or a regression suite");
+if (manual && execFileSync("git", ["status", "--porcelain"], { cwd: root, encoding: "utf8" }).trim()) {
+  throw new Error("Manual QA requires a clean, committed candidate");
+}
+if (manual && [".env", ".env.local", ".env.development", ".env.development.local"].some((name) => existsSync(resolve(root, name)))) {
+  throw new Error("Use a clean worktree without local environment files for manual QA");
+}
 const suite = process.argv.find((arg) => arg.startsWith("--suite="))?.slice(8) || "permissions";
 qaSuitePlan(suite);
 const source = {
@@ -16,6 +26,12 @@ const source = {
   tree: execFileSync("git", ["rev-parse", "HEAD^{tree}"], { cwd: root, encoding: "utf8" }).trim(),
 };
 const projectId = QA_EMULATOR_PROJECT;
+const ports = workspace
+  ? { app: 3016, auth: 4901, firestore: 4902, storage: 4903, hub: 4904, logging: 4905, firestoreWebsocket: 4906 }
+  : { app: 3015, auth: 9099, firestore: 8088, storage: 9199, hub: 4400, logging: 4500 };
+const baseUrl = `http://127.0.0.1:${ports.app}`;
+const authHost = `127.0.0.1:${ports.auth}`;
+const storageHost = `127.0.0.1:${ports.storage}`;
 if (projectId !== "demo-house-planner-qa" || !projectId.startsWith("demo-")) throw new Error("Local QA must use the fixed demo emulator project");
 
 // Explicit overrides prevent a developer's active cloud project, credentials or QA secrets
@@ -26,17 +42,20 @@ Object.assign(env, {
   GOOGLE_APPLICATION_CREDENTIALS: "", GOOGLE_CLOUD_QUOTA_PROJECT: "", GCLOUD_PROJECT: projectId,
   HOUSE_PLANNER_BUCKET: `${projectId}.appspot.com`, HOUSE_PLANNER_ADMIN_EMAIL: "",
   HOUSE_PLANNER_QA_EMAILS: QA_IDENTITIES.map((identity) => identity.email).join(","),
-  HOUSE_PLANNER_QA_PROJECT_IDS: "qa-primary,qa-isolation", HOUSE_PLANNER_PUBLIC_URL: "http://127.0.0.1:3015",
+  HOUSE_PLANNER_QA_PROJECT_IDS: "qa-primary,qa-isolation", HOUSE_PLANNER_PUBLIC_URL: baseUrl,
   HOUSE_PLANNER_VAULT_RECOVERY_KEY: randomBytes(32).toString("hex"),
   HOUSE_PLANNER_GOOGLE_SERVICE_ACCOUNT: "", HOUSE_PLANNER_GOOGLE_CLIENT_SECRET: "", HOUSE_PLANNER_GOOGLE_TOKEN_KEY: "", HOUSE_PLANNER_GMAIL_REFRESH_TOKEN: "",
   HOUSE_PLANNER_SOURCE_COMMIT: source.commit, HOUSE_PLANNER_SOURCE_TREE: source.tree,
-  FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099", FIRESTORE_EMULATOR_HOST: "127.0.0.1:8088", FIREBASE_STORAGE_EMULATOR_HOST: "127.0.0.1:9199",
+  FIREBASE_AUTH_EMULATOR_HOST: authHost, FIRESTORE_EMULATOR_HOST: `127.0.0.1:${ports.firestore}`, FIREBASE_STORAGE_EMULATOR_HOST: storageHost,
+  STORAGE_EMULATOR_HOST: `http://${storageHost}`,
   NEXT_PUBLIC_HOUSE_PLANNER_ENVIRONMENT: "qa", NEXT_PUBLIC_FIREBASE_PROJECT_ID: projectId,
   NEXT_PUBLIC_FIREBASE_API_KEY: "local-qa-emulator-key", NEXT_PUBLIC_FIREBASE_APP_ID: "local-qa-emulator-app",
   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: `${projectId}.firebaseapp.com`, NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: `${projectId}.appspot.com`,
-  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: "0", NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099",
-  QA_BASE_URL: "http://127.0.0.1:3015", QA_FIREBASE_PROJECT_ID: projectId, QA_PROJECT_ID: "qa-primary", QA_ISOLATION_PROJECT_ID: "qa-isolation",
-  QA_AI_MODE: "disabled", QA_AI_ENABLED: "0", QA_CLOUD_PROXY: "0", QA_TARGET_URL: "",
+  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: "0", NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST: authHost,
+  QA_BASE_URL: baseUrl, QA_FIREBASE_PROJECT_ID: projectId, QA_PROJECT_ID: "qa-primary", QA_ISOLATION_PROJECT_ID: "qa-isolation",
+  HOUSE_PLANNER_AI_ENABLED: "0", HOUSE_PLANNER_ASSISTANT_IMAGES: "0", HOUSE_PLANNER_RAG_PROJECT_IDS: "",
+  HOUSE_PLANNER_GOOGLE_CLIENT_ID: "", HOUSE_PLANNER_GMAIL_CLIENT_ID: "", HOUSE_PLANNER_GMAIL_CLIENT_SECRET: "", HOUSE_PLANNER_GMAIL_SENDER: "",
+  QA_AI_MODE: "disabled", QA_AI_ENABLED: "0", QA_MANUAL_APP_AGENT: manual ? "1" : "0", QA_BOOTSTRAP_ACCESS_TOKEN: "", QA_CLOUD_PROXY: "0", QA_TARGET_URL: "",
   METADATA_SERVER_DETECTION: "none", FIREBASE_CLI_DISABLE_USAGE_ANALYTICS: "1", NEXT_TELEMETRY_DISABLED: "1", CI: "1",
 });
 for (const identity of QA_IDENTITIES) {
@@ -147,14 +166,29 @@ async function execute(args, name) {
 
 try {
   if (spawnSync("java", ["-version"], { env, windowsHide: true, stdio: "ignore" }).status !== 0) throw new Error("Firebase emulators need Java; set JAVA_HOME and add its bin directory to PATH");
-  for (const port of [3015, 9099, 8088, 9199, 4400, 4500]) await assertPortFree(port);
-  process.stdout.write(`Starting isolated local QA (${suite}); logs: ${logDirectory}\n`);
-  const emulators = launch([firebaseCli, "emulators:start", "--only", "auth,firestore,storage", "--project", projectId, "--config", resolve(root, "firebase.qa.json"), "--non-interactive"], "emulators");
-  await Promise.all([9099, 8088, 9199].map((port) => waitForPort(port, emulators)));
-  const next = launch([resolve(root, "node_modules", "next", "dist", "bin", "next"), "dev", "--webpack", "--hostname", "127.0.0.1", "--port", "3015"], "next");
+  for (const port of Object.values(ports)) await assertPortFree(port);
+  process.stdout.write(`Starting isolated local QA (${workspace ? "workspace" : manual ? "manual app agent" : suite}); logs: ${logDirectory}\n`);
+  const emulators = launch([firebaseCli, "emulators:start", "--only", "auth,firestore,storage", "--project", projectId, "--config", resolve(root, workspace ? "firebase.local.json" : "firebase.qa.json"), "--non-interactive"], "emulators");
+  await Promise.all([ports.auth, ports.firestore, ports.storage].map((port) => waitForPort(port, emulators)));
+  const next = launch([resolve(root, "node_modules", "next", "dist", "bin", "next"), "dev", "--webpack", "--hostname", "127.0.0.1", "--port", String(ports.app)], "next");
   await waitForNext(next);
   await execute([resolve(root, "scripts", "seed-qa.mjs")], "QA fixture seed");
-  await execute([resolve(root, "scripts", "qa-regression.mjs"), `--suite=${suite}`], "QA regression");
+  if (workspace) {
+    const owner = QA_IDENTITIES.find((identity) => identity.key === "owner");
+    process.stdout.write(`Local workspace: ${baseUrl}/projects/qa-primary/overview?lang=en\n`);
+    process.stdout.write(`Emulator sign-in: ${owner.email} / ${env[owner.passwordEnv]}\n`);
+    process.stdout.write("Press Ctrl+C to stop the app and emulators. Local data is discarded.\n");
+    const serviceExit = await Promise.race([next, emulators].map((child) => new Promise((done) => {
+      if (child.exitCode !== null || child.signalCode !== null) done(child.exitCode);
+      else child.once("exit", done);
+    })));
+    if (!stopping) throw new Error(`A local workspace process stopped (status ${serviceExit ?? "signal"})`);
+  } else if (manual) {
+    const { openManualQaSession } = await import("./qa-manual-session.mjs");
+    await openManualQaSession({ target, env });
+  } else {
+    await execute([resolve(root, "scripts", "qa-regression.mjs"), `--suite=${suite}`], "QA regression");
+  }
   process.stdout.write("Local QA completed; emulators and app are stopping.\n");
 } catch (error) {
   process.stderr.write(`${error.message}\nLogs: ${logDirectory}\n`);

@@ -151,30 +151,24 @@ they do not claim that those earlier features were originally developed with Spe
 
 ## Run locally with permission
 
-Requires Node.js 22+ and npm. The following instructions are for the author and developers
-who have obtained [written permission](LICENSE) to build or run a local copy.
+With Node.js 22+ and Git, clone this repository and start the anonymous demo:
 
 ```powershell
 git clone https://github.com/carlosan1708/house-planner-portfolio.git
 cd house-planner-portfolio
 npm ci
 Copy-Item .env.example .env.local
-npm run dev
+npm run dev -- --hostname 127.0.0.1
 ```
 
-Open `http://localhost:3000/?mode=demo&lang=en`. The example configuration targets local synthetic
-emulators and disables live AI. The public demo can render without starting them; authenticated
-local tests require the [emulator workflow](docs/development/testing.md).
+Open [the local demo](http://127.0.0.1:3000/?mode=demo&lang=en). It uses fictional workbooks
+and files and runs without an account, Firebase emulators, or cloud credentials.
+On macOS/Linux use `cp .env.example .env.local`.
 
-```powershell
-npm run docs:check
-npm run lint
-npm test
-npm run build -- --webpack
-```
-
-These are local checks, not proof of a live model evaluation or production release.
-[Setup and configuration](DEVELOPMENT.md) explains the private-mode prerequisites.
+To sign in and work with synthetic projects, follow the [local workspace setup](DEVELOPMENT.md#local-workspace-with-sign-in)
+and run `npm run dev:local`. The launcher starts Firebase emulators and generates a fresh
+local password for the seeded administrator. For Vertex AI, Sheets and email, see
+[independent installation setup](DEVELOPMENT.md#independently-authorized-installation).
 
 ## Technology
 
